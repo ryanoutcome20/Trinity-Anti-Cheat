@@ -2,21 +2,35 @@
 --[[ Trinity Anti-Cheat ]]--
 --[[ ~~~~~~~~~~~~~~~~~~ ]]--
 
-MsgN("")
-MsgN("--[[ ~~~~~~~~~~~~~~~~~~ ]]--")
-MsgN("--[[ Trinity Anti-Cheat ]]--")
-MsgN("--[[ ~~~~~~~~~~~~~~~~~~ ]]--")
-MsgN("")
+local function Header()
+	MsgN("")
+	MsgN("--[[ ~~~~~~~~~~~~~~~~~~ ]]--")
+	MsgN("--[[ Trinity Anti-Cheat ]]--")
+	MsgN("--[[ ~~~~~~~~~~~~~~~~~~ ]]--")
+	MsgN("")
+end
 
-TAC = { }
+--- Initialize ---
+
+Header()
+
+if (not TAC) then
+	MsgN("Can't load any further due to missing init.lua file!")
+	MsgN("Check your addons and try again!")
+	
+	Header()
+	
+	return
+end
 
 --- Config ---
 
-TAC.Version = "0.0.1"
+TAC.Version = "0.0.2"
 TAC.Edition = "Pre-Alpha"
 
 MsgN("  Loading config")
 include("tac_config.lua")
+AddCSLuaFile("tac_config.lua")
 
 --- Setup ---
 
@@ -49,31 +63,42 @@ end
 
 MsgN("  Loading plugins")
 
-TAC.Plugins = 0
+TAC.Plugins_SV = 0
+TAC.Plugins_CL = 0
 
 for k, Plugin in pairs(file.Find("tac/*.lua", "LUA")) do
 	if (Plugin:StartWith("sv_")) then
 		include("tac/" .. Plugin)
-	elseif(Plugin:StartWith("sh_")) then
-		include("tac/" .. Plugin)
-		AddCSLuaFile("tac/" .. Plugin)
+		TAC.Plugins_SV = TAC.Plugins_SV + 1
+		continue
 	elseif(Plugin:StartWith("cl_")) then
 		AddCSLuaFile("tac/" .. Plugin)
+		TAC.Plugins_CL = TAC.Plugins_CL + 1
+		continue
 	end
 
-	TAC.Plugins = TAC.Plugins + 1
+	include("tac/" .. Plugin)
+	AddCSLuaFile("tac/" .. Plugin)
+		
+	TAC.Plugins_SV = TAC.Plugins_SV + 1
+	TAC.Plugins_CL = TAC.Plugins_CL + 1
 end
 
 --- End ---
 
 MsgN("")
 
-MsgN("  Loaded [" .. TAC.Plugins .. "] Plugins, [" .. TAC.Lists .. "] Lists!")
+MsgN(string.format(
+	"  Loaded [%i] Serverside Plugins, [%i] Clientside Plugins, [%i] Lists!",
+	TAC.Plugins_SV,
+	TAC.Plugins_CL,
+	TAC.Lists
+))
 
-MsgN("  Version " .. TAC.Version .. " [" .. TAC.Edition .. "] Done!")
+MsgN(string.format(
+	"  Version %s [%s] Done!",
+	TAC.Version,
+	TAC.Edition
+))
 
-MsgN("")
-MsgN("--[[ ~~~~~~~~~~~~~~~~~~ ]]--")
-MsgN("--[[ Trinity Anti-Cheat ]]--")
-MsgN("--[[ ~~~~~~~~~~~~~~~~~~ ]]--")
-MsgN("")
+Header()
