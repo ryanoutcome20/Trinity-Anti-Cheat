@@ -23,9 +23,14 @@ if (not TAC) then
 	return
 end
 
+--- Pre-Base ---
+
+MsgN("  Loading punishment stubs")
+include("tac_pstub.lua")
+
 --- Config ---
 
-TAC.Version = "0.0.2"
+TAC.Version = "0.0.3"
 TAC.Edition = "Pre-Alpha"
 
 MsgN("  Loading config")

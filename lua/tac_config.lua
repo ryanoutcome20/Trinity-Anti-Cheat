@@ -7,10 +7,8 @@ local Config = { }
 
 TAC.Config = Config
 
---- General ---
+--- Logging ---
 
 --- Punishment ---
-
---- Example ---
 
 return Config
