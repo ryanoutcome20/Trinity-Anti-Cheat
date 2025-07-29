@@ -30,7 +30,7 @@ include("tac_pstub.lua")
 
 --- Config ---
 
-TAC.Version = "0.0.3"
+TAC.Version = "0.0.4"
 TAC.Edition = "Pre-Alpha"
 
 MsgN("  Loading config")
@@ -95,7 +95,7 @@ MsgN("")
 
 MsgN(string.format(
 	"  Loaded [%i] Serverside Plugins, [%i] Clientside Plugins, [%i] Lists!",
-	TAC.Plugins_SV,
+	TAC.Plugins_SV, 
 	TAC.Plugins_CL,
 	TAC.Lists
 ))
