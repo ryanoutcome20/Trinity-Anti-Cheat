@@ -20,7 +20,8 @@ function TAC.PrintColor(tagColor, Text, ...)
 		string.format(
 			Text,
 			...
-		)
+		),
+		"\n"
 	)
 end
 
@@ -51,3 +52,72 @@ function TAC.Sanitize(Text)
 end
 
 TAC.Fix = TAC.Sanitize
+tSanitize = TAC.Sanitize
+
+function TAC.Enum(...)
+	for k, Name in pairs({...}) do 
+		_G[Name] = k - 1
+	end
+end
+
+function TAC.IsStaff(Player)
+	local Config = TAC.Config.Staff
+	
+	if (Config.Roles[Player:GetUserGroup()]) then
+		return true
+	end
+	
+	if (Config.IDs[Player:SteamID()] or Config.IDs[Player:SteamID64()]) then
+		return true
+	end
+	
+	return false
+end
+
+function TAC.Format(Token, Text, ...)
+	local Interpolated = string.Interpolate(Text, {
+		["Name"] = TAC.Sanitize(Token.Player:Nick()),
+		["SteamID64"] = Token.Player:SteamID64(),
+		["SteamID"] = Token.Player:SteamID(),
+		["IP"] = Token.Player:IPAddress(),
+		["Ping"] = Token.Player:Ping(),
+		["Loss"] = Token.Player:PacketLoss(),
+		["Position"] = tostring(Token.Player:GetPos()),
+		["Angle"] = tostring(Token.Player:EyeAngles()),
+		
+		["Info"] = Token.Info,
+		["ID"] = Token.ID,
+		
+		["Contact"] = TAC.Config.Contact,
+		["Map"] = game.GetMap(),
+		["Gamemode"] = engine.ActiveGamemode()
+	})
+	
+	return string.format(Interpolated, ...)
+end
+
+tFormat = TAC.Format
+
+function TAC.Tell(What, Who, Type, Sound, Ignore)
+	if (not Who or Who == ALERT_NONE) then
+		return
+	end
+	
+	Type = Type or NOTIFY_GENERIC
+
+	for k, Player in ipairs(player.GetHumans()) do 
+		if (Ignore == Player) then
+			continue
+		end
+		
+		if (Who == ALERT_STAFF and not TAC.IsStaff(Player)) then
+			continue
+		end
+		
+		Player:tAlert(
+			What,
+			Type,
+			Sound
+		)
+	end
+end

@@ -10,14 +10,61 @@ TAC.Config = Config
 --- Interpolated Strings ---
 
 --[[
+	Default Player Strings:
+	
 	{Name}
 	{SteamID64}
 	{SteamID}
 	{IP}
 	{Ping}
+	{Loss}
 	{Position}
 	{Angle}
 --]]
+
+--[[
+	Default Token Strings:
+	
+	{Info}
+	{ID}
+--]]
+
+--[[
+	Default Global Strings:
+
+	{Contact}
+	{Map}
+	{Gamemode}
+--]]
+
+--- General ---
+
+Config.Contact = "Bananas!"
+
+Config.Staff = {
+	Roles = {
+		admin = true,
+		operator = true,
+		superadmin = true
+	},
+	
+	IDs = {
+		-- SteamID
+	}
+}
+
+--- Alerts ---
+
+Config.Alerts = {
+	Enabled = true,
+	
+	Sounds = {
+		Punishment = "vo/ravenholm/madlaugh04.wav", -- Ha!
+		Important = "npc/roller/mine/rmine_taunt1.wav",
+		Notify = "npc/roller/mine/rmine_blip1.wav",
+		Error = "npc/roller/mine/rmine_blip3.wav"
+	}
+}
 
 --- Logging ---
 
@@ -30,7 +77,7 @@ Config.Logging = {
 		return "CREATE TABLE IF NOT EXISTS trinity_db( sid TEXT, type TEXT, text TEXT )"
 	end,
 	
-	dbQuery = function(User, Type, Message)
+	dbQuery = function(Player, Type, Message)
 		return string.format(
             "INSERT INTO trinity_db( sid, type, text ) VALUES( %s, %s, %s )",
             sql.SQLStr(User:SteamID64()),
@@ -39,7 +86,7 @@ Config.Logging = {
         )
 	end,
 	
-	Callback = function(User, Type, Text)
+	Callback = function(Player, Type, Text)
 		return
 	end,
 	
@@ -57,9 +104,61 @@ Config.Logging = {
 --- Punishment ---
 
 Config.Punishment = {
-	Fallback = {
+	ignoreStaff = false,
+
+	globalFilter = false,
+	globalFilterCallback = function(Player, Config)
+		return false
+	end,
+
+	pStub.Register("Fallback", {
+		-- General
+		Enabled = true,
+		Name = "Fallback",
+		Description = "",
+		Category = "None",
 		
-	},
+		-- Punishment section.
+		Backend = BACKEND_DEFAULT,
+		Method = PUNISHMENT_LOG,
+		Message = "Unfair Advantage: {Contact}",
+		Time = 0,
+
+		-- Flag section.
+		Flags = false,
+		Maximum = 3,
+		Decay = -1,
+		
+		-- Alert section.
+		Alerts = {
+			Evaluate = ALERT_EVERYONE,
+			Flags = ALERT_NONE,
+			Punishment = ALERT_NONE
+		},
+		
+		-- Formats.
+		formatEvaluate = function(Token)
+			return tFormat(
+				Token,
+				"{Name} [{SteamID64}] was evaluated for \"{Info}\"; prepare for punishment!"
+			)
+		end,
+		
+		formatPunishment = function(Token)
+			return tFormat(
+				Token,
+				"{Name} [{SteamID64}] was punished for \"{Info}\" ({ID})!"
+			)
+		end,
+		
+		-- Avoidance
+		Ping = -1,
+		Loss = -1,
+		Vehicles = false
+		
+		-- Extra
+		-- ...
+	}),
 }
 
 

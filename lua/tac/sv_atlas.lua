@@ -60,7 +60,7 @@ function Atlas:Pack(Data, alreadyPacked)
     end
 
     -- Only tables and strings need compression.
-    if (Type != TYPE_TABLE and Type != TYPE_STRING) then 
+    if (Type ~= TYPE_TABLE and Type ~= TYPE_STRING) then 
         return Data
     end
 
@@ -224,7 +224,7 @@ function Atlas:Process(Callbacks, Stage, ...)
             continue
         end
 
-        if (Data.Mode != MODE_ALL and Data.Mode != Stage) then 
+        if (Data.Mode ~= MODE_ALL and Data.Mode ~= Stage) then 
             continue
         end
 

@@ -10,9 +10,14 @@ pStub = {
 	Registers = { }
 }
 
-function pStub.Register(ID, Data)
+function pStub.Register(ID, Token)
+	if (TAC.Punishment) then
+		-- Hurray!
+		return TAC.Punishment.Register(ID, Token)
+	end
+
 	table.insert(pStub.Registers, {
 		ID = ID,
-		Data = Data
+		Token = Token
 	})
 end
