@@ -1,14 +1,14 @@
 local Player = FindMetaTable("Player")
 
 function Player:tLog(Type, Text)
-	if (not Type or not Text) then 
+	if not Type or not Text then 
 		return
 	end
 
     Type = string.upper(Type)
 	Text = TAC.Config.Logging.Prefix(Type) .. Text
 	
-	if (TAC.Config.Logging.DB) then 
+	if TAC.Config.Logging.DB then 
 		TAC.Config.Logging.dbCreate()
 		
 		TAC.Config.Logging.dbQuery(
@@ -18,7 +18,7 @@ function Player:tLog(Type, Text)
 		)
 	end
 
-	if (TAC.Config.Logging.File) then
+	if TAC.Config.Logging.File then
 		self:tWrite(
 			"log.txt",
 			Text,
@@ -26,7 +26,7 @@ function Player:tLog(Type, Text)
 		)
 	end
 	
-	if (TAC.Config.Logging.Console) then 
+	if TAC.Config.Logging.Console then 
 		TAC.Print("LOG: %s", Text)
 	end
 	
@@ -42,7 +42,7 @@ function Player:tWrite(Directory, Text, useHeader, deleteData)
 
     file.CreateDir(string.GetPathFromFilename(Directory))
 
-    if (deleteData or not file.Exists(Directory, "DATA")) then 
+    if deleteData or not file.Exists(Directory, "DATA") then 
         file.Write(Directory, useHeader and self:tHeader() or "")
     end
 

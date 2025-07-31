@@ -119,7 +119,7 @@ Config.Punishment = {
 		Category = "None",
 		
 		-- Punishment section.
-		Backend = BACKEND_DEFAULT,
+		Backend = "ULX", -- See "backends/" for adding new ones.
 		Method = PUNISHMENT_LOG,
 		Message = "Unfair Advantage: {Contact}",
 		Time = 0,
@@ -131,16 +131,16 @@ Config.Punishment = {
 		
 		-- Alert section.
 		Alerts = {
-			Evaluate = ALERT_EVERYONE,
-			Flags = ALERT_NONE,
-			Punishment = ALERT_NONE
+			Evaluate = ALERT_NONE,
+			Flags = ALERT_STAFF,
+			Punishment = ALERT_EVERYONE
 		},
 		
 		-- Formats.
 		formatEvaluate = function(Token)
 			return tFormat(
 				Token,
-				"{Name} [{SteamID64}] was evaluated for \"{Info}\"; prepare for punishment!"
+				"{Name} [{SteamID64}] was evaluated for \"{Info}\"!"
 			)
 		end,
 		
@@ -154,8 +154,8 @@ Config.Punishment = {
 		-- Avoidance
 		Ping = -1,
 		Loss = -1,
-		Vehicles = false
-		
+		Vehicles = false,
+
 		-- Extra
 		-- ...
 	}),

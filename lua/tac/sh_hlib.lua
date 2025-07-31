@@ -57,17 +57,17 @@ hLib = {
 -- =============================================================================
 
 function hLib:Add(Event, ID, Callback, Meta, isLocked)
-	if (not self.Cache[Event]) then
+	if not self.Cache[Event] then
 		self.Cache[Event] = { }
 		
-		if (self.gameEvents[Event]) then
+		if self.gameEvents[Event] then
 			gameevent.Listen(Event)
 		end
 		
 		hook.Add(Event, "hLib", function(...)
 			local Result = hLib:Run(Event, ...)
 			
-			if (Result) then
+			if Result then
 				return unpack(Result, 2)
 			end
 		end)
@@ -75,7 +75,7 @@ function hLib:Add(Event, ID, Callback, Meta, isLocked)
 	
 	local Exists, Data = self:Exists(Event, ID)
 	
-	if (Exists and Data.isLocked) then
+	if Exists and Data.isLocked then
 		debug.Trace()
 	
 		return ErrorNoHalt("Attempted to register on a locked hook ID.\n")
@@ -92,12 +92,12 @@ end
 function hLib:Remove(Event, ID)
 	local Cache = self.Cache[Event]
 	
-	if (not Cache) then
+	if not Cache then
 		return false
 	end
 	
 	for i = #Cache, 1, -1 do
-		if (Cache[i].ID == ID) then
+		if Cache[i].ID == ID then
 			table.remove(Cache, i)
 			return true
 		end
@@ -109,12 +109,12 @@ end
 function hLib:Exists(Event, ID)
 	local Cache = self.Cache[Event]
 	
-	if (not Cache) then
+	if not Cache then
 		return false
 	end
 	
 	for i = 1, #Cache do
-		if (Cache[i].ID == ID) then
+		if Cache[i].ID == ID then
 			return true, Cache[i]
 		end
 	end
@@ -125,14 +125,14 @@ end
 function hLib:Run(Event, ...)
 	local Cache = self.Cache[Event]
 	
-	if (not Cache) then
+	if not Cache then
 		return false
 	end
 	
 	for i = 1, #Cache do
 		local Status, Result = self:ProtectedCall(Cache[i].Callback, Cache[i].Meta, ...)
 	
-		if (Status and istable(Result) and Result[1] ~= nil) then
+		if Status and istable(Result) and Result[1] ~= nil then
 			return Result
 		end
 	end
@@ -145,7 +145,7 @@ function hLib:Call(Event, ...)
 end
 
 function hLib:GetTable(Event)
-	if (not Event) then
+	if not Event then
 		return self.Cache
 	end
 	
@@ -161,7 +161,7 @@ function hLib:ProtectedCall(Callback, Meta, ...)
 		end
 	end, Callback, Meta, ...)
 	
-	if (not Status) then
+	if not Status then
 		ErrorNoHalt(Result)
 	end
 

@@ -2,7 +2,7 @@
 	Trinity Serverside
 -----------------------------------------------------------]]
 
-if (SERVER) then
+if SERVER then
 	TAC = { }
 
 	AddCSLuaFile()
@@ -54,7 +54,7 @@ include( "drive/drive_noclip.lua" )
 	Serverside only modules
 -----------------------------------------------------------]]
 
-if ( SERVER ) then
+if  SERVER  then
 
 	require( "ai_task" )
 	require( "ai_schedule" )
@@ -66,7 +66,7 @@ end
 	Clientside only modules
 -----------------------------------------------------------]]
 
-if ( CLIENT ) then
+if  CLIENT  then
 
 	require( "draw" )		-- 2D Draw library
 	require( "markup" )		-- Text markup library
@@ -121,7 +121,7 @@ include( "extensions/motionsensor.lua" )
 include( "extensions/weapon.lua" )
 include( "extensions/coroutine.lua" )
 
-if ( CLIENT ) then
+if  CLIENT  then
 
 	include( "extensions/client/entity.lua" )
 	include( "extensions/client/globals.lua" )

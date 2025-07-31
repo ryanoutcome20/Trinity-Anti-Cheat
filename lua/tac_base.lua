@@ -9,6 +9,8 @@ TAC.SIGNITURE_GREEN = Color(66,255,96)
 TAC.SIGNITURE_RED = Color(225, 1, 26)
 TAC.SIGNITURE_GOLD = Color(245,194,71)
 
+local Player = FindMetaTable("Player")
+
 function TAC.PrintColor(tagColor, Text, ...)
 	MsgC(
 		TAC.WHITE,
@@ -63,11 +65,11 @@ end
 function TAC.IsStaff(Player)
 	local Config = TAC.Config.Staff
 	
-	if (Config.Roles[Player:GetUserGroup()]) then
+	if Config.Roles[Player:GetUserGroup()] then
 		return true
 	end
 	
-	if (Config.IDs[Player:SteamID()] or Config.IDs[Player:SteamID64()]) then
+	if Config.IDs[Player:SteamID()] or Config.IDs[Player:SteamID64()] then
 		return true
 	end
 	
@@ -99,18 +101,22 @@ end
 tFormat = TAC.Format
 
 function TAC.Tell(What, Who, Type, Sound, Ignore)
-	if (not Who or Who == ALERT_NONE) then
+	if not Who or Who == ALERT_NONE then
+		return
+	end
+	
+	if not TAC.Config.Alerts.Enabled then
 		return
 	end
 	
 	Type = Type or NOTIFY_GENERIC
 
 	for k, Player in ipairs(player.GetHumans()) do 
-		if (Ignore == Player) then
+		if Ignore == Player then
 			continue
 		end
 		
-		if (Who == ALERT_STAFF and not TAC.IsStaff(Player)) then
+		if Who == ALERT_STAFF and not TAC.IsStaff(Player) then
 			continue
 		end
 		
@@ -120,4 +126,32 @@ function TAC.Tell(What, Who, Type, Sound, Ignore)
 			Sound
 		)
 	end
+end
+
+function TAC.Timer(Player, Delay, Callback)
+	-- This would need a wrapper for callback if you
+	-- wanted to apply arguments (like Tokens for 
+	-- example).
+
+	timer.Simple(Delay, function()
+		if Player ~= nil and IsValid(Player) then
+			if Callback ~= nil then
+				Callback(Player)
+			end
+		end
+	end)
+end
+
+function Player:Set(Key, Value)
+	self.TAC = self.TAC or { }
+	
+	self.TAC[Key] = Value
+	
+	return Value
+end
+
+function Player:Grab(Key, Default)
+	self.TAC = self.TAC or { }
+
+	return self.TAC[Key] or Default
 end

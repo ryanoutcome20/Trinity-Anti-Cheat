@@ -1,17 +1,9 @@
 TAC.Punishment = { }
 
 TAC.Enum(
-	"PUNISHMENT_IGNORE",
 	"PUNISHMENT_LOG",
 	"PUNISHMENT_KICK",
 	"PUNISHMENT_BAN"
-)
-
-TAC.Enum(
-	"BACKEND_DEFAULT",
-	"BACKEND_ULX",
-	"BACKEND_SAM",
-	"BACKEND_CUSTOM"
 )
 
 TAC.Enum(
@@ -24,6 +16,13 @@ TAC.Enum(
 	"EVALUATE_SUCCESS",
 	"EVALUATE_BYPASSED",
 	"EVALUATE_FORCED"
+)
+
+TAC.Enum(
+	"EXECUTE_FAILED", -- Error
+	"EXECUTE_FLAG", -- Flagged
+	"EXECUTE_SUCCESS", -- Punished
+	"EXECUTE_BYPASSED" -- Staff, Whitelist, etc.
 )
 
 --- Registers ---
@@ -52,36 +51,40 @@ end
 
 --- Evaluate ---
 
-function TAC.Punishment.Valid(Player, Config)
-	if (not IsValid(Player) or not Player:IsPlayer()) then
+function TAC.Punishment.Valid(Player, Config, isToken)
+	if isToken then
+		Player = Config.Player
+	end
+
+	if not IsValid(Player) or not Player:IsPlayer() then
 		return
 	end
 	
 	-- Global Checks.
 	
-	if (TAC.Config.Punishment.ignoreStaff and TAC.IsStaff(Player)) then
+	if TAC.Config.Punishment.ignoreStaff and TAC.IsStaff(Player) then
 		return
 	end
 	
-	if (TAC.Config.Punishment.globalFilter and not TAC.globalFilterCallback(Player, Config)) then
+	if TAC.Config.Punishment.globalFilter and not TAC.globalFilterCallback(Player, Config) then
 		return
 	end
 	
 	-- Config Checks.
 	
-	if (not Config.Enabled) then
-		return false
-	end
-	
-	if (Config.Ping ~= -1 and Player:Ping() >= Config.Ping) then
+	if not Config.Enabled then
 		return
 	end
 	
-	if (Config.Loss ~= -1 and Player:PacketLoss() >= Config.Loss) then
+	if Config.Ping ~= -1 and Player:Ping() >= Config.Ping then
 		return
 	end
 	
-	if (Config.Vehicles and Player:InVehicle()) then
+	if Config.Loss ~= -1 and Player:PacketLoss() >= Config.Loss then
+		return
+	end
+	
+	if Config.Vehicles and Player:InVehicle() then
 		return
 	end
 	
@@ -89,7 +92,7 @@ function TAC.Punishment.Valid(Player, Config)
 end
 
 function TAC.Punishment.Evaluate(ID, Player, Info, ...)
-	if (not ID or not Player or not Info) then
+	if not ID or not Player or not Info then
 		return EVALUATE_FAILED, nil
 	end
 
@@ -98,31 +101,32 @@ function TAC.Punishment.Evaluate(ID, Player, Info, ...)
 	local Config = TAC.Config[ID]
 	local usingFallback = false
 
-	if (not Config) then
+	if not Config then
 		Config = TAC.Config.Fallback
 		usingFallback = true
 	end
 
 	Config = table.Copy(Config)
 
-	if (not TAC.Punishment.Valid(Player, Config) or Config.Method == PUNISHMENT_IGNORE) then
+	if not TAC.Punishment.Valid(Player, Config) then
 		return EVALUATE_BYPASSED, nil
 	end
 
 	local Token = {
 		ID = ID,
 		Player = Player,
+		SID = Player:SteamID64(),
 		Info = Info
 	}
 
 	table.Merge(Token, Config, true)
-		
+	
 	TAC.Tell(
 		Token.formatEvaluate(Token),
 		Token.Alerts.Evaluate,
 		NOTIFY_GENERIC,
 		TAC.Config.Alerts.Sounds.Notify,
-		-- TODO: Don't show alert to banned player, configurable.
+		Player
 	)
 
 	return usingFallback and EVALUATE_FALLBACK or EVALUATE_SUCCESS, Token
@@ -130,11 +134,112 @@ end
 
 --- Flags ---
 
--- ...
+function TAC.Punishment.Flag(Token)
+	-- We just take this and evaluate it for the
+	-- execution function.
+	
+	if not Token.Flags then
+		return true
+	end
+	
+	local Player = Token.Player
+		
+	if Player:Set(Token.ID, Player:Grab(Token.ID, 0) + 1) >= Token.Maximum then
+		Player:Set(Token.ID, 0)
+		
+		return true
+	end
+	
+	if Token.Decay ~= -1 then
+		TAC.Timer(Player, Token.Decay, function(Player)
+			Player:Set(Token.ID, Player:Grab(Token.ID, 0) - 1)
+		end)
+	end
+	
+	return false
+end
 
 --- Execute ---
 
--- ...
+function TAC.Punishment.Backend(Token)
+	local Backend = TAC.Backends[string.lower(Token.Backend)]
+	
+	if not Backend then
+		TAC.Print("No backend for punishment! (%s -> %s, doesn't exist)", Token.ID, Token.Backend)
+		return TAC.Backends["Default"]
+	elseif not Backend.Valid( then
+		TAC.Print("Invalid backend for punishment! (%s -> %s, valid failed)", Token.ID, Token.Backend)
+		return TAC.Backends["Default"]
+	end
+	
+	return Backend
+end
+
+function TAC.Execute(Token)
+	if not Token then
+		return EXECUTE_FAILED
+	end
+	
+	local Player = Token.Player
+	
+	if not IsValid(Player then
+		return EXECUTE_FAILED
+	end
+
+	if not TAC.Punishment.Valid(nil, Token, true then
+		return EXECUTE_BYPASSED
+	end
+	
+	if not TAC.Punishment.Flag(Token then
+		return EXECUTE_FLAG
+	end
+
+	-- Log.
+	Player:tLog(
+		"PUNISHMENT", 
+		Token.formatPunishment(Token)
+	)
+
+	if Token.Method == PUNISHMENT_LOG then
+		return EXECUTE_SUCCESS
+	end
+
+	-- Run punishment.
+	local Backend = TAC.Punishment.Backend(Token)
+	
+	if Token.Method == PUNISHMENT_BAN then
+		Backend.Ban(
+			Token.Player,
+			Token.Message,
+			Token.Time
+		)
+	else
+		Backend.Kick(
+			Token.Player,
+			Token.Message
+		)
+	end
+
+	return EXECUTE_SUCCESS
+end
+
+function TAC.ExecuteSID(Token)
+	-- The issue with supporting this is that I cannot even verify if the
+	-- user is staff or whatnot. This is an API function. Don't use this
+	-- unless you are SURE the user is meant to be punished.
+	
+	local Backend = TAC.Punishment.Backend(Token)
+	
+	if Token.Method == PUNISHMENT_BAN then
+		Backend.BanID(
+			Token.SID,
+			Token.Message,
+			Token.Time
+		)
+	else
+		TAC.Print("Was going to kick player but early disconnect: \"%s\"", Token.SID)
+	end
+end
 
 --- End ---
 

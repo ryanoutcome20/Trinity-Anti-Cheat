@@ -18,11 +18,11 @@ MODE_PARSING  = 1
 MODE_DONE     = 2
 
 function Atlas:Call(Function, Meta, ...)
-    if (not Function) then 
+    if not Function then 
         return
     end
 
-    if (Meta) then 
+    if Meta then 
         Function(Meta, ...)
     else
         Function(...)
@@ -42,7 +42,7 @@ function Atlas:Listen(Port, Identifier, Mode, Callback, Meta)
 end
 
 function Atlas:Close(Port, Identifier)
-    if (not self.Ports[Port]) then 
+    if not self.Ports[Port] then 
         return
     end
 
@@ -55,37 +55,37 @@ function Atlas:Pack(Data, alreadyPacked)
     local Type = TypeID(Data)
 
     -- Skip invalid types.
-    if (not Data or Type == TYPE_FUNCTION) then 
+    if not Data or Type == TYPE_FUNCTION then 
         return 
     end
 
     -- Only tables and strings need compression.
-    if (Type ~= TYPE_TABLE and Type ~= TYPE_STRING) then 
+    if Type ~= TYPE_TABLE and Type ~= TYPE_STRING then 
         return Data
     end
 
     -- Avoid infinite loops.
-    if (alreadyPacked[Data]) then 
+    if alreadyPacked[Data] then 
         return
     end
 
     -- Mark table as packed before recursion
-    if (Type == TYPE_TABLE) then 
+    if Type == TYPE_TABLE then 
         alreadyPacked[Data] = true
     end
 
     -- Table compression.
-    if (Type == TYPE_TABLE) then
+    if Type == TYPE_TABLE then
         local Constructed = { }
 
         for k, subData in pairs(Data) do
-            if (alreadyPacked[subData]) then
+            if alreadyPacked[subData] then
                 continue
             end
             
             local Value = self:Pack(subData, alreadyPacked)
 
-            if (Value) then
+            if Value then
                 Constructed[k] = {
                     Value = Value,
                     Type = TypeID(subData)
@@ -104,7 +104,7 @@ function Atlas:Unpack(Data)
     local Decompressed = util.Decompress(Data)
     
     -- If decompression fails, return the original data (not compressed).
-    if (not Decompressed or Decompressed == "") then
+    if not Decompressed or Decompressed == "" then
         return Data
     end
 
@@ -112,7 +112,7 @@ function Atlas:Unpack(Data)
     local Parsed = util.JSONToTable(Decompressed)
     
     -- If JSON parsing fails, return decompressed string.
-    if (not Parsed) then
+    if not Parsed then
         return Decompressed
     end
 
@@ -120,15 +120,15 @@ function Atlas:Unpack(Data)
     local Constructed = { }
 
     for k, Data in pairs(Parsed) do
-        if (not Data.Value or not Data.Type) then
+        if not Data.Value or not Data.Type then
             continue
         end
 
-        if (Data.Type == TYPE_STRING) then
+        if Data.Type == TYPE_STRING then
             Constructed[k] = tostring(self:Unpack(Data.Value))
-        elseif (Data.Type == TYPE_NUMBER) then
+        elseif Data.Type == TYPE_NUMBER then
             Constructed[k] = tonumber(self:Unpack(Data.Value))
-        elseif (Data.Type == TYPE_BOOL) then
+        elseif Data.Type == TYPE_BOOL then
             Constructed[k] = self:Unpack(Data.Value) == "true"
         else
             Constructed[k] = self:Unpack(Data.Value)
@@ -146,7 +146,7 @@ function Atlas:Split(Data)
 
         Split[Count] = Split[Count] or { }
     
-        if (#Split[Count] > 63000) then 
+        if #Split[Count] > 63000 then 
             Count = Count + 1
             
             Split[Count] = { }
@@ -220,11 +220,11 @@ end
 
 function Atlas:Process(Callbacks, Stage, ...)
     for Identifier, Data in pairs(Callbacks) do 
-        if (Data.Mode == MODE_NONE) then 
+        if Data.Mode == MODE_NONE then 
             continue
         end
 
-        if (Data.Mode ~= MODE_ALL and Data.Mode ~= Stage) then 
+        if Data.Mode ~= MODE_ALL and Data.Mode ~= Stage then 
             continue
         end
 
@@ -235,13 +235,13 @@ end
 function Atlas:Receive(ENT)
     local Data = self:Read()
 
-    if (not Data or not Data.Port) then 
+    if not Data or not Data.Port then 
         return
     end
 
     local Callbacks = self.Ports[Data.Port]
 
-    if (not Callbacks) then 
+    if not Callbacks then 
         return
     end
 
@@ -251,8 +251,8 @@ function Atlas:Receive(ENT)
 
     self:Process(Callbacks, MODE_PARSING, ENT, Data, Index)
 
-    if (Data.Final) then 
-        if (Data.Checksum == Index) then 
+    if Data.Final then 
+        if Data.Checksum == Index then 
             local Arguments = self:Unpack(Index)
 
             self:Process(Callbacks, MODE_DONE, ENT, unpack(Arguments))

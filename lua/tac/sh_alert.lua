@@ -1,8 +1,8 @@
-if (CLIENT) then
+if CLIENT then
 	local shouldNotify = CreateClientConVar("tac_should_notify", 1)
 
 	net.Receive("tac-alert", function()
-		if (not shouldNotify:GetBool()) then
+		if not shouldNotify:GetBool() then
 			return
 		end
 	
@@ -36,7 +36,7 @@ TAC.Enum(
 local Player = FindMetaTable("Player")
 
 function Player:tAlert(Message, Type, Sound)
-	if (not Sound) then
+	if not Sound then
 		Sound = Type
 		Type = NOTIFY_GENERIC
 	end
