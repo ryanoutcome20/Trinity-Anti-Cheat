@@ -77,6 +77,18 @@ function TAC.IsStaff(Player)
 end
 
 function TAC.Format(Token, Text, ...)
+	if (not Token) then
+		return
+	end
+	
+	if (not Text) then
+		if (not Token.Message) then
+			return ""
+		end
+		
+		Text = Token.Message
+	end
+	
 	local Interpolated = string.Interpolate(Text, {
 		["Name"] = TAC.Sanitize(Token.Player:Nick()),
 		["SteamID64"] = Token.Player:SteamID64(),

@@ -28,6 +28,9 @@ end
 MsgN("  Loading punishment stubs")
 include("tac_pstub.lua")
 
+MsgN("  Checking debug file")
+include("tac_debug.lua")
+
 --- Config ---
 
 TAC.Version = "0.0.6"
@@ -45,6 +48,9 @@ include("tac_base.lua")
 MsgN("  Caching resources")
 -- ...
 
+MsgN("  Creating clientside")
+AddCSLuaFile("tac_client.lua")
+
 --- Backends ---
 
 MsgN("  Loading backend managers")
@@ -58,11 +64,11 @@ for k, Backend in ipairs(file.Find("backends/*.lua", "LUA")) do
 		continue
 	end
 	
-	TAC.Backends[Name] = Data
+	TAC.Backends[string.lower(Name)] = Data
 end
 
 --- Lists ---
-
+ 
 MsgN("  Loading lists")
 
 TAC.Lists = 0
@@ -70,10 +76,10 @@ TAC.Lists = 0
 for k, List in ipairs(file.Find("lists/*.lua", "LUA")) do 
 	if List:StartWith("sv_") then
 		include("lists/" .. List)
-	elseif(List:StartWith("sh_") then
+	elseif List:StartWith("sh_") then
 		include("lists/" .. List)
 		AddCSLuaFile("lists/" .. List)
-	elseif(List:StartWith("cl_") then
+	elseif List:StartWith("cl_") then
 		AddCSLuaFile("lists/" .. List)
 	end
 
@@ -85,14 +91,14 @@ end
 MsgN("  Loading plugins")
 
 TAC.Plugins_SV = 0
-TAC.Plugins_CL = 0
+TAC.Plugins_CL = 0 
 
 for k, Plugin in ipairs(file.Find("tac/*.lua", "LUA")) do
 	if Plugin:StartWith("sv_") then
 		include("tac/" .. Plugin)
 		TAC.Plugins_SV = TAC.Plugins_SV + 1
 		continue
-	elseif(Plugin:StartWith("cl_") then
+	elseif Plugin:StartWith("cl_") then
 		AddCSLuaFile("tac/" .. Plugin)
 		TAC.Plugins_CL = TAC.Plugins_CL + 1
 		continue

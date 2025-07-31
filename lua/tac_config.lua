@@ -120,7 +120,7 @@ Config.Punishment = {
 		
 		-- Punishment section.
 		Backend = "ULX", -- See "backends/" for adding new ones.
-		Method = PUNISHMENT_LOG,
+		Method = PUNISHMENT_BAN,
 		Message = "Unfair Advantage: {Contact}",
 		Time = 0,
 

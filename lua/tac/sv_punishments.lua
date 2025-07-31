@@ -167,7 +167,7 @@ function TAC.Punishment.Backend(Token)
 	if not Backend then
 		TAC.Print("No backend for punishment! (%s -> %s, doesn't exist)", Token.ID, Token.Backend)
 		return TAC.Backends["Default"]
-	elseif not Backend.Valid( then
+	elseif not Backend.Valid() then
 		TAC.Print("Invalid backend for punishment! (%s -> %s, valid failed)", Token.ID, Token.Backend)
 		return TAC.Backends["Default"]
 	end
@@ -182,15 +182,15 @@ function TAC.Execute(Token)
 	
 	local Player = Token.Player
 	
-	if not IsValid(Player then
+	if not IsValid(Player) then
 		return EXECUTE_FAILED
 	end
 
-	if not TAC.Punishment.Valid(nil, Token, true then
+	if not TAC.Punishment.Valid(nil, Token, true) then
 		return EXECUTE_BYPASSED
 	end
 	
-	if not TAC.Punishment.Flag(Token then
+	if not TAC.Punishment.Flag(Token) then
 		return EXECUTE_FLAG
 	end
 
@@ -204,19 +204,22 @@ function TAC.Execute(Token)
 		return EXECUTE_SUCCESS
 	end
 
+	-- Get message.
+	local Message = tFormat(Token)
+
 	-- Run punishment.
 	local Backend = TAC.Punishment.Backend(Token)
 	
 	if Token.Method == PUNISHMENT_BAN then
 		Backend.Ban(
 			Token.Player,
-			Token.Message,
+			Message,
 			Token.Time
 		)
 	else
 		Backend.Kick(
 			Token.Player,
-			Token.Message
+			Message
 		)
 	end
 

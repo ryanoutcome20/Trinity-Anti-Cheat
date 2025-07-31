@@ -12,7 +12,6 @@ pStub = {
 
 function pStub.Register(ID, Token)
 	if TAC.Punishment then
-		-- Hurray!
 		return TAC.Punishment.Register(ID, Token)
 	end
 
