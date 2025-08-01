@@ -77,12 +77,12 @@ function TAC.IsStaff(Player)
 end
 
 function TAC.Format(Token, Text, ...)
-	if (not Token) then
+	if not Token then
 		return
 	end
 	
-	if (not Text) then
-		if (not Token.Message) then
+	if not Text then
+		if not Token.Message then
 			return ""
 		end
 		
@@ -111,12 +111,17 @@ function TAC.Format(Token, Text, ...)
 end
 
 tFormat = TAC.Format
-
+ 
 function TAC.Tell(What, Who, Type, Sound, Ignore)
+	if TAC.Debug then
+		What = What .. " [dbg]"
+		Ignore = nil
+	end
+		
 	if not Who or Who == ALERT_NONE then
 		return
 	end
-	
+		
 	if not TAC.Config.Alerts.Enabled then
 		return
 	end
@@ -167,3 +172,42 @@ function Player:Grab(Key, Default)
 
 	return self.TAC[Key] or Default
 end
+
+TAC.Enum(
+	"ALERT_NONE",
+	"ALERT_STAFF", 
+	"ALERT_EVERYONE"
+)
+
+TAC.Enum(
+	"NOTIFY_GENERIC",
+	"NOTIFY_ERROR", 
+	"NOTIFY_UNDO",
+	"NOTIFY_HINT",
+	"NOTIFY_CLEANUP"
+)
+
+TAC.Enum(
+	"PUNISHMENT_LOG",
+	"PUNISHMENT_KICK",
+	"PUNISHMENT_BAN"
+)
+
+TAC.Enum(
+	"FUN_NONE"
+)
+
+TAC.Enum(
+	"EVALUATE_FAILED",
+	"EVALUATE_FALLBACK",
+	"EVALUATE_SUCCESS",
+	"EVALUATE_BYPASSED",
+	"EVALUATE_FORCED"
+)
+
+TAC.Enum(
+	"EXECUTE_FAILED",
+	"EXECUTE_FLAG",
+	"EXECUTE_SUCCESS",
+	"EXECUTE_BYPASSED"
+)

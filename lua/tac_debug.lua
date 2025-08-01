@@ -4,7 +4,7 @@
 
 TAC.Debug = true
 
-if (not TAC.Debug) then
+if not TAC.Debug then
 	return
 end
 
@@ -15,3 +15,5 @@ concommand.Add("tac_cout", function()
 	
 	TAC.Print("Dumped %i indexes from TAC!", table.Count(TAC))
 end)
+
+dbg = TAC.Print

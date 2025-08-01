@@ -1,30 +1,5 @@
 TAC.Punishment = { }
 
-TAC.Enum(
-	"PUNISHMENT_LOG",
-	"PUNISHMENT_KICK",
-	"PUNISHMENT_BAN"
-)
-
-TAC.Enum(
-	"FUN_NONE"
-)
-
-TAC.Enum(
-	"EVALUATE_FAILED",
-	"EVALUATE_FALLBACK",
-	"EVALUATE_SUCCESS",
-	"EVALUATE_BYPASSED",
-	"EVALUATE_FORCED"
-)
-
-TAC.Enum(
-	"EXECUTE_FAILED", -- Error
-	"EXECUTE_FLAG", -- Flagged
-	"EXECUTE_SUCCESS", -- Punished
-	"EXECUTE_BYPASSED" -- Staff, Whitelist, etc.
-)
-
 --- Registers ---
 
 function TAC.Punishment.Register(ID, Token)
@@ -32,10 +7,13 @@ function TAC.Punishment.Register(ID, Token)
 	
 	local Fallback = TAC.Config.Fallback or { }
 	
-	TAC.Config[ID] = table.Merge(
-		Fallback,
-		Token
-	)
+	for k,v in pairs(Fallback) do 
+		if Token[k] == nil then
+			Token[k] = v
+		end
+	end
+	
+	TAC.Config[ID] = Token	
 end
 
 function TAC.Punishment.LoadStubs()
@@ -156,6 +134,14 @@ function TAC.Punishment.Flag(Token)
 		end)
 	end
 	
+	TAC.Tell(
+		Token.formatFlags(Token),
+		Token.Alerts.Flags,
+		NOTIFY_GENERIC,
+		TAC.Config.Alerts.Sounds.Important,
+		Player
+	)
+	
 	return false
 end
 
@@ -166,10 +152,10 @@ function TAC.Punishment.Backend(Token)
 	
 	if not Backend then
 		TAC.Print("No backend for punishment! (%s -> %s, doesn't exist)", Token.ID, Token.Backend)
-		return TAC.Backends["Default"]
+		return TAC.Backends.default
 	elseif not Backend.Valid() then
 		TAC.Print("Invalid backend for punishment! (%s -> %s, valid failed)", Token.ID, Token.Backend)
-		return TAC.Backends["Default"]
+		return TAC.Backends.default
 	end
 	
 	return Backend
@@ -203,12 +189,24 @@ function TAC.Execute(Token)
 	if Token.Method == PUNISHMENT_LOG then
 		return EXECUTE_SUCCESS
 	end
+	
+	TAC.Tell(
+		Token.formatPunishment(Token),
+		Token.Alerts.Punishment,
+		NOTIFY_GENERIC,
+		TAC.Config.Alerts.Sounds.Punishment,
+		Player
+	)
 
 	-- Get message.
 	local Message = tFormat(Token)
 
 	-- Run punishment.
 	local Backend = TAC.Punishment.Backend(Token)
+	
+	if not Backend then
+		return
+	end
 	
 	if Token.Method == PUNISHMENT_BAN then
 		Backend.Ban(

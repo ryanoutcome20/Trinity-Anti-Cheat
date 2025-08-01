@@ -19,20 +19,6 @@ end
 
 util.AddNetworkString("tac-alert")
 
-TAC.Enum(
-	"ALERT_NONE",
-	"ALERT_STAFF", 
-	"ALERT_EVERYONE"
-)
-
-TAC.Enum(
-	"NOTIFY_GENERIC",
-	"NOTIFY_ERROR", 
-	"NOTIFY_UNDO",
-	"NOTIFY_HINT",
-	"NOTIFY_CLEANUP"
-)
-
 local Player = FindMetaTable("Player")
 
 function Player:tAlert(Message, Type, Sound)

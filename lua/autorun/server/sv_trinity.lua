@@ -14,16 +14,9 @@ end
 
 Header()
 
-if not TAC then
-	MsgN("Can't load any further due to missing init.lua file!")
-	MsgN("Check your addons and try again!")
-	
-	Header()
-	
-	return
-end
+TAC = { }
 
---- Pre-Base ---
+--- Base ---
 
 MsgN("  Loading punishment stubs")
 include("tac_pstub.lua")
@@ -31,22 +24,21 @@ include("tac_pstub.lua")
 MsgN("  Checking debug file")
 include("tac_debug.lua")
 
---- Config ---
-
-TAC.Version = "0.0.6"
-TAC.Edition = "Pre-Alpha"
-
-MsgN("  Loading config")
-include("tac_config.lua")
-AddCSLuaFile("tac_config.lua")
-
---- Setup ---
-
 MsgN("  Loading base")
 include("tac_base.lua")
 
 MsgN("  Caching resources")
 -- ...
+
+--- Config ---
+
+TAC.Version = "0.0.7"
+TAC.Edition = "Pre-Alpha"
+
+MsgN("  Loading config")
+include("tac_config.lua")
+
+--- Clientside ---
 
 MsgN("  Creating clientside")
 AddCSLuaFile("tac_client.lua")

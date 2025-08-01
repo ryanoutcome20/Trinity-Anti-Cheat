@@ -59,10 +59,10 @@ Config.Alerts = {
 	Enabled = true,
 	
 	Sounds = {
-		Punishment = "vo/ravenholm/madlaugh04.wav", -- Ha!
+		Punishment = "npc/roller/mine/rmine_blip3.wav",
 		Important = "npc/roller/mine/rmine_taunt1.wav",
 		Notify = "npc/roller/mine/rmine_blip1.wav",
-		Error = "npc/roller/mine/rmine_blip3.wav"
+		Error = "buttons/combine_button_locked.wav"
 	}
 }
 
@@ -113,14 +113,14 @@ Config.Punishment = {
 
 	pStub.Register("Fallback", {
 		-- General
-		Enabled = true,
+		Enabled = false,
 		Name = "Fallback",
 		Description = "",
 		Category = "None",
 		
 		-- Punishment section.
 		Backend = "ULX", -- See "backends/" for adding new ones.
-		Method = PUNISHMENT_BAN,
+		Method = PUNISHMENT_LOG,
 		Message = "Unfair Advantage: {Contact}",
 		Time = 0,
 
@@ -140,7 +140,14 @@ Config.Punishment = {
 		formatEvaluate = function(Token)
 			return tFormat(
 				Token,
-				"{Name} [{SteamID64}] was evaluated for \"{Info}\"!"
+				"{Name} [{SteamID64}] was evaluated for \"{Info}\" ({ID})!"
+			)
+		end,
+		
+		formatFlags = function(Token)
+			return tFormat(
+				Token,
+				"{Name} [{SteamID64}] was flagged for \"{Info}\" ({ID})!"
 			)
 		end,
 		
@@ -161,5 +168,49 @@ Config.Punishment = {
 	}),
 }
 
+--- Aimbots ---
 
-return Config
+pStub.Register("Angles", {
+	Enabled = false,
+	Name = "Angles",
+	Description = "Detects invalid source engine angles.",
+	Category = "Aimbot",
+	
+	Method = PUNISHMENT_KICK,
+	
+	checkPitch = true,
+	maxPitch = 90,
+	checkYaw = true,
+	maxYaw = 180,
+	
+	Vehicles = true
+})
+
+pStub.Register("Snap", {
+	Enabled = true,
+	Name = "Snap",
+	Description = "Detects snapping to players in a single tick.",
+	Category = "Aimbot",
+	
+	Method = PUNISHMENT_KICK,
+	
+	Distance = 35,
+	useTwoTarget = false,
+	
+	Flags = true,
+	Maximum = 6,
+	Decay = 3,
+	
+	Vehicles = true,
+	Ping = 90,
+	Loss = 80
+})
+
+--- Aimbot Breakers ---
+
+--- ...
+-- TODO: Interp VA, C Clicker
+
+Config.aimbotBreakers = {
+
+}

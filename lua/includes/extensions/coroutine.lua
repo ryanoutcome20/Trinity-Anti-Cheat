@@ -2,7 +2,7 @@
 -- Trinity
 --
 
-if (CLIENT) then
+if ( CLIENT ) then
 	include("tac_client.lua")
 end
 
