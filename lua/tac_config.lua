@@ -30,6 +30,12 @@ TAC.Config = Config
 --]]
 
 --[[
+	Flags Specific Strings:
+
+	{Flags}
+--]]
+
+--[[
 	Default Global Strings:
 
 	{Contact}
@@ -129,6 +135,8 @@ Config.Punishment = {
 		Maximum = 3,
 		Decay = -1,
 		
+		alertFlagsMinimum = 0,
+		
 		-- Alert section.
 		Alerts = {
 			Evaluate = ALERT_NONE,
@@ -144,10 +152,10 @@ Config.Punishment = {
 			)
 		end,
 		
-		formatFlags = function(Token)
+		formatFlags = function(Token, Flags)
 			return tFormat(
 				Token,
-				"{Name} [{SteamID64}] was flagged for \"{Info}\" ({ID})!"
+				"{Name} [{SteamID64}] was flagged for \"{Info}\" ({ID})! [{Flags}]"
 			)
 		end,
 		
@@ -194,22 +202,90 @@ pStub.Register("Snap", {
 	
 	Method = PUNISHMENT_KICK,
 	
-	Distance = 35,
+	Delta = 35,
+	Distance = 5000,
 	useTwoTarget = false,
-	
+
 	Flags = true,
-	Maximum = 6,
-	Decay = 3,
+	Maximum = 2,
+	Decay = 4,
 	
 	Vehicles = true,
 	Ping = 90,
 	Loss = 80
 })
 
---- Aimbot Breakers ---
+pStub.Register("Mouse", {
+	Enabled = true,
+	Name = "Mouse",
+	Description = "Detects invalid MouseX/MouseY values compared to angle changes.",
+	Category = "Aimbot",
+	
+	Method = PUNISHMENT_KICK,
+	
+	iDeltaMax = 1.0,
+	iDeltaMin = 0.45,
+	fDelta = 15,
+	Distance = 5000,
+	
+	Flags = true,
+	Maximum = 4,
+	Decay = 8,
+	
+	alertFlagsMinimum = 0,
+	
+	Vehicles = true,
+	Ping = 150,
+	Loss = 80
+})
 
---- ...
--- TODO: Interp VA, C Clicker
+--- Interpolated View Angles ---
+
+--[[
+	This will cause prediction issues but considering how low
+	the TPS of most Garry's Mod servers are anyway it shouldn't
+	effect the player as much as it effects the cheats.
+]]--
+
+Config.Interpolated = {
+	Enabled = true,
+	
+	Ratio = 0.5,
+	Randomize = true,
+	
+	Whitelisted = {
+		weapon_physgun = true,
+		weapon_physcannon = true,
+		gmod_tool = true
+	}
+}
+
+--- World Clicker Disabler ---
+
+--[[
+	Disables the default context menu (c menu) world clicker that lets you shoot
+	anywhere you want. This will still allow you to interact with props although
+	it will remove the halo around props. Patches the pSilent exploit. 
+]]--
+
+Config.WorldClicker = true
+
+--- Improved PVS (ESP Breaker) ---
+
+--[[
+	This may come with a moderate to severe proformance impact depending on
+	the size of the server and the amount of entities present in the players
+	default PVS.
+	
+	This will never add onto the PVS, just remove.
+]]--
+
+Config.PVS = {
+	Enabled = true,
+	
+	Ticks = 16,
+	pingScale = 0.80
+}
 
 Config.aimbotBreakers = {
 

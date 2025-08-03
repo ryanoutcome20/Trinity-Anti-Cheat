@@ -12,9 +12,9 @@ function TAC.Aimbot.Angles(Player, cNew, cOld)
 	local Status, Token = EVALUATE_FAILED, nil
 	
 	if Config.checkPitch and math.abs(Angles.x) >= Config.maxPitch then
-		Status, Token = TAC.Punishment.Evaluate("Angles", Player, "Angles [x: %i y: %i; x]", Angles.x, Angles.y)	
+		Status, Token = TAC.Punishment.Evaluate("Angles", Player, "Angles [x: %i y: %i; bad x]", Angles.x, Angles.y)	
 	elseif Config.checkYaw and math.abs(Angles.y) >= Config.maxYaw then
-		Status, Token = TAC.Punishment.Evaluate("Angles", Player, "Angles [x: %i y: %i; y]", Angles.x, Angles.y)
+		Status, Token = TAC.Punishment.Evaluate("Angles", Player, "Angles [x: %i y: %i; bad y]", Angles.x, Angles.y)
 	end
 	
 	if Status == EVALUATE_SUCCESS and Token then
@@ -31,24 +31,24 @@ function TAC.Aimbot.Snap(Player, cNew, cOld)
 		return
 	end
 	
-	local Trace = cNew:GetEyeTrace()
+	local Trace = cNew:GetTraceData()
 		
-	if not Trace.Entity or not Trace.Entity:IsPlayer() then
+	if not Trace.Valid or Trace.Entity:GetPos():DistToSqr(cNew:GetPos()) <= Config.Distance then
 		return
 	end
-	
-	if Config.useTwoTarget then
-		Trace = cOld:GetEyeTrace()
 		
-		if not Trace.Entity or Trace.Entity:IsPlayer() then
+	if Config.useTwoTarget then
+		Trace = cOld:GetTraceData()
+		
+		if not Trace.Valid then
 			return
 		end
 	end
 	
-	local Delta = math.abs(math.AngleDifference(cNew:GetViewAngles().y+360, cOld:GetViewAngles().y+360))
-
-	if Delta >= Config.Distance then
-		local Status, Token = TAC.Punishment.Evaluate("Snap", Player, "Snapped [d: %f; >= %i]", Delta, Config.Distance)
+	local Delta = cNew:GetDelta()
+	
+	if Delta >= Config.Delta then
+		local Status, Token = TAC.Punishment.Evaluate("Snap", Player, "Snapped [delta: %f; >= %i]", Delta, Config.Delta)
 		
 		if Status == EVALUATE_SUCCESS and Token then
 			return TAC.Execute(Token)
@@ -57,3 +57,37 @@ function TAC.Aimbot.Snap(Player, cNew, cOld)
 end
 
 hook.Add("StartCommandPlus", "TAC.Aimbot.Snap", TAC.Aimbot.Snap)
+
+function TAC.Aimbot.Mouse(Player, cNew, cOld)
+	local Config = TAC.Config.Mouse
+
+	if not Config.Enabled then
+		return
+	end
+	
+	local Trace = cNew:GetTraceData()
+	
+	if not Trace.Valid or Trace.Entity:GetPos():DistToSqr(cNew:GetPos()) <= Config.Distance then
+		return
+	end
+
+	local mX, mY = cNew:GetMouseX(), cNew:GetMouseY()
+	
+	local Delta = cNew:GetDelta()
+	
+	if Delta >= Config.iDeltaMin and Delta <= Config.iDeltaMax and mX == 0 and mY == 0 then
+		local Status, Token = TAC.Punishment.Evaluate("Mouse", Player, "Mouse [inputless delta: %f]", Delta, mX, mY)
+		
+		if Status == EVALUATE_SUCCESS and Token then
+			return TAC.Execute(Token)
+		end
+	elseif Delta >= Config.fDelta and mX == mY then
+		local Status, Token = TAC.Punishment.Evaluate("Mouse", Player, "Mouse [far delta: %f; mx: %i; my: %i]", Delta, mX, mY)
+		
+		if Status == EVALUATE_SUCCESS and Token then
+			return TAC.Execute(Token)
+		end
+	end
+end
+
+hook.Add("StartCommandPlus", "TAC.Aimbot.Mouse", TAC.Aimbot.Mouse)

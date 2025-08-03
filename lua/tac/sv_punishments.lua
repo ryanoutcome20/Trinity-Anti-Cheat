@@ -121,26 +121,29 @@ function TAC.Punishment.Flag(Token)
 	end
 	
 	local Player = Token.Player
-		
-	if Player:Set(Token.ID, Player:Grab(Token.ID, 0) + 1) >= Token.Maximum then
+	
+	Token.flagsCount = Player:Grab(Token.ID, 0) + 1
+	
+	if Player:Set(Token.ID, Token.flagsCount) >= Token.Maximum then
 		Player:Set(Token.ID, 0)
-		
 		return true
 	end
 	
 	if Token.Decay ~= -1 then
 		TAC.Timer(Player, Token.Decay, function(Player)
-			Player:Set(Token.ID, Player:Grab(Token.ID, 0) - 1)
+			Player:Set(Token.ID, math.max(Player:Grab(Token.ID, 0) - 1, 0))
 		end)
 	end
 	
-	TAC.Tell(
-		Token.formatFlags(Token),
-		Token.Alerts.Flags,
-		NOTIFY_GENERIC,
-		TAC.Config.Alerts.Sounds.Important,
-		Player
-	)
+	if Token.alertFlagsMinimum <= Token.flagsCount then
+		TAC.Tell(
+			Token.formatFlags(Token),
+			Token.Alerts.Flags,
+			NOTIFY_GENERIC,
+			TAC.Config.Alerts.Sounds.Important,
+			Player
+		)
+	end
 	
 	return false
 end

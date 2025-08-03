@@ -35,6 +35,14 @@ function TAC.Print(Text, ...)
 	)
 end
 
+function TAC.StandardAngle(Yaw)
+	if Yaw >= 0 and Yaw <= 180 then
+		return Yaw
+	end
+
+	return Yaw - 360
+end
+
 function TAC.Sanitize(Text)
 	local Indexes = {
 		["\r"] = "\\r",
@@ -101,6 +109,8 @@ function TAC.Format(Token, Text, ...)
 		
 		["Info"] = Token.Info,
 		["ID"] = Token.ID,
+		
+		["Flags"] = tostring(Token.flagsCount) or "N/A",
 		
 		["Contact"] = TAC.Config.Contact,
 		["Map"] = game.GetMap(),
@@ -191,10 +201,6 @@ TAC.Enum(
 	"PUNISHMENT_LOG",
 	"PUNISHMENT_KICK",
 	"PUNISHMENT_BAN"
-)
-
-TAC.Enum(
-	"FUN_NONE"
 )
 
 TAC.Enum(
