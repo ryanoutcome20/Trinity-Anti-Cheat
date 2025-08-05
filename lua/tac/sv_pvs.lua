@@ -17,7 +17,10 @@ function TAC.PVS.Check(Player, Position, Target)
 		start = Position,
 		endpos = Target:EyePos(),
 		mask = MASK_VISIBLE,
-		filter = { Player, Target }
+		filter = {
+			Player, 
+			Target
+		}
 	})
 
 	return not Trace.Hit or Trace.Entity == Target
@@ -35,6 +38,23 @@ function TAC.PVS.Predict(Player, Ticks)
     local Velocity = Player:GetVelocity()
 	local Friction = Player:GetFriction()
 
+	-- Insert squared size.
+	
+	local Size = TAC.Config.PVS.squaredSize
+	
+	for i = -2, 2 do 
+		for k = -2, 2 do 
+			for v = -2, 2 do
+				table.insert(Data, {
+					Position = Position + (Vector(i, k, v) * Size),
+					Velocity = Velocity
+				})
+			end
+		end
+	end
+
+	-- Insert ticks.
+	
     for i = 1, Ticks do
         if not Grounded then
             Velocity = Velocity + (-vector_up * Gravity * TAC.PVS.Interval)
@@ -44,10 +64,10 @@ function TAC.PVS.Predict(Player, Ticks)
 
         Position = Position + Velocity * TAC.PVS.Interval
 
-        Data[i] = {
+        table.insert(Data, {
             Position = Position,
             Velocity = Velocity
-        }
+        })
     end
 
     return Data
@@ -59,7 +79,7 @@ function TAC.PVS.Run(Player)
 	if not Config.Enabled then
 		return
 	end
-
+	
 	local Positions = TAC.PVS.Predict(Player, Config.Ticks + math.ceil(Player:Ping() * Config.pingScale))
 
 	for k, Target in ipairs(ents.FindInPVS(Player)) do 

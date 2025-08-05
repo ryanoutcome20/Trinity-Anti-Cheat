@@ -18,13 +18,17 @@ AccessorFunc(Base, "MouseY", "MouseY")
 AccessorFunc(Base, "ForwardMove", "ForwardMove")
 AccessorFunc(Base, "UpMove", "UpMove")
 AccessorFunc(Base, "CommandNumber", "CommandNumber")
+AccessorFunc(Base, "TickCount", "TickCount")
 
 AccessorFunc(Base, "Pos", "Pos")
 AccessorFunc(Base, "EyeTrace", "EyeTrace")
+AccessorFunc(Base, "Weapon", "Weapon")
+
+AccessorFunc(Base, "m_flSimulationTime", "SimulationTime")
+AccessorFunc(Base, "m_fLerpTime", "LerpTime")
 
 AccessorFunc(Base, "Delta", "Delta")
 AccessorFunc(Base, "TraceData", "TraceData")
-AccessorFunc(Base, "Weapon", "Weapon")
 
 function TAC.SCP.CopyMeta(Player, CUserCMD)
 	local Meta = setmetatable({}, {
@@ -41,12 +45,20 @@ function TAC.SCP.CopyMeta(Player, CUserCMD)
 	Meta:SetForwardMove(CUserCMD:GetForwardMove())
 	Meta:SetUpMove(CUserCMD:GetUpMove())
 	Meta:SetCommandNumber(CUserCMD:CommandNumber())
+	Meta:SetTickCount(CUserCMD:TickCount())
 	
 	Meta:SetPos(Player:GetPos())
 	Meta:SetEyeTrace(Player:GetEyeTrace())
 	Meta:SetWeapon(Player:GetActiveWeapon())
+	
+	Meta:SetLerpTime(Player:GetInternalVariable("m_fLerpTime"))
+	Meta:SetSimulationTime(Player:GetInternalVariable("m_flSimulationTime"))
 
 	return Meta
+end
+
+function TAC.SCP.Valid(Player)
+	return Player:GetObserverMode( ) == OBS_MODE_NONE and not Player:IsFrozen() and Player:IsFullyAuthenticated() and not Player:IsTimingOut() and not Player:IsBot()
 end
 
 function TAC.SCP.StartCommand(Player, CUserCMD)
@@ -59,6 +71,10 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 	-- enough for some of our checks.
 	
 	-- Player:GetAimVector():AngleEx(vector_origin)
+	
+	if not TAC.SCP.Valid(Player) then
+		return
+	end
 	
 	local cOld = Player:Grab("SCP")
 	local cNew = TAC.SCP.CopyMeta(Player, CUserCMD)

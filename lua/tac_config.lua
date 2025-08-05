@@ -239,6 +239,115 @@ pStub.Register("Mouse", {
 	Loss = 80
 })
 
+--- Movement ---
+
+--- Exploits ---
+
+pStub.Register("Interpolation Abuse", {
+	Enabled = false,
+	Name = "Interpolation Abuse",
+	Description = "Detects two methods of interpolation abuse to catch cheaters.",
+	Category = "Exploit",
+	
+	Method = PUNISHMENT_KICK,
+	
+	Overflow = true,
+	
+	Flags = true,
+	Maximum = 4,
+	Decay = 8,
+	
+	Ping = 350,
+	Loss = 80
+})
+
+pStub.Register("Speedhack", {
+	Enabled = true,
+	Name = "Speedhack",
+	Description = "Detects speedhack on servers with sv_maxusrcmdprocessticks set to zero. May also detect other exploits.",
+	Category = "Exploit",
+	
+	Method = PUNISHMENT_KICK,
+	
+	Flags = true,
+	Maximum = 20,
+	Decay = 0.025,
+	
+	Alerts = {
+		Flags = ALERT_NONE
+	},
+	
+	Ping = 100,
+	Loss = 80
+})
+
+
+pStub.Register("Tickcount", {
+	Enabled = true,
+	Name = "Tickcount",
+	Description = "Detects tickcount manipulation to do things like backtrack.",
+	Category = "Exploit",
+	
+	Message = "Strange Lag Patterns: {Contact}",
+	
+	Method = PUNISHMENT_KICK,
+	
+	Regular = true,
+	
+	Negative = true,
+	Range = -350,
+	
+	Flags = true,
+	Maximum = 10,
+	Decay = 5,
+	
+	Alerts = {
+		Flags = ALERT_NONE
+	},
+	
+	Ping = 80,
+	Loss = 80
+})
+
+pStub.Register("Fakelag", {
+	Enabled = true,
+	Name = "Fakelag",
+	Description = "Detects constant lag patterns to find players who fakelag.",
+	Category = "Exploit",
+	
+	Message = "Strange Lag Patterns: {Contact}",
+	
+	Method = PUNISHMENT_KICK,
+	
+	Flags = true,
+	Maximum = 10,
+	Decay = 5,
+	
+	Alerts = {
+		Flags = ALERT_NONE
+	},
+	
+	Ping = 150,
+	Loss = 75
+})
+
+
+pStub.Register("Simulation Time", {
+	Enabled = true,
+	Name = "Simulation Time",
+	Description = "Detects players using the 'Desynculator' simulation time exploit.",
+	Category = "Exploit",
+	
+	Method = PUNISHMENT_KICK,
+	
+	Flags = true,
+	Maximum = 10,
+	Decay = 5,
+	
+	Ping = 150,
+	Loss = 75
+})
+
 --- Interpolated View Angles ---
 
 --[[
@@ -274,19 +383,17 @@ Config.WorldClicker = true
 
 --[[
 	This may come with a moderate to severe proformance impact depending on
-	the size of the server and the amount of entities present in the players
+	the size of the server and the amount of players present in the players
 	default PVS.
 	
-	This will never add onto the PVS, just remove.
+	This will never add onto the PVS, just remove. Also won't ever effect
+	entities, just players.
 ]]--
 
 Config.PVS = {
 	Enabled = true,
 	
 	Ticks = 16,
-	pingScale = 0.80
-}
-
-Config.aimbotBreakers = {
-
+	pingScale = 0.80,
+	squaredSize = 16
 }

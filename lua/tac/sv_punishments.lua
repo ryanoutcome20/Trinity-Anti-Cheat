@@ -5,15 +5,9 @@ TAC.Punishment = { }
 function TAC.Punishment.Register(ID, Token)
 	-- We just shove these into the config for later use.
 	
-	local Fallback = TAC.Config.Fallback or { }
+	local Base = table.Copy(TAC.Config.Fallback or {})
 	
-	for k,v in pairs(Fallback) do 
-		if Token[k] == nil then
-			Token[k] = v
-		end
-	end
-	
-	TAC.Config[ID] = Token	
+	TAC.Config[ID] = table.Merge(Base, Token)
 end
 
 function TAC.Punishment.LoadStubs()
@@ -23,7 +17,9 @@ function TAC.Punishment.LoadStubs()
 			Data.Token
 		)
 		
-		TAC.Print("%s loaded from pStubs!", Data.ID)
+		timer.Simple(0, function()
+			TAC.Print("%s loaded from pStubs!", Data.ID)
+		end)
 	end
 end
 
@@ -146,6 +142,10 @@ function TAC.Punishment.Flag(Token)
 	end
 	
 	return false
+end
+
+function TAC.Punishment.ResetFlags(Player, ID)
+	Player:Set(ID, 0)
 end
 
 --- Execute ---
