@@ -9,16 +9,10 @@ function TAC.Aimbot.Angles(Player, cNew, cOld)
 
 	local Angles = cNew:GetViewAngles()
 	
-	local Status, Token = EVALUATE_FAILED, nil
-	
 	if Config.checkPitch and math.abs(Angles.x) >= Config.maxPitch then
-		Status, Token = TAC.Punishment.Evaluate("Angles", Player, "Angles [x: %i y: %i; bad x]", Angles.x, Angles.y)	
+		TAC.Punishment.Wrapper("Angles", Player, "Angles [x: %i y: %i; bad x]", Angles.x, Angles.y)	
 	elseif Config.checkYaw and math.abs(Angles.y) >= Config.maxYaw then
-		Status, Token = TAC.Punishment.Evaluate("Angles", Player, "Angles [x: %i y: %i; bad y]", Angles.x, Angles.y)
-	end
-	
-	if Status == EVALUATE_SUCCESS and Token then
-		return TAC.Execute(Token)
+		TAC.Punishment.Wrapper("Angles", Player, "Angles [x: %i y: %i; bad y]", Angles.x, Angles.y)
 	end
 end
 
@@ -48,11 +42,7 @@ function TAC.Aimbot.Snap(Player, cNew, cOld)
 	local Delta = cNew:GetDelta()
 	
 	if Delta >= Config.Delta then
-		local Status, Token = TAC.Punishment.Evaluate("Snap", Player, "Snapped [delta: %f; >= %i]", Delta, Config.Delta)
-		
-		if Status == EVALUATE_SUCCESS and Token then
-			return TAC.Execute(Token)
-		end
+		TAC.Punishment.Wrapper("Snap", Player, "Snapped [delta: %f; >= %i]", Delta, Config.Delta)
 	end
 end
 
@@ -76,17 +66,9 @@ function TAC.Aimbot.Mouse(Player, cNew, cOld)
 	local Delta = cNew:GetDelta()
 	
 	if Delta >= Config.iDeltaMin and Delta <= Config.iDeltaMax and mX == 0 and mY == 0 then
-		local Status, Token = TAC.Punishment.Evaluate("Mouse", Player, "Mouse [inputless delta: %f]", Delta, mX, mY)
-		
-		if Status == EVALUATE_SUCCESS and Token then
-			return TAC.Execute(Token)
-		end
+		TAC.Punishment.Wrapper("Mouse", Player, "Mouse [inputless delta: %f]", Delta, mX, mY)
 	elseif Delta >= Config.fDelta and mX == mY then
-		local Status, Token = TAC.Punishment.Evaluate("Mouse", Player, "Mouse [far delta: %f; mx: %i; my: %i]", Delta, mX, mY)
-		
-		if Status == EVALUATE_SUCCESS and Token then
-			return TAC.Execute(Token)
-		end
+		TAC.Punishment.Wrapper("Mouse", Player, "Mouse [far delta: %f; mx: %i; my: %i]", Delta, mX, mY)
 	end
 end
 

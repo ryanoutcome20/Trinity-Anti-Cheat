@@ -106,6 +106,16 @@ function TAC.Punishment.Evaluate(ID, Player, Info, ...)
 	return usingFallback and EVALUATE_FALLBACK or EVALUATE_SUCCESS, Token
 end
 
+function TAC.Punishment.Wrapper(ID, Player, Info, ...)
+	local Status, Token = TAC.Punishment.Evaluate(ID, Player, Info, ...)
+	
+	if Status == EVALUATE_SUCCESS and Token then
+		return TAC.Execute(Token)
+	end
+	
+	return Status, Token
+end
+
 --- Flags ---
 
 function TAC.Punishment.Flag(Token)

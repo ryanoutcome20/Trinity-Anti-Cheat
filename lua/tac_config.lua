@@ -224,15 +224,15 @@ pStub.Register("Mouse", {
 	Method = PUNISHMENT_KICK,
 	
 	iDeltaMax = 1.0,
-	iDeltaMin = 0.45,
+	iDeltaMin = 0.5,
 	fDelta = 15,
 	Distance = 5000,
 	
 	Flags = true,
-	Maximum = 4,
-	Decay = 8,
+	Maximum = 10,
+	Decay = 4,
 	
-	alertFlagsMinimum = 0,
+	alertFlagsMinimum = 8,
 	
 	Vehicles = true,
 	Ping = 150,
@@ -248,6 +248,8 @@ pStub.Register("Interpolation Abuse", {
 	Name = "Interpolation Abuse",
 	Description = "Detects two methods of interpolation abuse to catch cheaters.",
 	Category = "Exploit",
+	
+	Message = "Strange Interpolation: {Contact}",
 	
 	Method = PUNISHMENT_KICK,
 	
@@ -267,11 +269,15 @@ pStub.Register("Speedhack", {
 	Description = "Detects speedhack on servers with sv_maxusrcmdprocessticks set to zero. May also detect other exploits.",
 	Category = "Exploit",
 	
+	Message = "Strange Lag Patterns: {Contact}",
+	
 	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
-	Maximum = 20,
-	Decay = 0.025,
+	Maximum = 45,
+	Decay = 0.15,
+	
+	alertFlagsMinimum = 40,
 	
 	Alerts = {
 		Flags = ALERT_NONE
@@ -340,12 +346,15 @@ pStub.Register("Simulation Time", {
 	
 	Method = PUNISHMENT_KICK,
 	
+	Low = -150,
+	High = 150,
+	
 	Flags = true,
 	Maximum = 10,
 	Decay = 5,
 	
-	Ping = 150,
-	Loss = 75
+	Ping = 250,
+	Loss = 80
 })
 
 --- Interpolated View Angles ---

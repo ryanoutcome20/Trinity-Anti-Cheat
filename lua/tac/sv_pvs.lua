@@ -88,7 +88,7 @@ function TAC.PVS.Run(Player)
 		end
 		
 		local Validated = false
-	
+		
 		for k, Data in ipairs(Positions) do 
 			if TAC.PVS.Check(Player, Data.Position, Target) then
 				Validated = true
