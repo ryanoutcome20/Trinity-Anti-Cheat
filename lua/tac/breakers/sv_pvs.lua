@@ -1,18 +1,18 @@
-TAC.PVS = { 
+TAC.Breakers.PVS = { 
 	Interval = engine.TickInterval()
 }
 
-function TAC.PVS.Set(Player, ENT, Status)
+function TAC.Breakers.PVS.Set(Player, ENT, Status)
 	ENT:SetPreventTransmit(Player, Status)
 	
 	local Sub = ENT:GetChildren()
 	
 	for i = 1, #Sub do
-		TAC.PVS.Set(Player, Sub[i], Status)
+		TAC.Breakers.PVS.Set(Player, Sub[i], Status)
 	end
 end
 
-function TAC.PVS.Check(Player, Position, Target)
+function TAC.Breakers.PVS.Check(Player, Position, Target)
 	local Trace = util.TraceLine({
 		start = Position,
 		endpos = Target:EyePos(),
@@ -26,7 +26,7 @@ function TAC.PVS.Check(Player, Position, Target)
 	return not Trace.Hit or Trace.Entity == Target
 end
 
-function TAC.PVS.Predict(Player, Ticks)
+function TAC.Breakers.PVS.Predict(Player, Ticks)
 	-- No, we won't do any AABB checks in here since it would be
 	-- too expensive.
 		
@@ -57,12 +57,12 @@ function TAC.PVS.Predict(Player, Ticks)
 	
     for i = 1, Ticks do
         if not Grounded then
-            Velocity = Velocity + (-vector_up * Gravity * TAC.PVS.Interval)
+            Velocity = Velocity + (-vector_up * Gravity * TAC.Breakers.PVS.Interval)
         else
             Velocity = Velocity * Friction
         end
 
-        Position = Position + Velocity * TAC.PVS.Interval
+        Position = Position + Velocity * TAC.Breakers.PVS.Interval
 
         table.insert(Data, {
             Position = Position,
@@ -73,14 +73,14 @@ function TAC.PVS.Predict(Player, Ticks)
     return Data
 end
 
-function TAC.PVS.Run(Player)
+function TAC.Breakers.PVS.Run(Player)
 	local Config = TAC.Config.PVS
 	
 	if not Config.Enabled then
 		return
 	end
 	
-	local Positions = TAC.PVS.Predict(Player, Config.Ticks + math.ceil(Player:Ping() * Config.pingScale))
+	local Positions = TAC.Breakers.PVS.Predict(Player, Config.Ticks + math.ceil(Player:Ping() * Config.pingScale))
 
 	for k, Target in ipairs(ents.FindInPVS(Player)) do 
 		if not Target:IsPlayer() or Target == Player then
@@ -90,14 +90,14 @@ function TAC.PVS.Run(Player)
 		local Validated = false
 		
 		for k, Data in ipairs(Positions) do 
-			if TAC.PVS.Check(Player, Data.Position, Target) then
+			if TAC.Breakers.PVS.Check(Player, Data.Position, Target) then
 				Validated = true
 				break
 			end
 		end
 		
-		TAC.PVS.Set(Player, Target, not Validated)
+		TAC.Breakers.PVS.Set(Player, Target, not Validated)
 	end
 end
 
-hook.Add("StartCommandPlus", "TAC.PVS.Run", TAC.PVS.Run)
+hook.Add("StartCommandPlus", "TAC.Breakers.PVS.Run", TAC.Breakers.PVS.Run)

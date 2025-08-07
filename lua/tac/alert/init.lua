@@ -14,7 +14,7 @@ if CLIENT then
 		surface.PlaySound(Sound)
 	end)
 	
-	return
+	return true
 end
 
 util.AddNetworkString("tac-alert")
@@ -35,3 +35,5 @@ function Player:tAlert(Message, Type, Sound)
 		})
 	net.Send(self)
 end
+
+return true

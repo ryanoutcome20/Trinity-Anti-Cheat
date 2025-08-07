@@ -344,6 +344,8 @@ pStub.Register("Simulation Time", {
 	Description = "Detects players using the 'Desynculator' simulation time exploit.",
 	Category = "Exploit",
 	
+	Message = "Timed Out",
+	
 	Method = PUNISHMENT_KICK,
 	
 	Low = -150,
@@ -368,11 +370,11 @@ pStub.Register("Simulation Time", {
 Config.Interpolated = {
 	Enabled = true,
 	
-	Ratio = 0.5,
+	Ratio = 0.25,
 	Randomize = true,
 	
 	Whitelisted = {
-		weapon_physgun = true,
+		weapon_physgun = false,
 		weapon_physcannon = true,
 		gmod_tool = true
 	}

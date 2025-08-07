@@ -94,7 +94,7 @@ function TAC.Punishment.Evaluate(ID, Player, Info, ...)
 	}
 
 	table.Merge(Token, Config, true)
-	
+		
 	TAC.Tell(
 		Token.formatEvaluate(Token),
 		Token.Alerts.Evaluate,

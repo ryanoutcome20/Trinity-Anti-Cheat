@@ -32,7 +32,7 @@ MsgN("  Caching resources")
 
 --- Config ---
 
-TAC.Version = "0.1.0"
+TAC.Version = "0.1.1"
 TAC.Edition = "Pre-Alpha"
 
 MsgN("  Loading config")
@@ -82,35 +82,46 @@ end
 
 MsgN("  Loading plugins")
 
-TAC.Plugins_SV = 0
-TAC.Plugins_CL = 0 
+TAC.Plugins = 0 
 
-for k, Plugin in ipairs(file.Find("tac/*.lua", "LUA")) do
-	if Plugin:StartWith("sv_") then
-		include("tac/" .. Plugin)
-		TAC.Plugins_SV = TAC.Plugins_SV + 1
-		continue
-	elseif Plugin:StartWith("cl_") then
-		AddCSLuaFile("tac/" .. Plugin)
-		TAC.Plugins_CL = TAC.Plugins_CL + 1
-		continue
-	end
+local function LoadPlugins(Root)
+	Root = Root or "tac/"
 
-	include("tac/" .. Plugin)
-	AddCSLuaFile("tac/" .. Plugin)
-		
-	TAC.Plugins_SV = TAC.Plugins_SV + 1
-	TAC.Plugins_CL = TAC.Plugins_CL + 1
+    local Stack = { }
+	
+    table.insert(Stack, Root)
+
+    while #Stack > 0 do
+        local Directory = table.remove(Stack)
+        local Files, Directories = file.Find(Directory .. "*", "LUA")
+
+		if Root ~= Directory then
+			local Formatted = Directory .. "/" .. "init.lua"
+			
+			if file.Exists(Formatted, "LUA") then
+				if include(Formatted) then
+					AddCSLuaFile(Formatted)
+				end
+				
+				TAC.Plugins = TAC.Plugins + 1
+			end
+		end
+
+        for k, Sub in ipairs(Directories) do
+            table.insert(Stack, Directory .. "/" .. Sub .. "/")
+        end
+    end
 end
+
+LoadPlugins()
 
 --- End ---
 
 MsgN("")
 
 MsgN(string.format(
-	"  Loaded [%i] Serverside Plugins, [%i] Clientside Plugins, [%i] Lists!",
-	TAC.Plugins_SV,
-	TAC.Plugins_CL,
+	"  Loaded [%i] Plugins, [%i] Lists!",
+	TAC.Plugins,
 	TAC.Lists
 ))
 

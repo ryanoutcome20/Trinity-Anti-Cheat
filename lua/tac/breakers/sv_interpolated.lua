@@ -1,4 +1,4 @@
-function TAC.InterpolateViewAngles(Player, cNew, cOld, CUserCMD)
+function TAC.Breakers.InterpolateViewAngles(Player, cNew, cOld, CUserCMD)
 	local Config = TAC.Config.Interpolated
 	
 	if not Config.Enabled then
@@ -32,4 +32,4 @@ function TAC.InterpolateViewAngles(Player, cNew, cOld, CUserCMD)
 	))
 end
 
-hook.Add("StartCommandPlus", "TAC.InterpolateViewAngles", TAC.InterpolateViewAngles)
+hook.Add("StartCommandPlus", "TAC.Breakers.InterpolateViewAngles", TAC.Breakers.InterpolateViewAngles)

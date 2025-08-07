@@ -58,7 +58,7 @@ function TAC.SCP.CopyMeta(Player, CUserCMD)
 end
 
 function TAC.SCP.Valid(Player)
-	return Player:GetObserverMode( ) == OBS_MODE_NONE and not Player:IsFrozen() and Player:IsFullyAuthenticated() and not Player:IsTimingOut() and not Player:IsBot()
+	return Player:GetObserverMode( ) == OBS_MODE_NONE and not Player:IsFrozen() and Player:IsFullyAuthenticated() and not Player:IsTimingOut() and not Player:IsBot() and not Player:IsTimingOut()
 end
 
 function TAC.SCP.StartCommand(Player, CUserCMD)
