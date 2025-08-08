@@ -62,6 +62,10 @@ function TAC.Punishment.Valid(Player, Config, isToken)
 		return
 	end
 	
+	if Config.Water and Player:WaterLevel() ~= 0 then
+		return
+	end
+	
 	return true
 end
 

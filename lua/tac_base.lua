@@ -127,7 +127,7 @@ function TAC.Tell(What, Who, Type, Sound, Ignore)
 		What = What .. " [dbg]"
 		Ignore = nil
 	end
-		
+	
 	if not Who or Who == ALERT_NONE then
 		return
 	end

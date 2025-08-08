@@ -1,4 +1,4 @@
-function TAC.Aimbot.Snap(Player, cNew, cOld)
+function TAC.Aimbot.Snap(Player, cNew, cOld, CUserCMD)
 	local Config = TAC.Config.Snap
 
 	if not Config.Enabled then

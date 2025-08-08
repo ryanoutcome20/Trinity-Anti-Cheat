@@ -1,4 +1,4 @@
-function TAC.Aimbot.Angles(Player, cNew, cOld)
+function TAC.Aimbot.Angles(Player, cNew, cOld, CUserCMD)
 	local Config = TAC.Config.Angles
 
 	if not Config.Enabled then

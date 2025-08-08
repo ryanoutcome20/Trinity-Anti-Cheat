@@ -170,6 +170,7 @@ Config.Punishment = {
 		Ping = -1,
 		Loss = -1,
 		Vehicles = false,
+		Water = false
 
 		-- Extra
 		-- ...
@@ -224,15 +225,15 @@ pStub.Register("Mouse", {
 	Method = PUNISHMENT_KICK,
 	
 	iDeltaMax = 1.0,
-	iDeltaMin = 0.5,
+	iDeltaMin = 0.45,
 	fDelta = 15,
-	Distance = 5000,
+	Distance = 8000,
 	
 	Flags = true,
-	Maximum = 10,
+	Maximum = 6,
 	Decay = 4,
 	
-	alertFlagsMinimum = 8,
+	alertFlagsMinimum = 3,
 	
 	Vehicles = true,
 	Ping = 150,
@@ -240,6 +241,55 @@ pStub.Register("Mouse", {
 })
 
 --- Movement ---
+
+pStub.Register("Bunnyhop", {
+	Enabled = true,
+	Name = "Bunnyhop",
+	Description = "Detects players with perfect bunnyhop. Will false flag bunnyhop addons.",
+	Category = "Movement",
+	
+	Message = "Bunnyhop: {Contact}",
+	
+	Method = PUNISHMENT_KICK,
+	
+	LTT = 1.5,
+	
+	Flags = true,
+	Maximum = 12,
+	Decay = 8,
+	
+	Vehicles = true,
+	Water = true
+})
+
+
+pStub.Register("Input", {
+	Enabled = true,
+	Name = "Input",
+	Description = "Detects players who are using something to manipulate their movement vectors.",
+	Category = "Movement",
+	
+	Method = PUNISHMENT_KICK,
+	
+	Minimum = 1000,
+	LTT = 1.5,
+
+	Vectors = {
+		[2500] = true,
+		[5000] = true,
+		[7500] = true,
+		[10000] = true
+	},
+	
+	Flags = false,
+	Maximum = 12,
+	Decay = 8,
+	
+	Ping = 200,
+	Loss = 90,
+	Vehicles = true,
+	Water = true
+})
 
 --- Exploits ---
 
@@ -337,17 +387,17 @@ pStub.Register("Fakelag", {
 	Loss = 75
 })
 
-
 pStub.Register("Simulation Time", {
 	Enabled = true,
 	Name = "Simulation Time",
 	Description = "Detects players using the 'Desynculator' simulation time exploit.",
 	Category = "Exploit",
 	
-	Message = "Timed Out",
+	Message = "Timed Out: {Contact}",
 	
 	Method = PUNISHMENT_KICK,
 	
+	TSS = 25,
 	Low = -150,
 	High = 150,
 	
@@ -357,6 +407,45 @@ pStub.Register("Simulation Time", {
 	
 	Ping = 250,
 	Loss = 80
+})
+
+pStub.Register("Act", {
+	Enabled = true,
+	Name = "Act",
+	Description = "Detects players who are moving while taunting (act commands).",
+	Category = "Exploit",
+	
+	Method = PUNISHMENT_BAN,
+	
+	Flags = false,
+	Maximum = 10,
+	Decay = 5
+})
+
+--- Command Enforcer ---
+
+pStub.Register("Command Enforcer", {
+	Enabled = false,
+	Name = "Command Enforcer",
+	Description = "Enforces console commands that shouldn't be changable without cheats.",
+	Category = "Commands",
+	
+	Message = "Bad Command: {Contact}",
+	
+	Method = PUNISHMENT_KICK,
+	
+	Commands = {
+		{
+			Name = "cl_interpolate",
+			Value = 1
+		}
+	},
+	
+	Delay = 5,
+	
+	Flags = false,
+	Maximum = -1,
+	Decay = -1,
 })
 
 --- Interpolated View Angles ---
@@ -374,7 +463,7 @@ Config.Interpolated = {
 	Randomize = true,
 	
 	Whitelisted = {
-		weapon_physgun = false,
+		weapon_physgun = true,
 		weapon_physcannon = true,
 		gmod_tool = true
 	}

@@ -1,4 +1,4 @@
-function TAC.Aimbot.Mouse(Player, cNew, cOld)
+function TAC.Aimbot.Mouse(Player, cNew, cOld, CUserCMD)
 	local Config = TAC.Config.Mouse
 
 	if not Config.Enabled then
