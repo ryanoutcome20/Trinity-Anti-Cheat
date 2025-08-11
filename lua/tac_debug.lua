@@ -17,3 +17,9 @@ concommand.Add("tac_cout", function()
 end)
 
 dbg = TAC.Print
+
+hook.Add("StartCommandPlus", "DBG", function(ply, cNew, cOld, cmd)
+    if not IsValid(ply) or not ply:IsPlayer() then return end
+
+
+end)

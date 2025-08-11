@@ -124,6 +124,9 @@ Config.Punishment = {
 		Description = "",
 		Category = "None",
 		
+		-- Clientside
+		Client = false,
+		
 		-- Punishment section.
 		Backend = "ULX", -- See "backends/" for adding new ones.
 		Method = PUNISHMENT_LOG,
@@ -170,7 +173,8 @@ Config.Punishment = {
 		Ping = -1,
 		Loss = -1,
 		Vehicles = false,
-		Water = false
+		Water = false,
+		Noclip = false
 
 		-- Extra
 		-- ...
@@ -180,7 +184,7 @@ Config.Punishment = {
 --- Aimbots ---
 
 pStub.Register("Angles", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Angles",
 	Description = "Detects invalid source engine angles.",
 	Category = "Aimbot",
@@ -203,11 +207,12 @@ pStub.Register("Snap", {
 	
 	Method = PUNISHMENT_KICK,
 	
-	Delta = 35,
+	Delta = 25,
 	Distance = 5000,
+	TSS = 3.5,
 	useTwoTarget = false,
 
-	Flags = true,
+	Flags = false,
 	Maximum = 2,
 	Decay = 4,
 	
@@ -225,7 +230,7 @@ pStub.Register("Mouse", {
 	Method = PUNISHMENT_KICK,
 	
 	iDeltaMax = 1.0,
-	iDeltaMin = 0.45,
+	iDeltaMin = 0.25,
 	fDelta = 15,
 	Distance = 8000,
 	
@@ -238,6 +243,48 @@ pStub.Register("Mouse", {
 	Vehicles = true,
 	Ping = 150,
 	Loss = 80
+})
+
+pStub.Register("Micromovement", {
+	Enabled = true,
+	Name = "Micromovement",
+	Description = "Detects strange stuttery movement within a players view angles.",
+	Category = "Aimbot",
+	
+	Method = PUNISHMENT_KICK,
+		
+	Delta = 0.05,
+	lOffset = 0.10,
+	hOffset = 0.75,
+	hIncrement = 3,
+	Distance = 4000,
+	
+	Flags = true,
+	Maximum = 6,
+	Decay = 4,
+	
+	alertFlagsMinimum = 3,
+	
+	Vehicles = true,
+	Ping = 150,
+	Loss = 80
+})
+
+pStub.Register("Autoclicker", {
+	Enabled = false,
+	Name = "Autoclicker",
+	Description = "Detects autoclickers. Will flag external autoclickers as well.",
+	Category = "Aimbot",
+	
+	Method = PUNISHMENT_KICK,
+	
+	Flags = true,
+	Maximum = 10,
+	Decay = 1.0,
+	
+	Alerts = {
+		Flags = ALERT_NONE
+	}
 })
 
 --- Movement ---
@@ -256,15 +303,16 @@ pStub.Register("Bunnyhop", {
 	
 	Flags = true,
 	Maximum = 12,
-	Decay = 8,
+	Decay = 10,
 	
 	Vehicles = true,
-	Water = true
+	Water = true,
+	Noclip = true
 })
 
 
 pStub.Register("Input", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Input",
 	Description = "Detects players who are using something to manipulate their movement vectors.",
 	Category = "Movement",
@@ -284,6 +332,10 @@ pStub.Register("Input", {
 	Flags = false,
 	Maximum = 12,
 	Decay = 8,
+	
+	Alerts = {
+		Flags = ALERT_NONE
+	},
 	
 	Ping = 200,
 	Loss = 90,
@@ -459,7 +511,7 @@ pStub.Register("Command Enforcer", {
 Config.Interpolated = {
 	Enabled = true,
 	
-	Ratio = 0.25,
+	Ratio = 0.05,
 	Randomize = true,
 	
 	Whitelisted = {
@@ -497,3 +549,46 @@ Config.PVS = {
 	pingScale = 0.80,
 	squaredSize = 16
 }
+
+--- Client Integrity ---
+
+pStub.Register("Client Integrity", {
+	Enabled = true,
+	Name = "Client Integrity",
+	Description = "Occurs when invalid data is sent to the server from the clientside.",
+	Category = "Integrity",
+	
+	Message = "Integrity: {Contact}",
+	
+	Method = PUNISHMENT_KICK
+})
+
+--- Client Mouse ---
+
+pStub.Register("Client Mouse", {
+	Enabled = true,
+	Name = "Client Mouse",
+	Description = "Occurs when the player moves their MouseX/MouseY while in an active menu.",
+	Category = "Aimbot",
+	
+	Client = true,
+	
+	Flags = true,
+	Maximum = 6,
+	Decay = 2
+})
+
+--- Engine Prediction ---
+
+pStub.Register("Engine Prediction", {
+	Enabled = false,
+	Name = "Engine Prediction",
+	Description = "Occurs when the player attempts to use an aimbot prediction.",
+	Category = "Aimbot",
+	
+	Client = true,
+	
+	Flags = true,
+	Maximum = 4,
+	Decay = 1
+})

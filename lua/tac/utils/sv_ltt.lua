@@ -1,7 +1,11 @@
 function TAC.LastTouchTime(Player)
-	local Time = CurTime()
+	local Time = Player:Grab("Last Touch Time", -1)
 
-	return Time - Player:Grab("Last Touch Time", Time)
+	if Time == -1 then
+		return -1
+	end
+
+	return CurTime() - Time
 end
 
 function TAC.UpdateLastTouchTime()

@@ -12,7 +12,7 @@ local function LoadPlugins(Root)
         local Files, Directories = file.Find(Directory .. "*", "LUA")
 
 		if Root ~= Directory then
-			local Formatted = Directory .. "/" .. "init.lua"
+			local Formatted = Directory .. "init.lua"
 			
 			if file.Exists(Formatted, "LUA") then
 				include(Formatted)
@@ -22,7 +22,7 @@ local function LoadPlugins(Root)
 		end
 
         for k, Sub in ipairs(Directories) do
-            table.insert(Stack, Directory .. "/" .. Sub .. "/")
+            table.insert(Stack, Directory .. Sub .. "/")
         end
     end
 end

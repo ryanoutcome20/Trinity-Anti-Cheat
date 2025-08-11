@@ -5,6 +5,10 @@ function TAC.Aimbot.Snap(Player, cNew, cOld, CUserCMD)
 		return
 	end
 	
+	if TAC.TimeSinceSpawned(Player) <= Config.TSS then
+		return
+	end
+	
 	local Trace = cNew:GetTraceData()
 		
 	if not Trace.Valid or Trace.Entity:GetPos():DistToSqr(cNew:GetPos()) <= Config.Distance then

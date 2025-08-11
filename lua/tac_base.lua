@@ -70,6 +70,10 @@ function TAC.Enum(...)
 	end
 end
 
+function TAC.Bitwise(Value, Mask)
+	return tobool(bit.band(Value, Mask))
+end
+
 function TAC.IsStaff(Player)
 	local Config = TAC.Config.Staff
 	
@@ -167,6 +171,14 @@ function TAC.Timer(Player, Delay, Callback)
 			end
 		end
 	end)
+end
+
+function TAC.TimeSinceSpawned(Player)
+	-- If you put this in a meta it'll be capable
+	-- of being broken by desynculator since that
+	-- breaks all synced timers.
+
+	return CurTime() - Player:GetCreationTime()
 end
 
 function Player:Set(Key, Value)

@@ -32,16 +32,23 @@ MsgN("  Caching resources")
 
 --- Config ---
 
-TAC.Version = "0.1.2"
+TAC.Version = "0.1.3"
 TAC.Edition = "Pre-Alpha"
 
 MsgN("  Loading config")
-include("tac_config.lua")
+include("config/tac_server.lua")
 
 --- Clientside ---
 
 MsgN("  Creating clientside")
 AddCSLuaFile("tac_client.lua")
+AddCSLuaFile("config/tac_client.lua")
+
+--- Atlas ---
+
+MsgN("  Creating Atlas instance")
+include("atlas/sv_atlas.lua")
+AddCSLuaFile("atlas/cl_atlas.lua")
 
 --- Backends ---
 

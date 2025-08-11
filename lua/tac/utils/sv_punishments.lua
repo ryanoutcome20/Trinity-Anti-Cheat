@@ -66,6 +66,10 @@ function TAC.Punishment.Valid(Player, Config, isToken)
 		return
 	end
 	
+	if Config.Noclip and Player:GetMoveType() == MOVETYPE_NOCLIP then
+		return
+	end
+	
 	return true
 end
 
@@ -130,9 +134,10 @@ function TAC.Punishment.Flag(Token)
 		return true
 	end
 	
+	local Increment = Token.Increment or 1
 	local Player = Token.Player
 	
-	Token.flagsCount = Player:Grab(Token.ID, 0) + 1
+	Token.flagsCount = Player:Grab(Token.ID, 0) + Increment
 	
 	if Player:Set(Token.ID, Token.flagsCount) >= Token.Maximum then
 		Player:Set(Token.ID, 0)
@@ -141,7 +146,7 @@ function TAC.Punishment.Flag(Token)
 	
 	if Token.Decay ~= -1 then
 		TAC.Timer(Player, Token.Decay, function(Player)
-			Player:Set(Token.ID, math.max(Player:Grab(Token.ID, 0) - 1, 0))
+			Player:Set(Token.ID, math.max(Player:Grab(Token.ID, 0) - Increment, 0))
 		end)
 	end
 	
@@ -224,6 +229,8 @@ function TAC.Execute(Token)
 	if not Backend then
 		return
 	end
+	
+	Player.TAC = { }
 	
 	if Token.Method == PUNISHMENT_BAN then
 		Backend.Ban(
