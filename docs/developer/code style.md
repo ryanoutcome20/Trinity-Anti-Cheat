@@ -4,16 +4,11 @@ This file should give you the basic coding style rules for **Trinity Anti-Cheat*
 
 # Variables
 
-Variables are designed to be simple and should follow a simple structure. They are a pseudo camel case writing style where camel case is only applied if the statement is more than two words long. For example:
+Variables are designed to be simple and should follow a simple structure. We use PascalCase for everything. 
 
-```lua
-local Elephant = "Elephant"
-local elephantSnout = "Snout"
-```
+Exceptions can be made for very long variables. An example would be the `cNew` and `cOld` used by `StartCommandPlus`. This is used instead of using `CUserCMDNew` and `CUserCMDOld`.
 
-Ideally you won't have to do this because you should keep all of your variables named as single words for simplicity.
-
-Do not use numbers in variable names. Spell out the number if you must.
+Exceptions can also be made to low-level engine bindings. An example would be `m_flSimulationTime` used by the Simulation Time check. Since this is such a low-level binding and must be grabbed like that anyway, setting the variable to that isn't a big deal.
 
 # If Statements
 
@@ -176,4 +171,27 @@ if TAC.Config.FSB.Enabled then
 		TAC.Config.FSB.Handle(TAC.Config.FSB.Code, Indentifier) -- TAC.Config.FSB.Handle is RunString (or RunStringEx)
 	end
 end
+```
+
+# Player Name
+
+If dealing with a player always use the variable name `Player`. If you cannot use `Player` then use `Target`. If dealing with more than one player then use the variable name specific to that use case. Examples include:
+
+```lua
+hook.Add("PlayerDeath", "Example", function(Victim, Inflictor, Attacker)
+	-- Code.
+	-- Can also use "Player" instead of "Victim"!
+end)
+```
+
+```lua
+hook.Add("PlayerHurt", "Example", function(Player, Target)
+	-- Code.
+end)
+```
+
+```lua
+hook.Add("StartCommand", "Example", function(Player, CUserCMD)
+	-- Code.
+end)
 ```
