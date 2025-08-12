@@ -9,9 +9,9 @@ function Player:tLog(Type, Text)
 	Text = TAC.Config.Logging.Prefix(Type) .. Text
 	
 	if TAC.Config.Logging.DB then 
-		TAC.Config.Logging.dbCreate()
+		TAC.Config.Logging.DBCreate()
 		
-		TAC.Config.Logging.dbQuery(
+		TAC.Config.Logging.DBQuery(
 			self,
 			Type,
 			Text

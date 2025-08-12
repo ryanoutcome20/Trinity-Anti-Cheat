@@ -79,11 +79,11 @@ Config.Logging = {
 	DB = false,
 	File = true, 
 	
-	dbCreate = function()
+	DBCreate = function()
 		return "CREATE TABLE IF NOT EXISTS trinity_db( sid TEXT, type TEXT, text TEXT )"
 	end,
 	
-	dbQuery = function(Player, Type, Message)
+	DBQuery = function(Player, Type, Message)
 		return string.format(
             "INSERT INTO trinity_db( sid, type, text ) VALUES( %s, %s, %s )",
             sql.SQLStr(User:SteamID64()),
@@ -138,7 +138,7 @@ Config.Punishment = {
 		Maximum = 3,
 		Decay = -1,
 		
-		alertFlagsMinimum = 0,
+		AlertFlagsMinimum = 0,
 		
 		-- Alert section.
 		Alerts = {
@@ -191,10 +191,10 @@ pStub.Register("Angles", {
 	
 	Method = PUNISHMENT_KICK,
 	
-	checkPitch = true,
-	maxPitch = 90,
-	checkYaw = true,
-	maxYaw = 180,
+	CheckPitch = true,
+	MaxPitch = 90,
+	CheckYaw = true,
+	MaxYaw = 180,
 	
 	Vehicles = true
 })
@@ -210,7 +210,7 @@ pStub.Register("Snap", {
 	Delta = 25,
 	Distance = 5000,
 	TSS = 3.5,
-	useTwoTarget = false,
+	UseTwoTarget = false,
 
 	Flags = false,
 	Maximum = 2,
@@ -229,16 +229,16 @@ pStub.Register("Mouse", {
 	
 	Method = PUNISHMENT_KICK,
 	
-	iDeltaMax = 1.0,
-	iDeltaMin = 0.25,
-	fDelta = 15,
+	InputlessDeltaMax = 1.0,
+	InputlessDeltaMin = 0.25,
+	FarDelta = 15,
 	Distance = 8000,
 	
 	Flags = true,
 	Maximum = 6,
 	Decay = 4,
 	
-	alertFlagsMinimum = 3,
+	AlertFlagsMinimum = 3,
 	
 	Vehicles = true,
 	Ping = 150,
@@ -254,16 +254,16 @@ pStub.Register("Micromovement", {
 	Method = PUNISHMENT_KICK,
 		
 	Delta = 0.05,
-	lOffset = 0.10,
-	hOffset = 0.75,
-	hIncrement = 3,
+	LowOffset = 0.10,
+	HighOffset = 0.75,
+	HighIncrement = 3,
 	Distance = 4000,
 	
 	Flags = true,
 	Maximum = 6,
 	Decay = 4,
 	
-	alertFlagsMinimum = 3,
+	AlertFlagsMinimum = 3,
 	
 	Vehicles = true,
 	Ping = 150,
@@ -379,7 +379,7 @@ pStub.Register("Speedhack", {
 	Maximum = 45,
 	Decay = 0.15,
 	
-	alertFlagsMinimum = 40,
+	AlertFlagsMinimum = 40,
 	
 	Alerts = {
 		Flags = ALERT_NONE
@@ -467,7 +467,7 @@ pStub.Register("Act", {
 	Description = "Detects players who are moving while taunting (act commands).",
 	Category = "Exploit",
 	
-	Method = PUNISHMENT_BAN,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = false,
 	Maximum = 10,
@@ -573,6 +573,8 @@ pStub.Register("Client Mouse", {
 	
 	Client = true,
 	
+	Method = PUNISHMENT_KICK,
+	
 	Flags = true,
 	Maximum = 6,
 	Decay = 2
@@ -581,14 +583,44 @@ pStub.Register("Client Mouse", {
 --- Engine Prediction ---
 
 pStub.Register("Engine Prediction", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Engine Prediction",
 	Description = "Occurs when the player attempts to use an aimbot prediction.",
 	Category = "Aimbot",
 	
 	Client = true,
 	
+	Method = PUNISHMENT_KICK,
+	
 	Flags = true,
 	Maximum = 4,
 	Decay = 1
+})
+
+--- Pre-Init Checksum ---
+
+--[[
+	This will basically check all functions and variables
+	in pre-init to verify the integrity of the environment.
+	
+	Check your console on the clientside to get the PIC 
+	checksum. Be sure to not have any external cheats or
+	pre-autorun scripts running when you do this!
+	
+	The checksum won't print if you have silent clientside
+	mode enabled.
+--]]
+
+pStub.Register("PIC", {
+	Enabled = true,
+	Name = "PIC",
+	Description = "Checks the players pre-init variables and generates a checksum to verify integrity.",
+	Category = "Integrity",
+	
+	Message = "Bad PIC Checksum: {Contact}",
+	
+	Method = PUNISHMENT_KICK,
+	
+	PIC = "2226812553",
+	Await = 3
 })

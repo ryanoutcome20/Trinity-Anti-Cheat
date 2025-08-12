@@ -137,9 +137,9 @@ function TAC.Punishment.Flag(Token)
 	local Increment = Token.Increment or 1
 	local Player = Token.Player
 	
-	Token.flagsCount = Player:Grab(Token.ID, 0) + Increment
+	Token.FlagsCount = Player:Grab(Token.ID, 0) + Increment
 	
-	if Player:Set(Token.ID, Token.flagsCount) >= Token.Maximum then
+	if Player:Set(Token.ID, Token.FlagsCount) >= Token.Maximum then
 		Player:Set(Token.ID, 0)
 		return true
 	end
@@ -150,7 +150,7 @@ function TAC.Punishment.Flag(Token)
 		end)
 	end
 	
-	if Token.alertFlagsMinimum <= Token.flagsCount then
+	if Token.AlertFlagsMinimum <= Token.FlagsCount then
 		TAC.Tell(
 			Token.formatFlags(Token),
 			Token.Alerts.Flags,

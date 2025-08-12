@@ -16,6 +16,11 @@ Config.FlagInterval = 0.25
 Config.Mouse = true
 Config.EnginePrediction = true
 
+--- Lua Execution / Detours ---
+
+Config.Tracer = true
+Config.PIC = true
+
 --- Breakers ---
 
 Config.FSB = {

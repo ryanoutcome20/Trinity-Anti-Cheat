@@ -11,11 +11,11 @@ TAC.SIGNITURE_GOLD = Color(245,194,71)
 
 local Player = FindMetaTable("Player")
 
-function TAC.PrintColor(tagColor, Text, ...)
+function TAC.PrintColor(TagColor, Text, ...)
 	MsgC(
 		TAC.WHITE,
 		"[",
-		tagColor,
+		TagColor,
 		"TAC",
 		TAC.WHITE,
 		"] ",
@@ -43,7 +43,7 @@ function TAC.StandardAngle(Yaw)
 	return Yaw - 360
 end
 
-function TAC.Sanitize(Text)
+function TAC.Fix(Text)
 	local Indexes = {
 		["\r"] = "\\r",
 		["\n"] = "\\n",
@@ -60,9 +60,6 @@ function TAC.Sanitize(Text)
 	
 	return Text
 end
-
-TAC.Fix = TAC.Sanitize
-tSanitize = TAC.Sanitize
 
 function TAC.Enum(...)
 	for k, Name in pairs({...}) do 
@@ -102,7 +99,7 @@ function TAC.Format(Token, Text, ...)
 	end
 	
 	local Interpolated = string.Interpolate(Text, {
-		["Name"] = TAC.Sanitize(Token.Player:Nick()),
+		["Name"] = TAC.Fix(Token.Player:Nick()),
 		["SteamID64"] = Token.Player:SteamID64(),
 		["SteamID"] = Token.Player:SteamID(),
 		["IP"] = Token.Player:IPAddress(),
@@ -114,7 +111,7 @@ function TAC.Format(Token, Text, ...)
 		["Info"] = Token.Info,
 		["ID"] = Token.ID,
 		
-		["Flags"] = tostring(Token.flagsCount) or "N/A",
+		["Flags"] = tostring(Token.FlagsCount) or "N/A",
 		
 		["Contact"] = TAC.Config.Contact,
 		["Map"] = game.GetMap(),
@@ -219,8 +216,7 @@ TAC.Enum(
 	"EVALUATE_FAILED",
 	"EVALUATE_FALLBACK",
 	"EVALUATE_SUCCESS",
-	"EVALUATE_BYPASSED",
-	"EVALUATE_FORCED"
+	"EVALUATE_BYPASSED"
 )
 
 TAC.Enum(

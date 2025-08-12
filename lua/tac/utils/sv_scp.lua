@@ -80,10 +80,9 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 	
 	local cOld = Player:Grab("SCP")
 	local cNew = TAC.SCP.CopyMeta(Player, CUserCMD)
-	
-	Player:Set("SCP", cNew)
-	
+		
 	if not cOld then
+		Player:Set("SCP", cNew)
 		return
 	end
 	
@@ -95,6 +94,13 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 		Entity = Trace.Entity,
 		Valid = Trace.Entity and Trace.Entity:IsPlayer() or false
 	})
+	
+	if not cOld.Delta or not cOld.TraceData then
+		Player:Set("SCP", cNew)
+		return
+	end
+	
+	Player:Set("SCP", cNew)
 	
 	hook.Run("StartCommandPlus", Player, cNew, cOld, CUserCMD)
 end

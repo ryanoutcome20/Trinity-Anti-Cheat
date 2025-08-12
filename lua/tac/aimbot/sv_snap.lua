@@ -4,7 +4,7 @@ function TAC.Aimbot.Snap(Player, cNew, cOld, CUserCMD)
 	if not Config.Enabled then
 		return
 	end
-	
+		
 	if TAC.TimeSinceSpawned(Player) <= Config.TSS then
 		return
 	end
@@ -15,7 +15,7 @@ function TAC.Aimbot.Snap(Player, cNew, cOld, CUserCMD)
 		return
 	end
 		
-	if Config.useTwoTarget then
+	if Config.UseTwoTarget then
 		Trace = cOld:GetTraceData()
 		
 		if not Trace.Valid then
