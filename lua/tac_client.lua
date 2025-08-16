@@ -77,6 +77,9 @@ local math = Get("math")
 local util = Get("util")
 local table = Get("table")
 local hook = Get("hook")
+local debug = Get("debug")
+
+local jit = Get("jit")
 
 local Color = Get("Color")
 local LocalPlayer = Get("LocalPlayer")()
@@ -118,6 +121,18 @@ function TAC.Print(Text, ...)
 		Text,
 		...
 	)
+end
+
+function TAC.Random(Length)
+	Length = Length or math.random(20, 40)
+	
+	local Text = ""
+	
+	for i = 1, Length do
+		Text = Text .. string.char(math.random(97, 122))
+	end
+	
+	return Text
 end
 
 --- Flag System ---
@@ -169,8 +184,21 @@ end
 --- File Stealer Breaker ---
 
 if TAC.Config.FSB.Enabled then
-	for k, Indentifier in ipairs(TAC.Config.FSB.Indentifier) do 
+	local Text = ""
+	
+	for k, Indentifier in ipairs(TAC.Config.FSB.Identifiers or { }) do 
 		TAC.Config.FSB.Handle(TAC.Config.FSB.Code, Indentifier)
+		Text = Text .. Indentifier
+	end
+		
+	Text = string.rep(Text, TAC.Config.FSB.Size)
+	
+	if TAC.Config.FSB.Spammer then
+		hook.Add("Think", "TAC-FSB", function()
+			local Buffer = TAC.Random()
+			
+			TAC.Config.FSB.Handle("--[[" .. Buffer .. Text .. Buffer .. "--]]", Buffer)
+		end)
 	end
 end
 
@@ -334,4 +362,20 @@ end
 
 if not TAC.Config.Silent then
 	TAC.Print("Trinity Clientside Loaded!")
+end
+
+--- Debug Mode ---
+
+local Debug = true
+
+if Debug then
+	TAC.Print("Trinity Debug Enabled!")
+
+	concommand.Add("tac_globalize", function()
+		_G.TAC = TAC
+	end)
+	
+	concommand.Add("tac_dbg_out", function()
+		PrintTable(TAC)
+	end)
 end

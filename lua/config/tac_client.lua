@@ -24,14 +24,16 @@ Config.PIC = true
 --- Breakers ---
 
 Config.FSB = {
-	Enabled = false,
+	Enabled = true,
 	
 	Code = "\n",
-	Identifier = {
-		"COM",
-		"\00"
+	Identifiers = {
+		".\n."
 	},
-	Handle = RunString
+	Handle = RunString,
+	
+	Spammer = true,
+	Size = 1
 }
 
 

@@ -7,8 +7,8 @@ function TAC.Aimbot.Autoclicker(Player, cNew, cOld, CUserCMD)
 	
 	if TAC.Bitwise(cNew:GetButtons(), IN_ATTACK) and not TAC.Bitwise(cOld:GetButtons(), IN_ATTACK) then
 		TAC.Punishment.Wrapper("Autoclicker", Player, "Autoclicker")
-	else
-		TAC.Punishment.ResetFlags(Player, "Autoclicker")
+	elseif Config.ResetOnFailure then
+		TAC.Punishment.ResetFlags(Player, "Autoclicker")	
 	end
 end
 

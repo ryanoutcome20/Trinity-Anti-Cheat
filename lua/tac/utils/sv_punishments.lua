@@ -208,10 +208,6 @@ function TAC.Execute(Token)
 		Token.formatPunishment(Token)
 	)
 
-	if Token.Method == PUNISHMENT_LOG then
-		return EXECUTE_SUCCESS
-	end
-	
 	TAC.Tell(
 		Token.formatPunishment(Token),
 		Token.Alerts.Punishment,
@@ -219,6 +215,10 @@ function TAC.Execute(Token)
 		TAC.Config.Alerts.Sounds.Punishment,
 		Player
 	)
+
+	if Token.Method == PUNISHMENT_LOG then
+		return EXECUTE_SUCCESS
+	end
 
 	-- Get message.
 	local Message = tFormat(Token)

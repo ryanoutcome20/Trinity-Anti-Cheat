@@ -5,6 +5,10 @@ function TAC.Networking.PIC.Receive(Stage, Player, Checksum)
 end
 
 function TAC.Networking.PIC.Await(Target)
+	if Target:IsBot() then
+		return
+	end
+
 	TAC.Timer(Target, TAC.Config.PIC.Await, function(Player)
 		TAC.Networking.PIC.Run(
 			Player,

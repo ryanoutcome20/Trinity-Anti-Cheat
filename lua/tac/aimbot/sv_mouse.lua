@@ -12,9 +12,9 @@ function TAC.Aimbot.Mouse(Player, cNew, cOld, CUserCMD)
 	end
 
 	local mX, mY = cNew:GetMouseX(), cNew:GetMouseY()
-	
+		
 	local Delta = cNew:GetDelta()
-	
+		
 	if Delta >= Config.InputlessDeltaMin and Delta <= Config.InputlessDeltaMax and mX == 0 and mY == 0 then
 		TAC.Punishment.Wrapper("Mouse", Player, "Mouse [inputless delta: %f]", Delta)
 	elseif Delta >= Config.FarDelta and mX == mY then

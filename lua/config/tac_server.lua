@@ -77,7 +77,7 @@ Config.Alerts = {
 Config.Logging = {
 	Console = true,
 	DB = false,
-	File = true, 
+	File = true,
 	
 	DBCreate = function()
 		return "CREATE TABLE IF NOT EXISTS trinity_db( sid TEXT, type TEXT, text TEXT )"
@@ -189,7 +189,7 @@ pStub.Register("Angles", {
 	Description = "Detects invalid source engine angles.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	CheckPitch = true,
 	MaxPitch = 90,
@@ -205,13 +205,17 @@ pStub.Register("Snap", {
 	Description = "Detects snapping to players in a single tick.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	Delta = 25,
-	Distance = 5000,
+	Scaled = true,
+	ScaledDelta = 45,
+	ScaledDistanceMin = 10000000,
+	ScaledDistanceMax = 500000000,
+	Distance = 65000,
 	TSS = 3.5,
 	UseTwoTarget = false,
-
+	
 	Flags = false,
 	Maximum = 2,
 	Decay = 4,
@@ -227,9 +231,9 @@ pStub.Register("Mouse", {
 	Description = "Detects invalid MouseX/MouseY values compared to angle changes.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
-	InputlessDeltaMax = 1.0,
+	InputlessDeltaMax = 2.5,
 	InputlessDeltaMin = 0.25,
 	FarDelta = 15,
 	Distance = 8000,
@@ -251,7 +255,7 @@ pStub.Register("Micromovement", {
 	Description = "Detects strange stuttery movement within a players view angles.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 		
 	Delta = 0.05,
 	LowOffset = 0.10,
@@ -271,16 +275,52 @@ pStub.Register("Micromovement", {
 })
 
 pStub.Register("Autoclicker", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Autoclicker",
 	Description = "Detects autoclickers. Will flag external autoclickers as well.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
+	
+	ResetOnFailure = false,
 	
 	Flags = true,
-	Maximum = 10,
+	Maximum = 15,
 	Decay = 1.0,
+	
+	Alerts = {
+		Flags = ALERT_NONE
+	}
+})
+
+pStub.Register("Static", {
+	Enabled = true,
+	Name = "Static",
+	Description = "Detects players moving at constant mouse speeds.",
+	Category = "Aimbot",
+	
+	Message = "Unusual Mouse Input: {Contact}",
+	
+	Method = PUNISHMENT_LOG,
+		
+	Flags = true,
+	Maximum = 15,
+	Decay = 0.5
+})
+
+pStub.Register("Emulated Mouse", {
+	Enabled = true,
+	Name = "Emulated Mouse",
+	Description = "Detects players emulating mouse inputs via SetMouseX & SetMouseY. Will false flag if given low maximums. Recommended to keep on kick instead of ban.",
+	Category = "Aimbot",
+	
+	Message = "Unusual Mouse Input: {Contact}",
+	
+	Method = PUNISHMENT_LOG,
+	
+	Flags = true,
+	Maximum = 60,
+	Decay = 0.5,
 	
 	Alerts = {
 		Flags = ALERT_NONE
@@ -297,7 +337,7 @@ pStub.Register("Bunnyhop", {
 	
 	Message = "Bunnyhop: {Contact}",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	LTT = 1.5,
 	
@@ -317,7 +357,7 @@ pStub.Register("Input", {
 	Description = "Detects players who are using something to manipulate their movement vectors.",
 	Category = "Movement",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	Minimum = 1000,
 	LTT = 1.5,
@@ -346,14 +386,14 @@ pStub.Register("Input", {
 --- Exploits ---
 
 pStub.Register("Interpolation Abuse", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Interpolation Abuse",
 	Description = "Detects two methods of interpolation abuse to catch cheaters.",
 	Category = "Exploit",
 	
 	Message = "Strange Interpolation: {Contact}",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	Overflow = true,
 	
@@ -373,7 +413,7 @@ pStub.Register("Speedhack", {
 	
 	Message = "Strange Lag Patterns: {Contact}",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	Flags = true,
 	Maximum = 45,
@@ -398,7 +438,7 @@ pStub.Register("Tickcount", {
 	
 	Message = "Strange Lag Patterns: {Contact}",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	Regular = true,
 	
@@ -425,10 +465,10 @@ pStub.Register("Fakelag", {
 	
 	Message = "Strange Lag Patterns: {Contact}",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	Flags = true,
-	Maximum = 10,
+	Maximum = 3,
 	Decay = 5,
 	
 	Alerts = {
@@ -447,7 +487,7 @@ pStub.Register("Simulation Time", {
 	
 	Message = "Timed Out: {Contact}",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	TSS = 25,
 	Low = -150,
@@ -467,7 +507,7 @@ pStub.Register("Act", {
 	Description = "Detects players who are moving while taunting (act commands).",
 	Category = "Exploit",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	Flags = false,
 	Maximum = 10,
@@ -477,14 +517,14 @@ pStub.Register("Act", {
 --- Command Enforcer ---
 
 pStub.Register("Command Enforcer", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Command Enforcer",
 	Description = "Enforces console commands that shouldn't be changable without cheats.",
 	Category = "Commands",
 	
 	Message = "Bad Command: {Contact}",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	Commands = {
 		{
@@ -509,9 +549,9 @@ pStub.Register("Command Enforcer", {
 ]]--
 
 Config.Interpolated = {
-	Enabled = true,
+	Enabled = false,
 	
-	Ratio = 0.05,
+	Ratio = 0.00005,
 	Randomize = true,
 	
 	Whitelisted = {
@@ -560,7 +600,7 @@ pStub.Register("Client Integrity", {
 	
 	Message = "Integrity: {Contact}",
 	
-	Method = PUNISHMENT_KICK
+	Method = PUNISHMENT_LOG
 })
 
 --- Client Mouse ---
@@ -573,7 +613,7 @@ pStub.Register("Client Mouse", {
 	
 	Client = true,
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	Flags = true,
 	Maximum = 6,
@@ -583,14 +623,14 @@ pStub.Register("Client Mouse", {
 --- Engine Prediction ---
 
 pStub.Register("Engine Prediction", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Engine Prediction",
 	Description = "Occurs when the player attempts to use an aimbot prediction.",
 	Category = "Aimbot",
 	
 	Client = true,
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	Flags = true,
 	Maximum = 4,
@@ -619,7 +659,7 @@ pStub.Register("PIC", {
 	
 	Message = "Bad PIC Checksum: {Contact}",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	PIC = "2226812553",
 	Await = 3
