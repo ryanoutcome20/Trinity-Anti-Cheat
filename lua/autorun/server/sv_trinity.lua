@@ -32,7 +32,7 @@ MsgN("  Caching resources")
 
 --- Config ---
 
-TAC.Version = "0.1.4"
+TAC.Version = "0.1.5"
 TAC.Edition = "Pre-Alpha"
 
 MsgN("  Loading config")
@@ -89,7 +89,10 @@ end
 
 MsgN("  Loading plugins")
 
-TAC.Plugins = 0 
+TAC.Plugins = {
+	Total = 0,
+	Client = 0
+}
 
 local function LoadPlugins(Root)
 	Root = Root or "tac/"
@@ -108,9 +111,10 @@ local function LoadPlugins(Root)
 			if file.Exists(Formatted, "LUA") then
 				if include(Formatted) then
 					AddCSLuaFile(Formatted)
+					TAC.Plugins.Client = TAC.Plugins.Client + 1
 				end
 				
-				TAC.Plugins = TAC.Plugins + 1
+				TAC.Plugins.Total = TAC.Plugins.Total + 1
 			end
 		end
 
@@ -128,7 +132,7 @@ MsgN("")
 
 MsgN(string.format(
 	"  Loaded [%i] Plugins, [%i] Lists!",
-	TAC.Plugins,
+	TAC.Plugins.Total,
 	TAC.Lists
 ))
 
@@ -139,3 +143,9 @@ MsgN(string.format(
 ))
 
 Header()
+
+--- Dedicated Server ---
+
+if not game.IsDedicated() then
+	TAC.Print("Loopback / LAN server detected, anti-cheat cannot run at full capacity!")
+end

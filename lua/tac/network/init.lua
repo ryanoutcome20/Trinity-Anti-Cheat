@@ -1,6 +1,7 @@
 TAC.Networking = { }
 
 include("sv_pic.lua")
+include("sv_plugins.lua")
 
 function TAC.Networking.Integrity(Player, Message, ...)
 	return TAC.Punishment.Wrapper("Client Integrity", Player, Message, ...)
@@ -12,13 +13,13 @@ function TAC.Networking.Flag(Stage, Player, Data)
 	end
 
 	if not Data.cID or not Data.Message then
-		return TAC.Networking.Integrity(Player, "Invalid Flags [cid: %s; msg: %s]", type(Data.cID), type(Data.Message))	
+		return TAC.Networking.Integrity(Player, "Invalid Flags [cid: %s; message: %s]", type(Data.cID), type(Data.Message))	
 	end
 	
 	local Config = TAC.Config[Data.cID]
 	
 	if not Config or not Config.Client then
-		return TAC.Networking.Integrity(Player, "Invalid Flags [cfg: %s]", tostring(Data.cID))	
+		return TAC.Networking.Integrity(Player, "Invalid Flags [config: %s]", tostring(Data.cID))	
 	end
 	
 	TAC.Punishment.Wrapper(Data.cID, Player, TAC.Fix(Data.Message) .. " [CL]")

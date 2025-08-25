@@ -29,7 +29,7 @@ end
 
 function TAC.Print(Text, ...)
 	return TAC.PrintColor(
-		TAC.SIGNITURE_GOLD,
+		TAC.SIGNITURE_BLUE,
 		Text,
 		...
 	)
@@ -52,7 +52,7 @@ function TAC.Fix(Text)
 		["\f"] = "\\f"
 	}
 	
-	Text = Text:sub(1, 50)
+	Text = Text:sub(1, 64)
 	
 	for k,v in pairs(Indexes) do 
 		Text = Text:Replace(k,v)
@@ -168,14 +168,6 @@ function TAC.Timer(Player, Delay, Callback)
 			end
 		end
 	end)
-end
-
-function TAC.TimeSinceSpawned(Player)
-	-- If you put this in a meta it'll be capable
-	-- of being broken by desynculator since that
-	-- breaks all synced timers.
-
-	return CurTime() - Player:GetCreationTime()
 end
 
 function Player:Set(Key, Value)

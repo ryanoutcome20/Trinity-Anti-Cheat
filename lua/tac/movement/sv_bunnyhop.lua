@@ -5,12 +5,16 @@ function TAC.Movement.Bunnyhop(Player, cNew, cOld, CUserCMD)
 		return
 	end
 	
-	if not cNew:GetOnGround() or cOld:GetOnGround() then
+	if TAC.TimeSinceSpawned(Player) <= Config.TimeSinceSpawned then
+		return
+	end
+
+	if TAC.LastTouchTime(Player) <= Config.LTT then
+		TAC.Punishment.ResetFlags(Player, "Bunnyhop")
 		return
 	end
 	
-	if TAC.LastTouchTime(Player) <= Config.LTT then
-		TAC.Punishment.ResetFlags(Player, "Bunnyhop")
+	if not cNew:GetOnGround() or cOld:GetOnGround() then
 		return
 	end
 	

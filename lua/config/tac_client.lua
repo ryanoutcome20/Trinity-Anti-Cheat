@@ -9,32 +9,85 @@ local Config = { }
 
 Config.Silent = false
 
-Config.FlagInterval = 0.25
-
 --- Aimbot ---
 
-Config.Mouse = true
-Config.EnginePrediction = true
+Config.Aimbot = {
+	Mouse = true,
+	EnginePrediction = true,
+	InputGuard = {
+		Buttons = true,
+		
+		Angles = true,
+		Offset = 1,
+		
+		Mouse = true,
+		
+		Movement = true
+	}
+}
 
---- Lua Execution / Detours ---
+--- Pre-Init ---
 
-Config.Tracer = true
-Config.PIC = true
+Config.Integrity = {
+	Tracer = true,
+	PIC = true,
+	Stack = true,
+	Libraries = {
+		Enabled = true,
+		
+		Command = true,
+		Commands = 1,
+		
+		Hook = true,
+		Hooks = 19,
+		
+		Net = true,
+		Nets = 4
+	},
+	Keys = true
+}
+
+--- Static Cheats / Scripts ---
+
+Config.Static = {
+	Enabled = true,
+
+	Interstate = true,
+	Memoriam = true,
+	Coffee = true,
+	D3C = true,
+	Majestic = true
+}
 
 --- Breakers ---
 
-Config.FSB = {
-	Enabled = true,
-	
-	Code = "\n",
-	Identifiers = {
-		".\n."
-	},
-	Handle = RunString,
-	
-	Spammer = true,
-	Size = 1
+Config.Breakers = {
+	FSB = {
+		Enabled = true,
+		
+		Code = "\n",
+		Identifiers = {
+			".DEL\nCON."
+		},
+		Handle = RunString,
+		
+		Spammer = true,
+		Ticks = 1,
+		Size = 1
+	}
 }
 
+--- Scans ---
+
+Config.Scans = {
+	Binaries = {
+		Enabled = true
+	},
+	Hooks = {
+		Enabled = true,
+		
+		Delay = 5
+	}
+}
 
 return Config

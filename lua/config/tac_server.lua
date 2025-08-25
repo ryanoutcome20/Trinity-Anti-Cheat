@@ -169,12 +169,22 @@ Config.Punishment = {
 			)
 		end,
 		
+		formatLog = function(Token)
+			return tFormat(
+				Token,
+				"{Name} [{SteamID64}] was logged for \"{Info}\" ({ID})!"
+			)
+		end,
+		
 		-- Avoidance
 		Ping = -1,
 		Loss = -1,
 		Vehicles = false,
 		Water = false,
-		Noclip = false
+		Noclip = false,
+		SWEPs = {
+			-- ...
+		}
 
 		-- Extra
 		-- ...
@@ -189,7 +199,7 @@ pStub.Register("Angles", {
 	Description = "Detects invalid source engine angles.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	CheckPitch = true,
 	MaxPitch = 90,
@@ -205,7 +215,7 @@ pStub.Register("Snap", {
 	Description = "Detects snapping to players in a single tick.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Delta = 25,
 	Scaled = true,
@@ -213,7 +223,7 @@ pStub.Register("Snap", {
 	ScaledDistanceMin = 10000000,
 	ScaledDistanceMax = 500000000,
 	Distance = 65000,
-	TSS = 3.5,
+	TimeSinceSpawned = 3.5,
 	UseTwoTarget = false,
 	
 	Flags = false,
@@ -231,7 +241,7 @@ pStub.Register("Mouse", {
 	Description = "Detects invalid MouseX/MouseY values compared to angle changes.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	InputlessDeltaMax = 2.5,
 	InputlessDeltaMin = 0.25,
@@ -255,7 +265,7 @@ pStub.Register("Micromovement", {
 	Description = "Detects strange stuttery movement within a players view angles.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 		
 	Delta = 0.05,
 	LowOffset = 0.10,
@@ -280,7 +290,7 @@ pStub.Register("Autoclicker", {
 	Description = "Detects autoclickers. Will flag external autoclickers as well.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	ResetOnFailure = false,
 	
@@ -301,11 +311,15 @@ pStub.Register("Static", {
 	
 	Message = "Unusual Mouse Input: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 		
 	Flags = true,
 	Maximum = 15,
-	Decay = 0.5
+	Decay = 0.5,
+	
+	Alerts = {
+		Flags = ALERT_NONE
+	}
 })
 
 pStub.Register("Emulated Mouse", {
@@ -316,7 +330,7 @@ pStub.Register("Emulated Mouse", {
 	
 	Message = "Unusual Mouse Input: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 60,
@@ -325,6 +339,23 @@ pStub.Register("Emulated Mouse", {
 	Alerts = {
 		Flags = ALERT_NONE
 	}
+})
+
+pStub.Register("Nospread", {
+	Enabled = true,
+	Name = "Nospread",
+	Description = "Detects seed nospreads by using a delta sample check. Can be expensive and may not be worth the performance.",
+	Category = "Aimbot",
+	
+	Message = "Unusual Spread Cone: {Contact}",
+	
+	Method = PUNISHMENT_KICK,
+	
+	Samples = 15,
+	DeltaSamples = 8,
+	MinimumCone = 0.05,
+	Distance = 400,
+	Delta = 0.01,
 })
 
 --- Movement ---
@@ -337,19 +368,38 @@ pStub.Register("Bunnyhop", {
 	
 	Message = "Bunnyhop: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	LTT = 1.5,
+	TimeSinceSpawned = 3.5,
 	
 	Flags = true,
 	Maximum = 12,
 	Decay = 10,
+	
+	AlertFlagsMinimum = 10,
 	
 	Vehicles = true,
 	Water = true,
 	Noclip = true
 })
 
+pStub.Register("Autostrafe", {
+	Enabled = true,
+	Name = "Autostrafe",
+	Description = "Detects players with artificial movement patterns related to strafing.",
+	Category = "Movement",
+	
+	Method = PUNISHMENT_BAN,
+		
+	Flags = true,
+	Maximum = 20,
+	Decay = 2,
+		
+	Alerts = {
+		Flags = ALERT_NONE
+	}
+})
 
 pStub.Register("Input", {
 	Enabled = false,
@@ -357,7 +407,7 @@ pStub.Register("Input", {
 	Description = "Detects players who are using something to manipulate their movement vectors.",
 	Category = "Movement",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Minimum = 1000,
 	LTT = 1.5,
@@ -393,7 +443,7 @@ pStub.Register("Interpolation Abuse", {
 	
 	Message = "Strange Interpolation: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Overflow = true,
 	
@@ -413,7 +463,7 @@ pStub.Register("Speedhack", {
 	
 	Message = "Strange Lag Patterns: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 45,
@@ -438,7 +488,7 @@ pStub.Register("Tickcount", {
 	
 	Message = "Strange Lag Patterns: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Regular = true,
 	
@@ -465,7 +515,7 @@ pStub.Register("Fakelag", {
 	
 	Message = "Strange Lag Patterns: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 3,
@@ -487,9 +537,9 @@ pStub.Register("Simulation Time", {
 	
 	Message = "Timed Out: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
-	TSS = 25,
+	TimeSinceCreated = 25,
 	Low = -150,
 	High = 150,
 	
@@ -507,11 +557,46 @@ pStub.Register("Act", {
 	Description = "Detects players who are moving while taunting (act commands).",
 	Category = "Exploit",
 	
+	Method = PUNISHMENT_KICK
+})
+
+--- Extras ---
+
+pStub.Register("Name Changer", {
+	Enabled = true,
+	Name = "Name Changer",
+	Description = "Detects when players change steam username/name command, can be used to kick players if needed.",
+	Category = "Extra",
+	
+	Method = PUNISHMENT_KICK
+})
+
+pStub.Register("Suspicious Keypresses", {
+	Enabled = true,
+	Name = "Suspicious Keypresses",
+	Description = "Detects when players press suspicious keys. Can be configured to stop after a maximum is reached.",
+	Category = "Extra",
+	
 	Method = PUNISHMENT_LOG,
 	
-	Flags = false,
-	Maximum = 10,
-	Decay = 5
+	MaximumLogs = -1,
+	
+	Keys = {
+		[KEY_INSERT] = "Insert",
+		[KEY_DELETE] = "Delete"
+	}
+})
+
+pStub.Register("Errors", {
+	Enabled = true,
+	Name = "Errors",
+	Description = "Logs errors, if given the option it can also scan for errors from files that aren't supposed to exist.",
+	Category = "Extra",
+	
+	Method = PUNISHMENT_LOG,
+
+	Scan = true,
+	ScanMethod = PUNISHMENT_Kick	
 })
 
 --- Command Enforcer ---
@@ -524,7 +609,7 @@ pStub.Register("Command Enforcer", {
 	
 	Message = "Bad Command: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Commands = {
 		{
@@ -549,7 +634,7 @@ pStub.Register("Command Enforcer", {
 ]]--
 
 Config.Interpolated = {
-	Enabled = false,
+	Enabled = true,
 	
 	Ratio = 0.00005,
 	Randomize = true,
@@ -585,9 +670,11 @@ Config.WorldClicker = true
 Config.PVS = {
 	Enabled = true,
 	
-	Ticks = 16,
-	pingScale = 0.80,
-	squaredSize = 16
+	Ticks = 2,
+	pingScale = 0.01,
+	squareSize = 1,
+	squaredSize = 256,
+	intervalScale = 8
 }
 
 --- Client Integrity ---
@@ -600,7 +687,7 @@ pStub.Register("Client Integrity", {
 	
 	Message = "Integrity: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Client Mouse ---
@@ -613,7 +700,7 @@ pStub.Register("Client Mouse", {
 	
 	Client = true,
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 6,
@@ -630,11 +717,69 @@ pStub.Register("Engine Prediction", {
 	
 	Client = true,
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 4,
 	Decay = 1
+})
+
+--- Input Guard ---
+
+pStub.Register("Input Guard Angles", {
+	Enabled = true,
+	Name = "Input Guard Angles",
+	Description = "Occurs when the player is detected for manipulating angles. Likely to flag poorly coded addons.",
+	Category = "Aimbot",
+	
+	Client = true,
+	
+	Method = PUNISHMENT_LOG,
+	
+	Flags = false,
+	Maximum = 10,
+	Decay = 3
+})
+
+pStub.Register("Input Guard Buttons", {
+	Enabled = true,
+	Name = "Input Guard Buttons",
+	Description = "Occurs when the player is detected for manipulating buttons. Unlikely to false flag.",
+	Category = "Aimbot",
+	
+	Client = true,
+	
+	Method = PUNISHMENT_LOG
+})
+
+pStub.Register("Input Guard Mouse", {
+	Enabled = true,
+	Name = "Input Guard Mouse",
+	Description = "Occurs when the player is detected for manipulating mouse movement. Unlikely to false flag.",
+	Category = "Aimbot",
+	
+	Client = true,
+	
+	Method = PUNISHMENT_LOG,
+
+	Flags = true,
+	Maximum = 6,
+	Decay = 3
+})
+
+pStub.Register("Input Guard Movement", {
+	Enabled = true,
+	Name = "Input Guard Movement",
+	Description = "Occurs when the player is detected for manipulating movement values. Likely to flag poorly coded addons.",
+	Category = "Aimbot",
+	
+	Client = true,
+	
+	Method = PUNISHMENT_LOG,
+
+	Flags = false,
+	Maximum = 8,
+	Decay = 3
 })
 
 --- Pre-Init Checksum ---
@@ -659,8 +804,135 @@ pStub.Register("PIC", {
 	
 	Message = "Bad PIC Checksum: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
-	PIC = "2226812553",
-	Await = 3
+	PIC = "387594818",
+	Await = 24
+})
+
+--- Stack ---
+
+--[[
+	This check builds a custom stack frame and then verifies that
+	the stack frame is properly setup through stack traversal. Flags
+	a lot of detours.
+]]--
+
+pStub.Register("Stack", {
+	Enabled = true,
+	Name = "Stack",
+	Description = "Occurs when a player uses a bypass on the debug library.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "Bad Stack Frame: {Contact}",
+	
+	Method = PUNISHMENT_KICK
+})
+
+--- Key Input ---
+
+pStub.Register("Key Input", {
+	Enabled = true,
+	Name = "Key Input",
+	Description = "Checks input compared to key inputs to verify the player actually pressed a key.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Method = PUNISHMENT_LOG
+})
+
+--- Static Script ---
+
+pStub.Register("Static Script", {
+	Enabled = true,
+	Name = "Static Script",
+	Description = "Occurs when cheat file traces are left on a players computer.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "Likely Cheater: {Contact}",
+	
+	Method = PUNISHMENT_KICK
+})
+
+--- Error Tracer ---
+
+pStub.Register("Error Tracer", {
+	Enabled = true,
+	Name = "Error Tracer",
+	Description = "Occurs when a player uses a bypass or an addon is overriding a function incorrectly.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "Error: {Contact}",
+	
+	Method = PUNISHMENT_KICK
+})
+
+--- Libraries ---
+
+pStub.Register("Libraries", {
+	Enabled = true,
+	Name = "Libraries",
+	Description = "Occurs when the integrity of libraries during the player joining cannot be verified, may false flag addons.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "Library Failure: {Contact}",
+	
+	Method = PUNISHMENT_KICK
+})
+
+--- Plugins ---
+
+--[[
+	Utility and check functionality to verify that a player has loaded all of the plugins
+	of the post-init clientside.
+--]]
+
+pStub.Register("Plugins", {
+	Enabled = true,
+	Name = "Plugins",
+	Description = "Checks the players plugins to verify they loaded the clientside correctly.",
+	Category = "Integrity",
+	
+	Message = "Missing Plugins, Rejoin! ({Contact})",
+	
+	Method = PUNISHMENT_KICK,
+	
+	Await = 24
+})
+
+--- Scans ---
+
+pStub.Register("Binaries", {
+	Enabled = true,
+	Name = "Binaries",
+	Description = "Occurs when a player uses a C++ module ingame through the require system, may false flag some addons.",
+	Category = "Scans",
+	
+	Client = true,
+	
+	Message = "Bad Module: {Contact}",
+	
+	Method = PUNISHMENT_KICK
+})
+
+pStub.Register("Hooks", {
+	Enabled = true,
+	Name = "Hooks",
+	Description = "Occurs when the player has a hook registered from the blacklist.",
+	Category = "Scans",
+	
+	Client = true,
+	
+	Message = "Bad Hook: {Contact}",
+	
+	Method = PUNISHMENT_KICK
 })

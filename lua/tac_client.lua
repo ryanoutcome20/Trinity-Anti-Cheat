@@ -9,12 +9,14 @@ local TAC = { }
 TAC.Config = include("config/tac_client.lua")
 TAC.Atlas = include("atlas/cl_atlas.lua")
 
+TAC.Loaded = 0
+
 --- Localizers ---
 
 TAC.Localizers = { }
 
 function TAC.Localizers.Localize()
-    local Result = {}
+    local Result = { }
     
 	local Stack = {
 		{
@@ -26,7 +28,7 @@ function TAC.Localizers.Localize()
 	local Visted = {
 		[_G] = true 
 	}
-
+	
     while #Stack > 0 do
         local Frame = table.remove(Stack)
 		
@@ -78,11 +80,17 @@ local util = Get("util")
 local table = Get("table")
 local hook = Get("hook")
 local debug = Get("debug")
-
+local file = Get("file")
 local jit = Get("jit")
+local concommand = Get("concommand")
 
+local pcall = Get("pcall")
 local Color = Get("Color")
-local LocalPlayer = Get("LocalPlayer")()
+local Angle = Get("Angle")
+local Vector = Get("Vector")
+local include = Get("include")
+local CreateClientConVar = Get("CreateClientConVar")
+local LocalPlayer = Get("LocalPlayer")
 
 --- Colors ---
 
@@ -135,29 +143,99 @@ function TAC.Random(Length)
 	return Text
 end
 
+function TAC.Visible(Mask, Target, From)
+	From = From or LocalPlayer():EyePos()
+	
+	local Trace = util.TraceLine({
+		start = From,
+		endpos = Target:EyePos(),
+		mask = Mask,
+		filter = {
+			LocalPlayer(), 
+			Target
+		}
+	})
+	
+	return not Trace.Hit or Trace.Entity == Target
+end
+
 --- Flag System ---
 
-local Last = 0
+TAC.Flags = { 
+	Buffer = { }
+}
 
-function TAC.Flag(cID, Message, ...)
-	local Time = CurTime()
+function TAC.Flags.Flag(cID, Message, ...)	
+	table.insert(TAC.Flags.Buffer, {
+		cID = cID,
+		Message = string.format(
+			Message,
+			...
+		)
+	})
+end
+
+function TAC.Flags.Process()
+	timer.Simple(0.25, TAC.Flags.Process)
 	
-	if Last >= Time then
+	local Object = table.remove(TAC.Flags.Buffer)
+	
+	-- Check if we even have anything to process.
+	if not Object then
 		return
 	end
 	
+	-- Send our alert.
 	TAC.Atlas:Send(
 		"Flag", 
 		{
-			cID = cID,
-			Message = string.format(
-				Message,
-				...
-			)
+			cID = Object.cID,
+			Message = Object.Message
 		}
 	)
 	
-	Last = Time + TAC.Config.FlagInterval
+	-- Clamp flags.
+	while #TAC.Flags.Buffer > 15 do 
+		table.remove(TAC.Flags.Buffer)
+	end
+end
+
+timer.Simple(0.25, TAC.Flags.Process)
+
+TAC.Flag = TAC.Flags.Flag
+
+--- List Manager ---
+
+TAC.Lists = { 
+	Cache = { }
+}
+
+function TAC.Lists.Merge(Name)
+	if TAC.Lists.Cache[Name] then
+		return TAC.Lists.Cache[Name]
+	end
+
+	TAC.Lists.Cache[Name] = include("lists/cl_" .. string.lower(Name) .. ".lua")
+	
+	return TAC.Lists.Cache[Name]
+end
+
+function TAC.Lists.Grab(Name)
+	return TAC.Lists.Cache[Name]
+end
+
+--- Matches ---
+
+local Match = TAC.Lists.Merge("Match")
+
+function TAC.Match(String)
+	for k, Name in ipairs(Match) do 
+		if string.find(String, Name) then
+			return Name
+		end
+	end
+	
+	return false
 end
 
 --- Function Buffers ---
@@ -181,188 +259,81 @@ function TAC.GenerateBuffer(Function)
 	)
 end
 
---- File Stealer Breaker ---
+function TAC.GenerateUpvalueTree(Function)
+	local Info = debug.getinfo(Function, "uS")
+	local Variables = {}
 
-if TAC.Config.FSB.Enabled then
-	local Text = ""
-	
-	for k, Indentifier in ipairs(TAC.Config.FSB.Identifiers or { }) do 
-		TAC.Config.FSB.Handle(TAC.Config.FSB.Code, Indentifier)
-		Text = Text .. Indentifier
-	end
-		
-	Text = string.rep(Text, TAC.Config.FSB.Size)
-	
-	if TAC.Config.FSB.Spammer then
-		hook.Add("Think", "TAC-FSB", function()
-			local Buffer = TAC.Random()
+	if (Info and Info.what == "Lua") then
+		local Upvalues = info.nups
+
+		for i = 1, Upvalues do
+			local k,v = debug.getupvalue(Function, i)
 			
-			TAC.Config.FSB.Handle("--[[" .. Buffer .. Text .. Buffer .. "--]]", Buffer)
-		end)
-	end
-end
-
---- Mouse ---
-
-TAC.Mouse = { }
-
-function TAC.Mouse.Run(CUserCMD)
-	if not vgui.CursorVisible() then
-		return
-	end
-	
-	if CUserCMD:GetMouseX() == 0 and CUserCMD:GetMouseY() == 0 then
-		return
-	end
-
-	TAC.Flag("Client Mouse", "Menu Movement")
-end
-
-if TAC.Config.Mouse then
-	hook.Add("CreateMove", "TAC.Mouse.Run", TAC.Mouse.Run)
-end
-
---- Engine Prediction ---
-
-TAC.Engine = { 
-	Object = NULL
-}
-
-function TAC.Engine.CreateMove(CUserCMD)
-	local Command = CUserCMD:CommandNumber()
-
-	if Command == 0 then
-		return
-	end
-
-	TAC.Engine.Object = Command
-end
-
-function TAC.Engine.SetupMove(Player, CMoveData, CUserCMD)
-	local Command = CUserCMD:CommandNumber()
-	
-	if Command == 0 or not TAC.Engine.Object then
-		return
-	end
-
-	if Command > TAC.Engine.Object then
-		TAC.Flag("Engine Prediction", "Engine Prediction [in: %i; out: %i]", TAC.Engine.Object, Command)
-	end
-end
-
-if TAC.Config.EnginePrediction then
-	hook.Add("CreateMove", "TAC.Engine.CreateMove", TAC.Engine.CreateMove)
-	hook.Add("SetupMove", "TAC.Engine.SetupMove", TAC.Engine.SetupMove)
-end
-
---- Error Tracer ---
-
-TAC.Tracer = { }
-
-function TAC.Tracer.Run()
-	
-end
-
-if TAC.Config.Tracer then
-	
-end
-
---- PIC --
-
-TAC.PIC = { }
-
-function TAC.PIC.Generate(Target, Visited, Buffer)
-	Visited = Visited or { 
-		[_G] = true
-	}
-	Target = Target or _G
-	Buffer = Buffer or { }
-
-	for k,v in pairs(Target) do 
-		if Visited[v] then
-			continue
-		end
-		
-		Visited[v] = true
-		
-		if istable(v) then
-			if Buffer[k] then
-				continue
-			end
-		
-			Buffer[k] = { }
-			TAC.PIC.Generate(v, Visited, Buffer[k])
-		elseif isfunction(v) then
-			Buffer[k] = { 
-				Key = tostring(k),
-				Value = TAC.GenerateBuffer(v)
-			}
+			Variables[k] = v
 		end
 	end
-	
-	return Buffer
-end
 
-function TAC.PIC.Sort(Target)
-	local Keys = { }
-	
-	for k,v in pairs(Target) do
-		table.insert(Keys, k)
-	end
-	
-	table.sort(Keys, function(a, b)
-		return tostring(a) < tostring(b)
-	end)
-	
-	return Keys
-end
-
-function TAC.PIC.GenerateChecksum(Target, Buffer)
-	Buffer = Buffer or ""
-
-	local Keys = TAC.PIC.Sort(Target)
-	
-	for k, v in ipairs(Keys) do
-		local Object = Target[v]
-		
-		if not istable(Object) then
-			continue
-		end
-		
-		if Object.Key and Object.Value then
-			Buffer = Buffer .. "|" .. Object.Key .. ":" .. Object.Value
-		else
-			Buffer = Buffer .. "|" .. tostring(v)
-			Buffer = Buffer .. TAC.PIC.GenerateChecksum(Object, "")
-		end
-	end
-	
-	return util.CRC(Buffer)
-end
-
-
-function TAC.PIC.Run()
-	local Checksum = TAC.PIC.GenerateChecksum(TAC.PIC.Generate())
-	
-	TAC.Atlas:Send(
-		"PIC", 
-		Checksum
-	)
-	
-	if not TAC.Config.Silent then
-		TAC.Print("PIC Checksum: %s", Checksum)
-	end
-end
-
-if TAC.Config.PIC then
-	TAC.PIC.Run()
+	return Variables
 end
 
 --- Load Message ---
 
 if not TAC.Config.Silent then
-	TAC.Print("Trinity Clientside Loaded!")
+	TAC.Print("Trinity Pre-Init Loaded!")
 end
+
+--- Load Plugins ---
+
+TAC.Environment = setmetatable({
+	TAC = TAC,
+	_G = _G
+}, {
+	__index = _G
+})
+
+function TAC.LoadFile(Directory)
+	if file.Exists(Directory, "LUA") then
+		local Code = file.Read(Directory, "LUA")
+		
+		Code = CompileString(Code, Directory)
+		
+		if Code then
+			setfenv(Code, TAC.Environment)()
+			return true
+		end
+	end
+	
+	ErrorNoHalt("Trinity File Failure: " .. Directory)
+	
+	return false
+end
+
+function TAC.LoadPlugins(Root)
+	Root = Root or "tac/"
+
+    local Stack = { }
+	
+    table.insert(Stack, Root)
+
+    while #Stack > 0 do
+        local Directory = table.remove(Stack)
+        local Files, Directories = file.Find(Directory .. "*", "LUA")
+
+		if Root ~= Directory then
+			if TAC.LoadFile(Directory .. "init.lua") then
+				TAC.Loaded = TAC.Loaded + 1
+			end
+		end
+
+        for k, Sub in ipairs(Directories) do
+            table.insert(Stack, Directory .. Sub .. "/")
+        end
+    end
+end
+
+TAC.LoadPlugins()
+
+CreateClientConVar("_t", TAC.Loaded, false, true, "", TAC.Loaded, TAC.Loaded)
 
 --- Debug Mode ---
 
@@ -377,5 +348,14 @@ if Debug then
 	
 	concommand.Add("tac_dbg_out", function()
 		PrintTable(TAC)
+	end)
+	
+	concommand.Add("tac_reload_plugins", function()
+		TAC.LoadPlugins()
+	end)
+	
+	concommand.Add("tac_reload_config", function()
+		TAC.Config = include("config/tac_client.lua")
+		TAC.Print("Reloaded config!")
 	end)
 end

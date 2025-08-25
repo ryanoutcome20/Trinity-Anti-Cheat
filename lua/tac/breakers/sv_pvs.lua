@@ -1,6 +1,4 @@
-TAC.Breakers.PVS = { 
-	Interval = engine.TickInterval()
-}
+TAC.Breakers.PVS = { }
 
 function TAC.Breakers.PVS.Set(Player, ENT, Status)
 	ENT:SetPreventTransmit(Player, Status)
@@ -40,13 +38,13 @@ function TAC.Breakers.PVS.Predict(Player, Ticks)
 
 	-- Insert squared size.
 	
-	local Size = TAC.Config.PVS.squaredSize
+	local Size, Squared = TAC.Config.PVS.squareSize, TAC.Config.PVS.squaredSize
 	
-	for i = -2, 2 do 
-		for k = -2, 2 do 
-			for v = -2, 2 do
+	for i = -Size, Size do 
+		for k = -Size, Size do 
+			for v = -Size, Size do
 				table.insert(Data, {
-					Position = Position + (Vector(i, k, v) * Size),
+					Position = Position + (Vector(i, k, v) * Squared),
 					Velocity = Velocity
 				})
 			end
@@ -69,7 +67,7 @@ function TAC.Breakers.PVS.Predict(Player, Ticks)
             Velocity = Velocity
         })
     end
-
+	
     return Data
 end
 
@@ -79,6 +77,8 @@ function TAC.Breakers.PVS.Run(Player)
 	if not Config.Enabled then
 		return
 	end
+	
+	TAC.Breakers.PVS.Interval = engine.TickInterval() * Config.intervalScale
 	
 	local Positions = TAC.Breakers.PVS.Predict(Player, Config.Ticks + math.ceil(Player:Ping() * Config.pingScale))
 
@@ -90,11 +90,15 @@ function TAC.Breakers.PVS.Run(Player)
 		local Validated = false
 		
 		for k, Data in ipairs(Positions) do 
+			debugoverlay.Box(Data.Position, Vector(1,1,1), Vector(5,5,5), 0.03, HSVToColor(CurTime()%360*k*5, 1, 1))
+		end
+		
+		for k, Data in ipairs(Positions) do
 			if TAC.Breakers.PVS.Check(Player, Data.Position, Target) then
 				Validated = true
 				break
 			end
-		end
+		end		
 		
 		TAC.Breakers.PVS.Set(Player, Target, not Validated)
 	end

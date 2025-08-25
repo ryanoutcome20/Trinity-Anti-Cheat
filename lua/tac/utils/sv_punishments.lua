@@ -16,10 +16,6 @@ function TAC.Punishment.LoadStubs()
 			Data.ID,
 			Data.Token
 		)
-		
-		timer.Simple(0, function()
-			TAC.Print("%s loaded from pStubs!", Data.ID)
-		end)
 	end
 end
 
@@ -68,6 +64,14 @@ function TAC.Punishment.Valid(Player, Config, isToken)
 	
 	if Config.Noclip and Player:GetMoveType() == MOVETYPE_NOCLIP then
 		return
+	end
+	
+	local SWEP = Player:GetActiveWeapon()
+	
+	if SWEP and IsValid(SWEP) then
+		if Config[SWEP:GetClass()] then
+			return
+		end
 	end
 	
 	return true
@@ -202,21 +206,27 @@ function TAC.Execute(Token)
 		return EXECUTE_FLAG
 	end
 
+	local onlyLog = Token.Method == PUNISHMENT_LOG
+	
+	-- Log specific override stuff.
+	local Formatted = onlyLog and Token.formatLog(Token) or Token.formatPunishment(Token)
+	local Sound = onlyLog and TAC.Config.Alerts.Sounds.Notify or TAC.Config.Alerts.Sounds.Punishment
+
 	-- Log.
 	Player:tLog(
 		"PUNISHMENT", 
-		Token.formatPunishment(Token)
+		Formatted
 	)
 
 	TAC.Tell(
-		Token.formatPunishment(Token),
+		Formatted,
 		Token.Alerts.Punishment,
 		NOTIFY_GENERIC,
-		TAC.Config.Alerts.Sounds.Punishment,
+		Sound,
 		Player
 	)
 
-	if Token.Method == PUNISHMENT_LOG then
+	if onlyLog then
 		return EXECUTE_SUCCESS
 	end
 
@@ -229,9 +239,7 @@ function TAC.Execute(Token)
 	if not Backend then
 		return
 	end
-	
-	Player.TAC = { }
-	
+		
 	if Token.Method == PUNISHMENT_BAN then
 		Backend.Ban(
 			Token.Player,

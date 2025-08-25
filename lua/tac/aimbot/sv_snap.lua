@@ -5,7 +5,7 @@ function TAC.Aimbot.Snap(Player, cNew, cOld, CUserCMD)
 		return
 	end
 		
-	if TAC.TimeSinceSpawned(Player) <= Config.TSS then
+	if TAC.TimeSinceSpawned(Player) <= Config.TimeSinceSpawned then
 		return
 	end
 	
