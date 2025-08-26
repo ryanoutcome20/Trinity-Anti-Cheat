@@ -3,7 +3,7 @@
 --
 
 if ( CLIENT ) then
-	include("tac_client.lua")
+	--include("tac_client.lua")
 end
 
 --

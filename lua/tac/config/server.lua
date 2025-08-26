@@ -889,26 +889,6 @@ pStub.Register("Libraries", {
 	Method = PUNISHMENT_KICK
 })
 
---- Plugins ---
-
---[[
-	Utility and check functionality to verify that a player has loaded all of the plugins
-	of the post-init clientside.
---]]
-
-pStub.Register("Plugins", {
-	Enabled = true,
-	Name = "Plugins",
-	Description = "Checks the players plugins to verify they loaded the clientside correctly.",
-	Category = "Integrity",
-	
-	Message = "Missing Plugins, Rejoin! ({Contact})",
-	
-	Method = PUNISHMENT_KICK,
-	
-	Await = 24
-})
-
 --- Scans ---
 
 pStub.Register("Binaries", {

@@ -1,5 +1,7 @@
 if SERVER then
-	return true
+	return {
+		"init.lua"
+	}
 end
 
 TAC.Static = { }

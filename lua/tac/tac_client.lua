@@ -276,6 +276,23 @@ function TAC.GenerateUpvalueTree(Function)
 	return Variables
 end
 
+--- Alerts ---
+
+local shouldNotify = CreateClientConVar("tac_should_notify", 1)
+
+net.Receive("tac-alert", function()
+	if not shouldNotify:GetBool() then
+		return
+	end
+
+	local Message, Type, Sound = unpack(net.ReadTable())
+	
+	Message = "TAC: " .. Message
+	
+	notification.AddLegacy(Message, Type, 8)
+	surface.PlaySound(Sound)
+end)
+
 --- Load Message ---
 
 if not TAC.Config.Silent then
