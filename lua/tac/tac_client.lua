@@ -215,7 +215,7 @@ function TAC.Lists.Merge(Name)
 		return TAC.Lists.Cache[Name]
 	end
 
-	TAC.Lists.Cache[Name] = include("lists/cl_" .. string.lower(Name) .. ".lua")
+	TAC.Lists.Cache[Name] = include("tac/lists/cl_" .. string.lower(Name) .. ".lua")
 	
 	return TAC.Lists.Cache[Name]
 end
