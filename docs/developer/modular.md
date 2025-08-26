@@ -4,20 +4,23 @@
 
 # Main Modules
 
-Modules are dynamically loaded in from the client side and server side. Modules are stored in `lua/tac/`. In order to use a module, you must first create a folder for your module and then create its `init.lua` file. For example:
-
-In `tac/example/init.lua`
+Modules are dynamically loaded on the serverside from the directory `tac/modules/`. Serverside, they are loaded automatically by calling the `init.lua` file. Below is an example of how to use these `init.lua` files.
 
 ```lua
-AddCSLuaFile() -- This file will now be included dynamically by the clientside. Any file added will be included dynamically.
-
-AddCSLuaFile("cl_example.lua") -- This will now be included by the clientside.
-include("sv_example.lua") -- This will now be included by the serverside.
-
-MsgN(CLIENT and "CLIENT" or "SERVER")
+if SERVER then
+	-- This includes a serverside file.
+	include("sv_serverside.lua")
+	
+	-- This defines load orders for clientside files.
+	-- These are dynamically streamed in order to the clientside.
+	return {
+		"cl_clientside_one.lua",
+		"cl_clientside_two.lua"
+	}
+end
 ```
 
-This structure allows you to string together larger modules by including them from the init file. It is recommended to manually include files via the init file on the client side; otherwise, they will load alphabetically.
+Files that are dynamically streamed are automatically compressed and sent in batches thanks to the Atlas library.
 
 # Lists
 
@@ -30,7 +33,7 @@ Lists are dynamically loaded from the client side and server side. The realm of 
 Lists are dynamically included using the built-in `include` function and must be structured like so:
 
 ```lua
-return "Example", {
+return {
 	A = 1,
 	B = 2
 }
@@ -39,8 +42,18 @@ return "Example", {
 You can access your new list by using the utility libraries offered by the server side & client side:
 
 ```lua
--- As of 0.1.4 this has yet to be completed
--- TODO! Expected as of 0.1.5+
+-- List names are based on the file names!
+
+local Example = TAC.Lists.Merge("Example", true)
+
+PrintTable(Example) -- tac/lists/sh_example.lua
+```
+
+```lua
+List name is based on the file name!
+
+TAC.Lists.Merge(Name, Shared) - Merges list automatically, returns the data from the list. Pass true to shared if the file prefix starts with sh_.
+TAC.Lists.Grab(Name) - Grabs the list by name from the cache.
 ```
 
 # Backends

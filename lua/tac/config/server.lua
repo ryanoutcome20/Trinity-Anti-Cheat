@@ -191,6 +191,14 @@ Config.Punishment = {
 	}),
 }
 
+--- Networking ---
+
+Config.Networking = {
+	Overreach = 2,
+	Delay = 1.5,
+	Step = 0.15
+}
+
 --- Aimbots ---
 
 pStub.Register("Angles", {
@@ -887,26 +895,6 @@ pStub.Register("Libraries", {
 	Message = "Library Failure: {Contact}",
 	
 	Method = PUNISHMENT_KICK
-})
-
---- Plugins ---
-
---[[
-	Utility and check functionality to verify that a player has loaded all of the plugins
-	of the post-init clientside.
---]]
-
-pStub.Register("Plugins", {
-	Enabled = true,
-	Name = "Plugins",
-	Description = "Checks the players plugins to verify they loaded the clientside correctly.",
-	Category = "Integrity",
-	
-	Message = "Missing Plugins, Rejoin! ({Contact})",
-	
-	Method = PUNISHMENT_KICK,
-	
-	Await = 24
 })
 
 --- Scans ---

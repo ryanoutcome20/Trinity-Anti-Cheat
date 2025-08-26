@@ -18,31 +18,32 @@ TAC = { }
 
 --- Base ---
 
-MsgN("  Loading punishment stubs")
-include("tac_pstub.lua")
+MsgN("  Loading stub systems")
+include("tac/stubs/punishment_stubs.lua")
+include("tac/stubs/module_stubs.lua")
 
 MsgN("  Checking debug file")
-include("tac_debug.lua")
+include("tac/debug.lua")
 
 MsgN("  Loading base")
-include("tac_base.lua")
+include("tac/base.lua")
 
 MsgN("  Caching resources")
 -- ...
 
 --- Config ---
 
-TAC.Version = "0.1.5"
+TAC.Version = "0.1.6"
 TAC.Edition = "Pre-Alpha"
 
 MsgN("  Loading config")
-include("config/tac_server.lua")
+include("tac/config/server.lua")
 
 --- Clientside ---
 
 MsgN("  Creating clientside")
-AddCSLuaFile("tac_client.lua")
-AddCSLuaFile("config/tac_client.lua")
+AddCSLuaFile("tac/client.lua")
+AddCSLuaFile("tac/config/client.lua")
 
 --- Atlas ---
 
@@ -56,8 +57,8 @@ MsgN("  Loading backend managers")
 
 TAC.Backends = { }
 
-for k, Backend in ipairs(file.Find("backends/*.lua", "LUA")) do 
-	local Name, Data = include("backends/" .. Backend)
+for k, Backend in ipairs(file.Find("tac/backends/*.lua", "LUA")) do 
+	local Name, Data = include("tac/backends/" .. Backend)
 	
 	if not Name or not Data then
 		continue
@@ -68,58 +69,55 @@ end
 
 --- Lists ---
  
-MsgN("  Loading lists")
+MsgN("  Caching lists")
 
-TAC.Lists = 0
- 
-for k, List in ipairs(file.Find("lists/*.lua", "LUA")) do 
+for k, List in ipairs(file.Find("tac/lists/*.lua", "LUA")) do 
 	if List:StartWith("sv_") then
-		include("lists/" .. List)
-	elseif List:StartWith("sh_") then
-		include("lists/" .. List)
-		AddCSLuaFile("lists/" .. List)
-	elseif List:StartWith("cl_") then
-		AddCSLuaFile("lists/" .. List)
+		continue
 	end
-
-	TAC.Lists = TAC.Lists + 1
+	
+	AddCSLuaFile("tac/lists/" .. List)
 end
 
 --- Plugins ---
 
 MsgN("  Loading plugins")
 
-TAC.Plugins = {
-	Total = 0,
-	Client = 0
-}
+TAC.Plugins = 0
 
 local function LoadPlugins(Root)
-	Root = Root or "tac/"
+    Root = Root or "tac/modules"
 
     local Stack = { }
-	
     table.insert(Stack, Root)
 
     while #Stack > 0 do
         local Directory = table.remove(Stack)
-        local Files, Directories = file.Find(Directory .. "*", "LUA")
-
-		if Root ~= Directory then
-			local Formatted = Directory .. "/" .. "init.lua"
-			
-			if file.Exists(Formatted, "LUA") then
-				if include(Formatted) then
-					AddCSLuaFile(Formatted)
-					TAC.Plugins.Client = TAC.Plugins.Client + 1
-				end
-				
-				TAC.Plugins.Total = TAC.Plugins.Total + 1
-			end
-		end
+        local Files, Directories = file.Find(Directory .. "/*", "LUA")
 
         for k, Sub in ipairs(Directories) do
-            table.insert(Stack, Directory .. "/" .. Sub .. "/")
+            table.insert(Stack, Directory .. "/" .. Sub)
+        end
+
+        if Root == Directory then
+            continue
+        end
+
+        local Formatted = Directory .. "/init.lua"
+
+        if file.Exists(Formatted, "LUA") then
+			TAC.Plugins = TAC.Plugins + 1
+			
+            local Clientside = include(Formatted)
+
+            if not Clientside then
+                continue
+            end
+
+            for k, Sub in ipairs(Clientside) do
+                local Path = Directory .. "/" .. Sub
+                mStub.Register(Path)
+            end
         end
     end
 end
@@ -131,8 +129,8 @@ LoadPlugins()
 MsgN("")
 
 MsgN(string.format(
-	"  Loaded [%i] Plugins, [%i] Lists!",
-	TAC.Plugins.Total,
+	"  Loaded [%i] Plugins!",
+	TAC.Plugins,
 	TAC.Lists
 ))
 

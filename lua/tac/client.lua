@@ -6,7 +6,7 @@
 
 local TAC = { }
 
-TAC.Config = include("config/tac_client.lua")
+TAC.Config = include("tac/config/client.lua")
 TAC.Atlas = include("atlas/cl_atlas.lua")
 
 TAC.Loaded = 0
@@ -210,12 +210,14 @@ TAC.Lists = {
 	Cache = { }
 }
 
-function TAC.Lists.Merge(Name)
+function TAC.Lists.Merge(Name, Shared)
+	local Prefix = Shared and "sh_" or "cl_"
+
 	if TAC.Lists.Cache[Name] then
 		return TAC.Lists.Cache[Name]
 	end
 
-	TAC.Lists.Cache[Name] = include("lists/cl_" .. string.lower(Name) .. ".lua")
+	TAC.Lists.Cache[Name] = include("tac/lists/" .. Prefix .. string.lower(Name) .. ".lua")
 	
 	return TAC.Lists.Cache[Name]
 end
@@ -276,6 +278,98 @@ function TAC.GenerateUpvalueTree(Function)
 	return Variables
 end
 
+--- PIC ---
+
+TAC.PIC = { }
+
+function TAC.PIC.Generate(Target, Visited, Buffer)
+	Visited = Visited or { 
+		[_G] = true
+	}
+	Target = Target or _G
+	Buffer = Buffer or { }
+
+	for k,v in pairs(Target) do 
+		if Visited[v] then
+			continue
+		end
+		
+		Visited[v] = true
+		
+		if istable(v) then
+			if Buffer[k] then
+				continue
+			end
+		
+			Buffer[k] = { }
+			TAC.PIC.Generate(v, Visited, Buffer[k])
+		elseif isfunction(v) then
+			Buffer[k] = { 
+				Key = tostring(k),
+				Value = TAC.GenerateBuffer(v)
+			}
+		end
+	end
+	
+	return Buffer
+end
+
+function TAC.PIC.Sort(Target)
+	local Keys = { }
+	
+	for k,v in pairs(Target) do
+		table.insert(Keys, k)
+	end
+	
+	table.sort(Keys, function(a, b)
+		return tostring(a) < tostring(b)
+	end)
+	
+	return Keys
+end
+
+function TAC.PIC.GenerateChecksum(Target, Buffer)
+	Buffer = Buffer or ""
+
+	local Keys = TAC.PIC.Sort(Target)
+	
+	for k, v in ipairs(Keys) do
+		local Object = Target[v]
+		
+		if not istable(Object) then
+			continue
+		end
+		
+		if Object.Key and Object.Value then
+			Buffer = Buffer .. "|" .. Object.Key .. ":" .. Object.Value
+		else
+			Buffer = Buffer .. "|" .. tostring(v)
+			Buffer = Buffer .. TAC.PIC.GenerateChecksum(Object, "")
+		end
+	end
+	
+	return util.CRC(Buffer)
+end
+
+TAC.PIC.Generated = TAC.PIC.Generate()
+
+--- Alerts ---
+
+local shouldNotify = CreateClientConVar("tac_should_notify", 1)
+
+net.Receive("tac-alert", function()
+	if not shouldNotify:GetBool() then
+		return
+	end
+
+	local Message, Type, Sound = unpack(net.ReadTable())
+	
+	Message = "TAC: " .. Message
+	
+	notification.AddLegacy(Message, Type, 8)
+	surface.PlaySound(Sound)
+end)
+
 --- Load Message ---
 
 if not TAC.Config.Silent then
@@ -291,49 +385,19 @@ TAC.Environment = setmetatable({
 	__index = _G
 })
 
-function TAC.LoadFile(Directory)
-	if file.Exists(Directory, "LUA") then
-		local Code = file.Read(Directory, "LUA")
-		
-		Code = CompileString(Code, Directory)
-		
-		if Code then
-			setfenv(Code, TAC.Environment)()
-			return true
-		end
+function TAC.LoadCode(Code, File)
+	Code = CompileString(Code, File or "MISSING")
+	
+	if Code then
+		return setfenv(Code, TAC.Environment)()
 	end
-	
-	ErrorNoHalt("Trinity File Failure: " .. Directory)
-	
-	return false
 end
 
-function TAC.LoadPlugins(Root)
-	Root = Root or "tac/"
-
-    local Stack = { }
+TAC.Atlas:Listen("Plugin", "TAC.Plugins", MODE_DONE, function(Stage, File, Code)
+	TAC.Print("Got: " .. File)
 	
-    table.insert(Stack, Root)
-
-    while #Stack > 0 do
-        local Directory = table.remove(Stack)
-        local Files, Directories = file.Find(Directory .. "*", "LUA")
-
-		if Root ~= Directory then
-			if TAC.LoadFile(Directory .. "init.lua") then
-				TAC.Loaded = TAC.Loaded + 1
-			end
-		end
-
-        for k, Sub in ipairs(Directories) do
-            table.insert(Stack, Directory .. Sub .. "/")
-        end
-    end
-end
-
-TAC.LoadPlugins()
-
-CreateClientConVar("_t", TAC.Loaded, false, true, "", TAC.Loaded, TAC.Loaded)
+	TAC.LoadCode(Code, File)
+end)
 
 --- Debug Mode ---
 
@@ -350,12 +414,8 @@ if Debug then
 		PrintTable(TAC)
 	end)
 	
-	concommand.Add("tac_reload_plugins", function()
-		TAC.LoadPlugins()
-	end)
-	
 	concommand.Add("tac_reload_config", function()
-		TAC.Config = include("config/tac_client.lua")
+		TAC.Config = include("tac/config/client.lua")
 		TAC.Print("Reloaded config!")
 	end)
 end

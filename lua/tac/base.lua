@@ -9,6 +9,8 @@ TAC.SIGNITURE_GREEN = Color(66,255,96)
 TAC.SIGNITURE_RED = Color(225, 1, 26)
 TAC.SIGNITURE_GOLD = Color(245,194,71)
 
+util.AddNetworkString("tac-alert")
+
 local Player = FindMetaTable("Player")
 
 function TAC.PrintColor(TagColor, Text, ...)
@@ -182,6 +184,21 @@ function Player:Grab(Key, Default)
 	self.TAC = self.TAC or { }
 
 	return self.TAC[Key] or Default
+end
+
+function Player:tAlert(Message, Type, Sound)
+	if not Sound then
+		Sound = Type
+		Type = NOTIFY_GENERIC
+	end
+	
+	net.Start("tac-alert")
+		net.WriteTable({
+			Message,
+			Type,
+			Sound
+		})
+	net.Send(self)
 end
 
 TAC.Enum(

@@ -1,5 +1,11 @@
 if SERVER then
-	return true
+	return {
+		"init.lua"
+	}
+end
+
+for i = 1, 50 do
+MsgN("! LOADED STATIC")
 end
 
 TAC.Static = { }
