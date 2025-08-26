@@ -210,12 +210,14 @@ TAC.Lists = {
 	Cache = { }
 }
 
-function TAC.Lists.Merge(Name)
+function TAC.Lists.Merge(Name, Shared)
+	local Prefix = Shared and "sh_" or "cl_"
+
 	if TAC.Lists.Cache[Name] then
 		return TAC.Lists.Cache[Name]
 	end
 
-	TAC.Lists.Cache[Name] = include("tac/lists/cl_" .. string.lower(Name) .. ".lua")
+	TAC.Lists.Cache[Name] = include("tac/lists/" .. Prefix .. string.lower(Name) .. ".lua")
 	
 	return TAC.Lists.Cache[Name]
 end
