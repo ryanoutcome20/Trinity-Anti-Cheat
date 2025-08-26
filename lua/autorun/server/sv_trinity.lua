@@ -23,10 +23,10 @@ include("tac/stubs/punishment_stubs.lua")
 include("tac/stubs/module_stubs.lua")
 
 MsgN("  Checking debug file")
-include("tac/tac_debug.lua")
+include("tac/debug.lua")
 
 MsgN("  Loading base")
-include("tac/tac_base.lua")
+include("tac/base.lua")
 
 MsgN("  Caching resources")
 -- ...
@@ -42,7 +42,7 @@ include("tac/config/server.lua")
 --- Clientside ---
 
 MsgN("  Creating clientside")
-AddCSLuaFile("tac/tac_client.lua")
+AddCSLuaFile("tac/client.lua")
 AddCSLuaFile("tac/config/client.lua")
 
 --- Atlas ---

@@ -1,6 +1,4 @@
-TAC.Engine = { 
-	Object = NULL
-}
+TAC.Engine = { }
 
 function TAC.Engine.CreateMove(CUserCMD)
 	local Command = CUserCMD:CommandNumber()

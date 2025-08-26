@@ -191,6 +191,14 @@ Config.Punishment = {
 	}),
 }
 
+--- Networking ---
+
+Config.Networking = {
+	Overreach = 2,
+	Delay = 1.5,
+	Step = 0.15
+}
+
 --- Aimbots ---
 
 pStub.Register("Angles", {

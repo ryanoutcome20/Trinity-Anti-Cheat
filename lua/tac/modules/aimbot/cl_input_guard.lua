@@ -1,6 +1,4 @@
-TAC.Aimbot.InputGuard = { 
-	Storage = { }
-}
+TAC.Aimbot.InputGuard = { }
 
 function TAC.Aimbot.InputGuard.Verify(Config, Object, CUserCMD)
 	-- Verify angles.
@@ -56,7 +54,7 @@ end
 function TAC.Aimbot.InputGuard.SetupMove(Player, CMoveData, CUserCMD)
 	local Config = TAC.Config.Aimbot.InputGuard
 	local Object = TAC.Aimbot.InputGuard.Storage
-	
+
 	if Object and IsFirstTimePredicted() then
 		Player = GetPredictionPlayer()
 		CUserCMD = Player:GetCurrentCommand()
