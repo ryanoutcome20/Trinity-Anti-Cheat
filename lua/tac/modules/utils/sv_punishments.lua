@@ -189,21 +189,21 @@ end
 
 function TAC.Execute(Token)
 	if not Token then
-		return EXECUTE_FAILED
+		return EXECUTE_FAILED, false
 	end
 	
 	local Player = Token.Player
 	
 	if not IsValid(Player) then
-		return EXECUTE_FAILED
+		return EXECUTE_FAILED, false
 	end
 
 	if not TAC.Punishment.Valid(nil, Token, true) then
-		return EXECUTE_BYPASSED
+		return EXECUTE_BYPASSED, false
 	end
 	
 	if not TAC.Punishment.Flag(Token) then
-		return EXECUTE_FLAG
+		return EXECUTE_FLAG, false
 	end
 
 	local onlyLog = Token.Method == PUNISHMENT_LOG
@@ -227,7 +227,7 @@ function TAC.Execute(Token)
 	)
 
 	if onlyLog then
-		return EXECUTE_SUCCESS
+		return EXECUTE_SUCCESS, true
 	end
 
 	-- Get message.
@@ -237,7 +237,7 @@ function TAC.Execute(Token)
 	local Backend = TAC.Punishment.Backend(Token)
 	
 	if not Backend then
-		return
+		return EXECUTE_FAILED, false
 	end
 		
 	if Token.Method == PUNISHMENT_BAN then
@@ -253,7 +253,7 @@ function TAC.Execute(Token)
 		)
 	end
 
-	return EXECUTE_SUCCESS
+	return EXECUTE_SUCCESS, false
 end
 
 function TAC.ExecuteSID(Token)

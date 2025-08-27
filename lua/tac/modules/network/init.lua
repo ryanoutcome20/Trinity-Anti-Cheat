@@ -22,7 +22,31 @@ function TAC.Networking.Flag(Stage, Player, Data)
 		return TAC.Networking.Integrity(Player, "Invalid Flags [config: %s]", tostring(Data.cID))	
 	end
 	
-	TAC.Punishment.Wrapper(Data.cID, Player, TAC.Fix(Data.Message) .. " [CL]")
+	return TAC.Punishment.Wrapper(Data.cID, Player, TAC.Fix(Data.Message) .. " [CL]")
+end
+
+function TAC.Networking.FlagBatch(Stage, Player, Objects) 
+	Objects = istable(Objects) and Objects or { }
+	
+	local Config = TAC.Config["Networking Batch"]
+	
+	if #Objects == 0 or #Objects > Config.Maximum then
+		return TAC.Punishment.Wrapper("Networking Batch", Player, "Networking Batch [got: %i]", #Objects)
+	end
+	
+	for k, Object in ipairs(Objects) do 
+		local Status, Log = TAC.Networking.Flag(
+			Stage, 
+			Player, 
+			Object
+		)
+		
+		if Status == EXECUTE_SUCCESS and Log ~= true then
+			break
+		end
+	end
 end
 
 Atlas:Listen("Flag", "TAC.Networking.Flag", MODE_DONE, TAC.Networking.Flag)
+
+Atlas:Listen("Flag Batch", "TAC.Networking.FlagBatch", MODE_DONE, TAC.Networking.FlagBatch)

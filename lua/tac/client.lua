@@ -188,20 +188,30 @@ end
 function TAC.Flags.Process()
 	timer.Simple(0.25, TAC.Flags.Process)
 	
-	local Object = table.remove(TAC.Flags.Buffer)
+	-- Get our batch that we're sending.
+	local Objects, Size = { }, 0
+	
+	while Size < TAC.Config.BatchSize and #Objects < TAC.Config.BatchCount do 
+		local Object = table.remove(TAC.Flags.Buffer)
+		
+		if not Object then
+			break
+		end
+		
+		Size = Size + #Object.Message + #Object.cID
+		
+		table.insert(Objects, Object)
+	end
 	
 	-- Check if we even have anything to process.
-	if not Object then
+	if #Objects == 0 then
 		return
 	end
 	
 	-- Send our alert.
 	TAC.Atlas:Send(
-		"Flag", 
-		{
-			cID = Object.cID,
-			Message = Object.Message
-		}
+		"Flag Batch", 
+		Objects
 	)
 	
 	-- Clamp flags.
@@ -381,14 +391,14 @@ end
 
 --- Alerts ---
 
-local shouldNotify = CreateClientConVar("tac_should_notify", 1)
+local tac_should_notify = CreateClientConVar("tac_should_notify", 1)
 
-net.Receive("tac-alert", function()
-	if not shouldNotify:GetBool() then
+TAC.Atlas:Listen("Alert", "TAC.Alert", MODE_DONE, function(Mode, Data)	
+	if not tac_should_notify:GetBool() then
 		return
 	end
 
-	local Message, Type, Sound = unpack(net.ReadTable())
+	local Message, Type, Sound = unpack(Data)
 	
 	Message = "TAC: " .. Message
 	

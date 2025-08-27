@@ -13,7 +13,6 @@ AccessorFunc(Base, "Buttons", "Buttons")
 AccessorFunc(Base, "MouseX", "MouseX")
 AccessorFunc(Base, "ViewAngles", "ViewAngles")
 AccessorFunc(Base, "SideMove", "SideMove")
-AccessorFunc(Base, "MouseWheel", "MouseWheel")
 AccessorFunc(Base, "MouseY", "MouseY")
 AccessorFunc(Base, "ForwardMove", "ForwardMove")
 AccessorFunc(Base, "UpMove", "UpMove")
@@ -25,8 +24,8 @@ AccessorFunc(Base, "EyeTrace", "EyeTrace")
 AccessorFunc(Base, "Weapon", "Weapon")
 AccessorFunc(Base, "OnGround", "OnGround")
 
-AccessorFunc(Base, "m_flSimulationTime", "SimulationTime")
-AccessorFunc(Base, "m_fLerpTime", "LerpTime")
+AccessorFunc(Base, "SimulationTime", "SimulationTime")
+AccessorFunc(Base, "LerpTime", "LerpTime")
 
 AccessorFunc(Base, "Delta", "Delta")
 AccessorFunc(Base, "TraceData", "TraceData")
@@ -36,25 +35,25 @@ function TAC.SCP.CopyMeta(Player, CUserCMD)
 		__index = Base
 	})
 
-	Meta:SetImpulse(CUserCMD:GetImpulse())
-	Meta:SetButtons(CUserCMD:GetButtons())
-	Meta:SetMouseX(CUserCMD:GetMouseX())
-	Meta:SetViewAngles(CUserCMD:GetViewAngles())
-	Meta:SetSideMove(CUserCMD:GetSideMove())
-	Meta:SetMouseWheel(CUserCMD:GetMouseWheel())
-	Meta:SetMouseY(CUserCMD:GetMouseY())
-	Meta:SetForwardMove(CUserCMD:GetForwardMove())
-	Meta:SetUpMove(CUserCMD:GetUpMove())
-	Meta:SetCommandNumber(CUserCMD:CommandNumber())
-	Meta:SetTickCount(CUserCMD:TickCount())
+	Meta.Impulse = CUserCMD:GetImpulse()
+	Meta.Buttons = CUserCMD:GetButtons()
+	Meta.MouseX = CUserCMD:GetMouseX()
+	Meta.ViewAngles = CUserCMD:GetViewAngles()
+	Meta.SideMove = CUserCMD:GetSideMove()
+	Meta.MouseY = CUserCMD:GetMouseY()
+	Meta.ForwardMove = CUserCMD:GetForwardMove()
+	Meta.UpMove = CUserCMD:GetUpMove()
+	Meta.CommandNumber = CUserCMD:CommandNumber()
+	Meta.TickCount = CUserCMD:TickCount()
 	
-	Meta:SetPos(Player:GetPos())
-	Meta:SetEyeTrace(Player:GetEyeTrace())
-	Meta:SetWeapon(Player:GetActiveWeapon())
-	Meta:SetOnGround(Player:IsOnGround())
+	Meta.Pos = Player:GetPos()
+	Meta.Weapon = Player:GetActiveWeapon()
+	Meta.OnGround = Player:IsOnGround()
 	
-	Meta:SetLerpTime(Player:GetInternalVariable("m_fLerpTime"))
-	Meta:SetSimulationTime(Player:GetInternalVariable("m_flSimulationTime"))
+	Meta.LerpTime = Player:GetInternalVariable("m_fLerpTime")
+	Meta.SimulationTime = Player:GetInternalVariable("m_flSimulationTime")
+
+	Meta.EyeTrace = TAC.EyeTrace(Player)
 
 	return Meta
 end
@@ -95,14 +94,11 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 		Valid = Trace.Entity and Trace.Entity:IsPlayer() or false
 	})
 	
-	if not cOld.Delta or not cOld.TraceData then
-		Player:Set("SCP", cNew)
-		return
-	end
-	
 	Player:Set("SCP", cNew)
 	
-	hook.Run("StartCommandPlus", Player, cNew, cOld, CUserCMD)
+	if cOld.Delta and cOld.TraceData then
+		--hook.Run("StartCommandPlus", Player, cNew, cOld, CUserCMD)
+	end
 end
 
 hook.Add("StartCommand", "TAC.SCP.StartCommand", TAC.SCP.StartCommand)

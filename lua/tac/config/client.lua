@@ -9,6 +9,9 @@ local Config = { }
 
 Config.Silent = false
 
+Config.BatchSize = 32000
+Config.BatchCount = 32
+
 --- Aimbot ---
 
 Config.Aimbot = {
@@ -86,7 +89,7 @@ Config.Scans = {
 	Hooks = {
 		Enabled = true,
 		
-		Delay = 5
+		Delay = 45
 	}
 }
 

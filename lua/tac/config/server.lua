@@ -199,6 +199,28 @@ Config.Networking = {
 	Step = 0.15
 }
 
+pStub.Register("Networking Batch", {
+	Enabled = true,
+	Name = "Networking Batch",
+	Description = "Occurs when a player manipulates the punishment batch processing on the clientside.",
+	Category = "Networking",
+		
+	Method = PUNISHMENT_KICK,
+	
+	Maximum = 32
+})
+
+pStub.Register("Client Integrity", {
+	Enabled = true,
+	Name = "Client Integrity",
+	Description = "Occurs when invalid data is sent to the server from the clientside.",
+	Category = "Networking",
+	
+	Message = "Integrity: {Contact}",
+	
+	Method = PUNISHMENT_KICK
+})
+
 --- Aimbots ---
 
 pStub.Register("Angles", {
@@ -207,7 +229,7 @@ pStub.Register("Angles", {
 	Description = "Detects invalid source engine angles.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	CheckPitch = true,
 	MaxPitch = 90,
@@ -223,7 +245,7 @@ pStub.Register("Snap", {
 	Description = "Detects snapping to players in a single tick.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Delta = 25,
 	Scaled = true,
@@ -249,7 +271,7 @@ pStub.Register("Mouse", {
 	Description = "Detects invalid MouseX/MouseY values compared to angle changes.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	InputlessDeltaMax = 2.5,
 	InputlessDeltaMin = 0.25,
@@ -273,7 +295,7 @@ pStub.Register("Micromovement", {
 	Description = "Detects strange stuttery movement within a players view angles.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 		
 	Delta = 0.05,
 	LowOffset = 0.10,
@@ -298,7 +320,7 @@ pStub.Register("Autoclicker", {
 	Description = "Detects autoclickers. Will flag external autoclickers as well.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	ResetOnFailure = false,
 	
@@ -319,7 +341,7 @@ pStub.Register("Static", {
 	
 	Message = "Unusual Mouse Input: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 		
 	Flags = true,
 	Maximum = 15,
@@ -338,7 +360,7 @@ pStub.Register("Emulated Mouse", {
 	
 	Message = "Unusual Mouse Input: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 60,
@@ -357,7 +379,7 @@ pStub.Register("Nospread", {
 	
 	Message = "Unusual Spread Cone: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Samples = 15,
 	DeltaSamples = 8,
@@ -376,7 +398,7 @@ pStub.Register("Bunnyhop", {
 	
 	Message = "Bunnyhop: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	LTT = 1.5,
 	TimeSinceSpawned = 3.5,
@@ -398,7 +420,7 @@ pStub.Register("Autostrafe", {
 	Description = "Detects players with artificial movement patterns related to strafing.",
 	Category = "Movement",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 		
 	Flags = true,
 	Maximum = 20,
@@ -415,7 +437,7 @@ pStub.Register("Input", {
 	Description = "Detects players who are using something to manipulate their movement vectors.",
 	Category = "Movement",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Minimum = 1000,
 	LTT = 1.5,
@@ -451,7 +473,7 @@ pStub.Register("Interpolation Abuse", {
 	
 	Message = "Strange Interpolation: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Overflow = true,
 	
@@ -471,7 +493,7 @@ pStub.Register("Speedhack", {
 	
 	Message = "Strange Lag Patterns: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 45,
@@ -496,7 +518,7 @@ pStub.Register("Tickcount", {
 	
 	Message = "Strange Lag Patterns: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Regular = true,
 	
@@ -523,7 +545,7 @@ pStub.Register("Fakelag", {
 	
 	Message = "Strange Lag Patterns: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 3,
@@ -545,7 +567,7 @@ pStub.Register("Simulation Time", {
 	
 	Message = "Timed Out: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	TimeSinceCreated = 25,
 	Low = -150,
@@ -565,7 +587,7 @@ pStub.Register("Act", {
 	Description = "Detects players who are moving while taunting (act commands).",
 	Category = "Exploit",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Extras ---
@@ -576,7 +598,7 @@ pStub.Register("Name Changer", {
 	Description = "Detects when players change steam username/name command, can be used to kick players if needed.",
 	Category = "Extra",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 pStub.Register("Suspicious Keypresses", {
@@ -604,7 +626,7 @@ pStub.Register("Errors", {
 	Method = PUNISHMENT_LOG,
 
 	Scan = true,
-	ScanMethod = PUNISHMENT_LOG	
+	ScanMethod = PUNISHMENT_Kick	
 })
 
 --- Command Enforcer ---
@@ -617,7 +639,7 @@ pStub.Register("Command Enforcer", {
 	
 	Message = "Bad Command: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Commands = {
 		{
@@ -685,19 +707,6 @@ Config.PVS = {
 	intervalScale = 8
 }
 
---- Client Integrity ---
-
-pStub.Register("Client Integrity", {
-	Enabled = true,
-	Name = "Client Integrity",
-	Description = "Occurs when invalid data is sent to the server from the clientside.",
-	Category = "Integrity",
-	
-	Message = "Integrity: {Contact}",
-	
-	Method = PUNISHMENT_LOG
-})
-
 --- Client Mouse ---
 
 pStub.Register("Client Mouse", {
@@ -708,7 +717,7 @@ pStub.Register("Client Mouse", {
 	
 	Client = true,
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 6,
@@ -725,7 +734,7 @@ pStub.Register("Engine Prediction", {
 	
 	Client = true,
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 4,
@@ -812,7 +821,7 @@ pStub.Register("PIC", {
 	
 	Message = "Bad PIC Checksum: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	PIC = "387594818",
 	Await = 24
@@ -836,7 +845,7 @@ pStub.Register("Stack", {
 	
 	Message = "Bad Stack Frame: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Key Input ---
@@ -864,7 +873,7 @@ pStub.Register("Static Script", {
 	
 	Message = "Likely Cheater: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Error Tracer ---
@@ -879,7 +888,7 @@ pStub.Register("Error Tracer", {
 	
 	Message = "Error: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Libraries ---
@@ -894,7 +903,7 @@ pStub.Register("Libraries", {
 	
 	Message = "Library Failure: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Scans ---
@@ -909,7 +918,7 @@ pStub.Register("Binaries", {
 	
 	Message = "Bad Module: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 pStub.Register("Hooks", {
@@ -922,5 +931,5 @@ pStub.Register("Hooks", {
 	
 	Message = "Bad Hook: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })

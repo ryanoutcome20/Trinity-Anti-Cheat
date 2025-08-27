@@ -73,6 +73,25 @@ function TAC.Bitwise(Value, Mask)
 	return tobool(bit.band(Value, Mask))
 end
 
+function TAC.EyeTrace(Player)
+	local Time = CurTime()
+
+	local Trace = Player:Grab("Eye Trace")
+	
+	if Trace and Time - Trace.Frame < 1 then
+		return Trace.Trace
+	end
+
+	Trace = {
+		Frame = Time,
+		Trace = Player:GetEyeTrace()
+	}
+	
+	Player:Set("Eye Trace", Trace)
+	
+	return Trace.Trace
+end
+
 function TAC.IsStaff(Player)
 	local Config = TAC.Config.Staff
 	
@@ -192,13 +211,15 @@ function Player:tAlert(Message, Type, Sound)
 		Type = NOTIFY_GENERIC
 	end
 	
-	net.Start("tac-alert")
-		net.WriteTable({
+	Atlas:Send(
+		"Alert", 
+		self, 
+		{
 			Message,
 			Type,
 			Sound
-		})
-	net.Send(self)
+		}
+	)
 end
 
 TAC.Enum(
