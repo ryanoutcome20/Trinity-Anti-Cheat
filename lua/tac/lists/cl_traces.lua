@@ -61,12 +61,5 @@ return {
 
 	-- net
 	{Pointer = net.Receive, Name = "net.Receive", Message = "lua/includes/extensions/net.lua:12: attempt to index local 'name' (a nil value)"},
-	{Pointer = net.ReadType, Name = "net.ReadType", Message = "lua/includes/extensions/net.lua:234: attempt to concatenate local 'typeid' (a nil value)"},
-	{Pointer = net.ReadPlayer, Name = "net.ReadPlayer", Message = "bad argument #1 to '?' (number expected, got no value)"},
-	{Pointer = net.ReadTable, Name = "net.ReadTable", Message = "lua/includes/extensions/net.lua:234: attempt to concatenate local 'typeid' (a nil value)"},
-	{Pointer = net.WriteColor, Name = "net.WriteColor", Message = "lua/includes/extensions/net.lua:92: net.WriteColor: color expected, got nil"},
-	{Pointer = net.ReadColor, Name = "net.ReadColor", Message = "lua/includes/util/color.lua:16: bad argument #1 to 'min' (number expected, got nil)"},
-	{Pointer = net.WriteTable, Name = "net.WriteTable", Message = "lua/includes/extensions/net.lua:140: bad argument #1 to 'pairs' (table expected, got nil)"},
-	{Pointer = net.Incoming, Name = "net.Incoming", Message = "lua/includes/extensions/net.lua:22: bad argument #1 to 'NetworkIDToString' (number expected, got nil)"},
 	{Pointer = net.Start, Name = "net.Start", Message = "bad argument #1 to '?' (string expected, got nil)"}
 }

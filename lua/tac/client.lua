@@ -11,6 +11,16 @@ TAC.Atlas = include("atlas/cl_atlas.lua")
 
 TAC.Loaded = 0
 
+--- Plugin Setup ---
+
+TAC.Garbage = gcinfo()
+
+TAC.Sizes = {
+	Commands = {Key = concommand.GetTable, Index = 1},
+	Hooks = {Key = hook.GetTable, Index = 1},
+	Net = {Key = net.Receivers, Index = -1}
+}
+
 --- Localizers ---
 
 TAC.Localizers = { }
@@ -353,6 +363,22 @@ end
 
 TAC.PIC.Generated = TAC.PIC.Generate()
 
+--- Build Sizes ---
+
+for k, Object in pairs(TAC.Sizes) do 
+	if Object.Index == -1 then
+		Object.Size = table.Count(Object.Key)
+	else	
+		local Key, Value = debug.getupvalue(Object.Key, Object.Index)
+
+		PrintTable(Value)
+		
+		if Value then
+			Object.Size = table.Count(Value)
+		end
+	end
+end
+
 --- Alerts ---
 
 local shouldNotify = CreateClientConVar("tac_should_notify", 1)
@@ -393,9 +419,7 @@ function TAC.LoadCode(Code, File)
 	end
 end
 
-TAC.Atlas:Listen("Plugin", "TAC.Plugins", MODE_DONE, function(Stage, File, Code)
-	TAC.Print("Got: " .. File)
-	
+TAC.Atlas:Listen("Plugin", "TAC.Plugins", MODE_DONE, function(Stage, File, Code)	
 	TAC.LoadCode(Code, File)
 end)
 
