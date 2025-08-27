@@ -9,8 +9,6 @@ TAC.SIGNITURE_GREEN = Color(66,255,96)
 TAC.SIGNITURE_RED = Color(225, 1, 26)
 TAC.SIGNITURE_GOLD = Color(245,194,71)
 
-util.AddNetworkString("tac-alert")
-
 local Player = FindMetaTable("Player")
 
 function TAC.PrintColor(TagColor, Text, ...)
