@@ -13,7 +13,7 @@ function TAC.Nospread.Variance(Deltas)
 end
 
 function TAC.Nospread.Run(Player, Samples)
-    local Deltas = {}
+    local Deltas = { }
 
     for k, Object in ipairs(Samples) do
         local Pre, Post = Object.Pre, Object.Post

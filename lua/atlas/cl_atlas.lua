@@ -57,7 +57,7 @@ function Atlas:Close(Port, Identifier)
 end
 
 function Atlas:Pack(Data, alreadyPacked)
-    alreadyPacked = alreadyPacked or {}
+    alreadyPacked = alreadyPacked or { }
 
     local Type = TypeID(Data)
 

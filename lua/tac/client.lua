@@ -273,9 +273,9 @@ end
 
 function TAC.GenerateUpvalueTree(Function)
 	local Info = debug.getinfo(Function, "uS")
-	local Variables = {}
+	local Variables = { }
 
-	if (Info and Info.what == "Lua") then
+	if Info and Info.what == "Lua" then
 		local Upvalues = info.nups
 
 		for i = 1, Upvalues do

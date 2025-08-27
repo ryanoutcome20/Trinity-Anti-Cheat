@@ -32,7 +32,7 @@ AccessorFunc(Base, "Delta", "Delta")
 AccessorFunc(Base, "TraceData", "TraceData")
 
 function TAC.SCP.CopyMeta(Player, CUserCMD)
-	local Meta = setmetatable({}, {
+	local Meta = setmetatable({ }, {
 		__index = Base
 	})
 
@@ -60,7 +60,7 @@ function TAC.SCP.CopyMeta(Player, CUserCMD)
 end
 
 function TAC.SCP.Valid(Player)
-	return Player:GetObserverMode( ) == OBS_MODE_NONE and not Player:IsFrozen() and Player:IsFullyAuthenticated() and not Player:IsTimingOut() and not Player:IsBot() and not Player:IsTimingOut()
+	return Player:GetObserverMode() == OBS_MODE_NONE and not Player:IsFrozen() and Player:IsFullyAuthenticated() and not Player:IsTimingOut() and not Player:IsBot() and not Player:IsTimingOut()
 end
 
 function TAC.SCP.StartCommand(Player, CUserCMD)

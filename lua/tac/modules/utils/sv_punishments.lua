@@ -5,7 +5,7 @@ TAC.Punishment = { }
 function TAC.Punishment.Register(ID, Token)
 	-- We just shove these into the config for later use.
 	
-	local Base = table.Copy(TAC.Config.Fallback or {})
+	local Base = table.Copy(TAC.Config.Fallback or { })
 	
 	TAC.Config[ID] = table.Merge(Base, Token)
 end

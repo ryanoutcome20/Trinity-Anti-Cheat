@@ -28,7 +28,7 @@ function TAC.Breakers.PVS.Predict(Player, Ticks)
 	-- No, we won't do any AABB checks in here since it would be
 	-- too expensive.
 		
-    local Data = {}
+    local Data = { }
 
     local Gravity = Player:GetGravity()
     local Grounded = Player:IsOnGround()
