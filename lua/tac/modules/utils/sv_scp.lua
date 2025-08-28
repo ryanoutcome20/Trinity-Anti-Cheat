@@ -97,7 +97,7 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 	Player:Set("SCP", cNew)
 	
 	if cOld.Delta and cOld.TraceData then
-		--hook.Run("StartCommandPlus", Player, cNew, cOld, CUserCMD)
+		hook.Run("StartCommandPlus", Player, cNew, cOld, CUserCMD)
 	end
 end
 
