@@ -149,7 +149,7 @@ Config.Punishment = {
 		-- Delay section.
 		Delay = true,
 		DelayMinimum = 1,
-		DelayMaximum = 1,
+		DelayMaximum = 10,
 		DelaySID = true,
 		DelayIgnoreLogOnly = true,
 		
@@ -205,10 +205,10 @@ Config.Punishment = {
 		Noclip = false,
 		SWEPs = {
 			-- ...
-		}
+		},
 
 		-- Extra
-		-- ...
+		Verbose = true
 	}),
 }
 

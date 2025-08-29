@@ -35,6 +35,10 @@ function TAC.Punishment.Evaluate(ID, Player, Info, ...)
 		TAC.Config.Alerts.Sounds.Notify,
 		Player
 	)
+	
+	if Token.Verbose then
+		TAC.Verbose.Dump(Player)
+	end
 
 	return usingFallback and EVALUATE_FALLBACK or EVALUATE_SUCCESS, Token
 end

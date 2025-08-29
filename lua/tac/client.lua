@@ -382,8 +382,6 @@ for k, Object in pairs(TAC.Sizes) do
 		Object.Size = table.Count(Object.Key)
 	else	
 		local Key, Value = debug.getupvalue(Object.Key, Object.Index)
-
-		PrintTable(Value)
 		
 		if Value then
 			Object.Size = table.Count(Value)
