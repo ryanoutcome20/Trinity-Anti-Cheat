@@ -1,4 +1,4 @@
-function TAC.Aimbot.Snap(Player, cNew, cOld, CUserCMD)
+function TAC.Aimbot.Snap(Player, Cache)
 	local Config = TAC.Config.Snap
 
 	if not Config.Enabled then
@@ -9,37 +9,38 @@ function TAC.Aimbot.Snap(Player, cNew, cOld, CUserCMD)
 		return
 	end
 	
-	local Trace = cNew:GetTraceData()
+	local Flags = {
+		Amount = 0,
+		Highest = 0
+	}
 	
-	if not Trace.Valid then
-		return
-	end
+	for k, Object in ipairs(Cache) do
+		local cNew, cOld = Object.cNew, Object.cOld
 	
-	local Distance = Trace.Entity:GetPos():DistToSqr(cNew:GetPos())
-	
-	if Distance <= Config.Distance then
-		return
-	end
-	
-	if Config.UseTwoTarget then
-		Trace = cOld:GetTraceData()
+		local Trace = cNew:GetTraceData()
 		
 		if not Trace.Valid then
-			return
+			continue
+		end
+		
+		local Distance = Trace.Entity:GetPos():DistToSqr(cNew:GetPos())
+
+		if Distance <= Config.Distance then
+			continue
+		end
+		
+		local Delta = cNew:GetDelta()
+		
+		if Delta >= Config.Delta then
+			Flags.Amount = Flags.Amount + 1
+			
+			if Delta >= Flags.Highest then
+				Flags.Highest = Delta
+			end
 		end
 	end
 	
-	local Delta = cNew:GetDelta()
-	
-	if Delta >= Config.Delta then
-		TAC.Punishment.Wrapper("Snap", Player, "Snapped [delta: %f; >= %i]", Delta, Config.Delta)
-	elseif Config.Scaled and Distance >= Config.ScaledDistanceMin and Distance <= Config.ScaledDistanceMax then
-		Delta = Delta * math.sqrt(Distance) / 720
-				
-		if Delta >= Config.ScaledDelta then
-			TAC.Punishment.Wrapper("Snap", Player, "Snapped [delta: %f; >= %i; scaled]", Delta, Config.ScaledDelta)
-		end
-	end
+	TAC.Batch.Punish(Flags.Amount, "Snap", Player, "Snapped [batch: %i/%i; highest: %f]", Flags.Amount, #Cache, Flags.Highest)
 end
 
-hook.Add("StartCommandPlus", "TAC.Aimbot.Snap", TAC.Aimbot.Snap)
+hook.Add("StartCommandBatch", "TAC.Aimbot.Snap", TAC.Aimbot.Snap)

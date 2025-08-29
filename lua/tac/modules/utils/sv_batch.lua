@@ -1,5 +1,19 @@
 TAC.Batch = { }
 
+function TAC.Batch.Punish(Flags, cID, Player, Message, ...)
+	if Flags == 0 then
+		return
+	end
+	
+	local Status, Token = TAC.Punishment.Evaluate(cID, Player, Message, ...)
+
+	if Status == EVALUATE_SUCCESS and Token then
+		Token.Increment = Flags
+	
+		return TAC.Execute(Token)
+	end
+end
+
 function TAC.Batch.StartCommandPlus(Player, cNew, cOld)
 	local Cache = Player:Grab("Batch Storage", { })
 	

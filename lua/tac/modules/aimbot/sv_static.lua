@@ -1,15 +1,23 @@
-function TAC.Aimbot.Static(Player, cNew, cOld, CUserCMD)
+function TAC.Aimbot.Static(Player, Cache)
 	local Config = TAC.Config["Static"]
 
 	if not Config.Enabled then
 		return
 	end
 	
-	local Offset = cNew:GetMouseY() * cOld:GetMouseY()
+	local Flags = 0
 	
-	if cNew:GetMouseY() == cOld:GetMouseY() and Offset > 10000 and Offset < 500000 then
-		TAC.Punishment.Wrapper("Static", Player, "Static [offset: %i]", Offset)
+	for k, Object in ipairs(Cache) do
+		local cNew, cOld = Object.cNew, Object.cOld
+		
+		local Offset = cNew:GetMouseY() * cOld:GetMouseY()
+		
+		if cNew:GetMouseY() == cOld:GetMouseY() and Offset > 1 and Offset < 500000 then
+			Flags = Flags + 1
+		end
 	end
+	
+	TAC.Batch.Punish(Flags, "Static", Player, "Static [batch: %i/%i]", Flags, #Cache)
 end
 
-hook.Add("StartCommandPlus", "TAC.Aimbot.Static", TAC.Aimbot.Static)
+hook.Add("StartCommandBatch", "TAC.Aimbot.Static", TAC.Aimbot.Static)
