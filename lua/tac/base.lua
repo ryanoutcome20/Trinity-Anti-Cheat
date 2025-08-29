@@ -43,6 +43,23 @@ function TAC.StandardAngle(Yaw)
 	return Yaw - 360
 end
 
+function TAC.Mean(Data)
+    local Sum, Count = 0, 0
+
+    for k, Value in ipairs(Data) do
+        if isnumber(Value) then
+            Sum = Sum + Value
+            Count = Count + 1
+        end
+    end
+
+    if Count > 0 then
+        return Sum / Count
+    else
+        return 0 
+    end
+end
+
 function TAC.Fix(Text)
 	local Indexes = {
 		["\r"] = "\\r",

@@ -269,16 +269,11 @@ pStub.Register("Snap", {
 	Description = "Detects snapping to players in a single tick.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
-	Delta = 25,
-	Scaled = true,
-	ScaledDelta = 45,
-	ScaledDistanceMin = 10000000,
-	ScaledDistanceMax = 500000000,
+	Delta = 5,
 	Distance = 65000,
 	TimeSinceSpawned = 3.5,
-	UseTwoTarget = false,
 	
 	Flags = false,
 	Maximum = 2,
@@ -365,7 +360,7 @@ pStub.Register("Static", {
 	
 	Message = "Unusual Mouse Input: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 		
 	Flags = true,
 	Maximum = 15,
@@ -569,16 +564,18 @@ pStub.Register("Fakelag", {
 	
 	Method = PUNISHMENT_LOG,
 	
+	Window = 32,
+	
 	Flags = true,
-	Maximum = 25,
-	Decay = 5,
+	Maximum = 15,
+	Decay = 10,
 	
 	Alerts = {
 		Flags = ALERT_NONE
 	},
 	
 	Ping = 150,
-	Loss = 75
+	Loss = 35
 })
 
 pStub.Register("Simulation Time", {
@@ -766,7 +763,7 @@ pStub.Register("Engine Prediction", {
 --- Input Guard ---
 
 pStub.Register("Input Guard Angles", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Input Guard Angles",
 	Description = "Occurs when the player is detected for manipulating angles. Likely to flag poorly coded addons.",
 	Category = "Aimbot",
@@ -781,7 +778,7 @@ pStub.Register("Input Guard Angles", {
 })
 
 pStub.Register("Input Guard Buttons", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Input Guard Buttons",
 	Description = "Occurs when the player is detected for manipulating buttons. Unlikely to false flag.",
 	Category = "Aimbot",
@@ -792,7 +789,7 @@ pStub.Register("Input Guard Buttons", {
 })
 
 pStub.Register("Input Guard Movement", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Input Guard Movement",
 	Description = "Occurs when the player is detected for manipulating movement values. Likely to flag poorly coded addons.",
 	Category = "Aimbot",
@@ -858,7 +855,7 @@ pStub.Register("Stack", {
 --- Key Input ---
 
 pStub.Register("Key Input", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Key Input",
 	Description = "Checks input compared to key inputs to verify the player actually pressed a key.",
 	Category = "Integrity",
