@@ -23,15 +23,7 @@ function TAC.Aimbot.InputGuard.Verify(Config, Object, CUserCMD)
 	if Config.Buttons and Object.Buttons ~= CUserCMD:GetButtons() then
 		TAC.Flag("Input Guard Buttons", "Input Guard [buttons]")
 	end
-	
-	-- Verify mouse.
-	
-	local Mouse = CUserCMD:GetMouseX() + CUserCMD:GetMouseY()
-	
-	if Config.Mouse and Object.Mouse ~= Mouse then
-		TAC.Flag("Input Guard Mouse", "Input Guard [mouse; delta: %i; expected: %i]", Mouse, Object.Mouse)
-	end
-	
+		
 	-- Verify movement.
 	
 	local Movement = CUserCMD:GetSideMove() + CUserCMD:GetForwardMove()
@@ -46,7 +38,6 @@ function TAC.Aimbot.InputGuard.StartCommand(Player, CUserCMD)
 		Angles = CUserCMD:GetViewAngles(),
 		Buttons = CUserCMD:GetButtons(),
 		
-		Mouse = CUserCMD:GetMouseX() + CUserCMD:GetMouseY(),
 		Movement = CUserCMD:GetSideMove() + CUserCMD:GetForwardMove()
 	}
 end

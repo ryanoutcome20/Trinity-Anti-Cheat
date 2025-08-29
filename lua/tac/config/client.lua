@@ -23,8 +23,6 @@ Config.Aimbot = {
 		Angles = true,
 		Offset = 1,
 		
-		Mouse = true,
-		
 		Movement = true
 	}
 }

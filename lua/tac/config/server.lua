@@ -36,6 +36,12 @@ TAC.Config = Config
 --]]
 
 --[[
+	Delayed Punishment Specific Strings:
+
+	{Timer}
+--]]
+
+--[[
 	Default Global Strings:
 
 	{Contact}
@@ -140,10 +146,18 @@ Config.Punishment = {
 		
 		AlertFlagsMinimum = 0,
 		
+		-- Delay section.
+		Delay = true,
+		DelayMinimum = 5,
+		DelayMaximum = 10,
+		DelaySID = true,
+		DelayIgnoreLogOnly = true,
+		
 		-- Alert section.
 		Alerts = {
 			Evaluate = ALERT_NONE,
 			Flags = ALERT_STAFF,
+			Delays = ALERT_STAFF,
 			Punishment = ALERT_EVERYONE
 		},
 		
@@ -155,7 +169,7 @@ Config.Punishment = {
 			)
 		end,
 		
-		formatFlags = function(Token, Flags)
+		formatFlags = function(Token)
 			return tFormat(
 				Token,
 				"{Name} [{SteamID64}] was flagged for \"{Info}\" ({ID})! [{Flags}]"
@@ -166,6 +180,13 @@ Config.Punishment = {
 			return tFormat(
 				Token,
 				"{Name} [{SteamID64}] was punished for \"{Info}\" ({ID})!"
+			)
+		end,
+		
+		formatDelayedPunishment = function(Token, Time)
+			return tFormat(
+				Token,
+				"{Name} [{SteamID64}] is about to be punished for \"{Info}\" ({ID})! [{Timer}s]"
 			)
 		end,
 		
@@ -229,7 +250,7 @@ pStub.Register("Angles", {
 	Description = "Detects invalid source engine angles.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	CheckPitch = true,
 	MaxPitch = 90,
@@ -648,7 +669,7 @@ pStub.Register("Command Enforcer", {
 		}
 	},
 	
-	Delay = 5,
+	Await = 5,
 	
 	Flags = false,
 	Maximum = -1,
@@ -767,21 +788,6 @@ pStub.Register("Input Guard Buttons", {
 	Client = true,
 	
 	Method = PUNISHMENT_LOG
-})
-
-pStub.Register("Input Guard Mouse", {
-	Enabled = true,
-	Name = "Input Guard Mouse",
-	Description = "Occurs when the player is detected for manipulating mouse movement. Unlikely to false flag.",
-	Category = "Aimbot",
-	
-	Client = true,
-	
-	Method = PUNISHMENT_LOG,
-
-	Flags = true,
-	Maximum = 6,
-	Decay = 3
 })
 
 pStub.Register("Input Guard Movement", {

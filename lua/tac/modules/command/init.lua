@@ -31,7 +31,7 @@ function TAC.Command.Hook(Player)
 	
 	TAC.Timer(
 		Player, 
-		TAC.Config["Command Enforcer"].Delay, 
+		TAC.Config["Command Enforcer"].Await, 
 		TAC.Command.Hook
 	)
 end

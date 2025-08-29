@@ -25,7 +25,7 @@ function TAC.Networking.Flag(Stage, Player, Data)
 	return TAC.Punishment.Wrapper(Data.cID, Player, TAC.Fix(Data.Message) .. " [CL]")
 end
 
-function TAC.Networking.FlagBatch(Stage, Player, Objects) 
+function TAC.Networking.FlagBatch(Stage, Player, Objects)
 	Objects = istable(Objects) and Objects or { }
 	
 	local Config = TAC.Config["Networking Batch"]

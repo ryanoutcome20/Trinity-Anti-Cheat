@@ -130,6 +130,8 @@ function TAC.Format(Token, Text, ...)
 		["Info"] = Token.Info,
 		["ID"] = Token.ID,
 		
+		["Timer"] = Token.Timer and tostring(math.Round(Token.Timer, 2)) or "N/A",
+		
 		["Flags"] = tostring(Token.FlagsCount) or "N/A",
 		
 		["Contact"] = TAC.Config.Contact,
@@ -218,6 +220,10 @@ function Player:tAlert(Message, Type, Sound)
 			Sound
 		}
 	)
+end
+
+function Player:tPunishing()
+	return TAC.Punishment and TAC.Punishment.IsActive(self) or false
 end
 
 TAC.Enum(

@@ -2,7 +2,7 @@ TAC.Transfer = { }
 
 function TAC.Transfer.ID(Player)
 	return string.format(
-		"TAC_%s",
+		"TAC_TRANSFER_%s",
 		Player:SteamID64()
 	)
 end
