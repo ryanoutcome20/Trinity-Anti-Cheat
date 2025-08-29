@@ -647,7 +647,7 @@ pStub.Register("Errors", {
 	Method = PUNISHMENT_LOG,
 
 	Scan = true,
-	ScanMethod = PUNISHMENT_Kick	
+	ScanMethod = PUNISHMENT_KICK	
 })
 
 --- Command Enforcer ---
