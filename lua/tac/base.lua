@@ -10,7 +10,7 @@ TAC.SIGNITURE_RED = Color(225, 1, 26)
 TAC.SIGNITURE_GOLD = Color(245,194,71)
 
 local Player = FindMetaTable("Player")
- 
+
 function TAC.PrintColor(TagColor, Text, ...)
 	MsgC(
 		TAC.WHITE,
