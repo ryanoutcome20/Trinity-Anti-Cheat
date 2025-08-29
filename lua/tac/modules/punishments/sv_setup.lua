@@ -34,7 +34,6 @@ function TAC.Punishment.Valid(Player, Config, isToken, noDelay)
 	
 	-- Global Checks.
 	if not noDelay and Player:tPunishing() then
-		TAC.Print("MORE THAN ONE PUNISHMENT!")
 		return
 	end
 	
