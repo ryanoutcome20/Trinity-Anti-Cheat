@@ -8,7 +8,6 @@ if SERVER then
 	include("sv_nospread.lua")
 	include("sv_autoclicker.lua")
 	include("sv_micromovement.lua")
-	include("sv_emulated_mouse.lua")
 	
 	return {
 		"init.lua",
