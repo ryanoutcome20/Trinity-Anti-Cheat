@@ -17,13 +17,17 @@ function TAC.Transfer.Get(Index)
 	return Stubs
 end
 
-function TAC.Transfer.Step(Player)
+function TAC.Transfer.Step(Player, ID)
+	if not Player or not IsValid(Player) then
+		return timer.Remove(ID)
+	end
+
 	local Index = Player:Grab("Transfer Step", 1)
 	
 	local File = TAC.Transfer.Get(Index)
 	
 	if not File then
-		return TAC.Transfer.Stop(Player)
+		return timer.Remove(ID)
 	end
 	
 	Atlas:Send(
@@ -58,12 +62,14 @@ function TAC.Transfer.Start(Data)
 	local Config = TAC.Config.Networking
 	
 	TAC.Timer(Player, Config.Delay, function(Player)
+		local ID = TAC.Transfer.ID(Player)
+		
 		timer.Create(
-			TAC.Transfer.ID(Player),
+			ID,
 			Config.Delay,
 			#mStub.Files * Config.Overreach,
-			function()				
-				TAC.Transfer.Step(Player)
+			function()
+				TAC.Transfer.Step(Player, ID)
 			end
 		)
 	end)

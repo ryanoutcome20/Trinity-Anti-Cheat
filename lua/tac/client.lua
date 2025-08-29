@@ -92,6 +92,8 @@ local hook = Get("hook")
 local debug = Get("debug")
 local file = Get("file")
 local jit = Get("jit")
+local surface = Get("surface")
+local notify = Get("notify")
 local concommand = Get("concommand")
 
 local pcall = Get("pcall")
@@ -388,23 +390,6 @@ for k, Object in pairs(TAC.Sizes) do
 		end
 	end
 end
-
---- Alerts ---
-
-local tac_should_notify = CreateClientConVar("tac_should_notify", 1)
-
-TAC.Atlas:Listen("Alert", "TAC.Alert", MODE_DONE, function(Mode, Data)	
-	if not tac_should_notify:GetBool() then
-		return
-	end
-
-	local Message, Type, Sound = unpack(Data)
-	
-	Message = "TAC: " .. Message
-	
-	notification.AddLegacy(Message, Type, 8)
-	surface.PlaySound(Sound)
-end)
 
 --- Load Message ---
 
