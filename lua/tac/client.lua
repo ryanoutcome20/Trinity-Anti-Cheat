@@ -171,6 +171,14 @@ function TAC.Visible(Mask, Target, From)
 	return not Trace.Hit or Trace.Entity == Target
 end
 
+function TAC.StandardAngle(Yaw)
+	if Yaw >= 0 and Yaw <= 180 then
+		return Yaw
+	end
+
+	return Yaw - 360
+end
+
 --- Flag System ---
 
 TAC.Flags = { 
@@ -383,7 +391,7 @@ for k, Object in pairs(TAC.Sizes) do
 	else	
 		local Key, Value = debug.getupvalue(Object.Key, Object.Index)
 		
-		if Value then
+		if istable(Value) then
 			Object.Size = table.Count(Value)
 		end
 	end

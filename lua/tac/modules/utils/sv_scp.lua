@@ -85,14 +85,16 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 		return
 	end
 	
-	cNew:SetDelta(math.abs(math.AngleDifference(TAC.StandardAngle(cNew:GetViewAngles().y), TAC.StandardAngle(cOld:GetViewAngles().y))))
+	cNew.Delta = math.abs(math.AngleDifference(TAC.StandardAngle(cNew.ViewAngles.y), TAC.StandardAngle(cOld.ViewAngles.y)))
 	
-	local Trace = cNew:GetEyeTrace()
+	local Trace = cNew.EyeTrace
 	
-	cNew:SetTraceData({
-		Entity = Trace.Entity,
-		Valid = Trace.Entity and Trace.Entity:IsPlayer() or false
-	})
+	if Trace then
+		cNew.TraceData = {
+			Entity = Trace.Entity,
+			Valid = Trace.Entity and Trace.Entity:IsPlayer() or false
+		}
+	end
 	
 	Player:Set("SCP", cNew)
 	

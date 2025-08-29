@@ -50,6 +50,10 @@ function TAC.Punishment.Valid(Player, Config, isToken, noDelay)
 		return
 	end
 	
+	if Config.Callback and Config.Callback(Player) then
+		return
+	end
+	
 	if Config.Ping ~= -1 and Player:Ping() >= Config.Ping then
 		return
 	end

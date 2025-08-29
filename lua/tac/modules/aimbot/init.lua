@@ -13,6 +13,7 @@ if SERVER then
 		"init.lua",
 		"cl_input_guard.lua",
 		"cl_engine_prediction.lua",
-		"cl_menu_movement.lua"
+		"cl_menu_movement.lua",
+		"cl_emulated_mouse.lua"
 	}
 end

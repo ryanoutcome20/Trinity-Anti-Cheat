@@ -24,6 +24,15 @@ Config.Aimbot = {
 		Offset = 1,
 		
 		Movement = true
+	},
+	EmulatedMouse = {
+		Enabled = true,
+		
+		Yaw = true,
+		YawOffset = 5,
+		
+		Pitch = true,
+		PitchOffset = 5
 	}
 }
 

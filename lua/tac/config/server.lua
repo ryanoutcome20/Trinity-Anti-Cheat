@@ -51,7 +51,7 @@ TAC.Config = Config
 
 --- General ---
 
-Config.Contact = "Bananas!"
+Config.Contact = "github.com/ryanoutcome20/Trinity-Anti-Cheat/"
 
 Config.Staff = {
 	Roles = {
@@ -147,7 +147,7 @@ Config.Punishment = {
 		AlertFlagsMinimum = 0,
 		
 		-- Delay section.
-		Delay = true,
+		Delay = false,
 		DelayMinimum = 1,
 		DelayMaximum = 10,
 		DelaySID = true,
@@ -208,7 +208,10 @@ Config.Punishment = {
 		},
 
 		-- Extra
-		Verbose = true
+		Verbose = false,
+		Callback = function(Player) 
+			return false
+		end
 	}),
 }
 
@@ -390,6 +393,23 @@ pStub.Register("Nospread", {
 	Delta = 0.01,
 })
 
+pStub.Register("Emulated Mouse", {
+	Enabled = true,
+	Name = "Emulated Mouse",
+	Description = "Detects emulated mouse movements by verifying mouse step amounts relative to sensitivity.",
+	Category = "Aimbot",
+	
+	Message = "Strange Mouse Movements: {Contact}",
+	
+	Client = true,
+	
+	Method = PUNISHMENT_KICK,
+	
+	Flags = true,
+	Maximum = 2,
+	Decay = 15
+})
+
 --- Movement ---
 
 pStub.Register("Bunnyhop", {
@@ -550,7 +570,7 @@ pStub.Register("Fakelag", {
 	Method = PUNISHMENT_LOG,
 	
 	Flags = true,
-	Maximum = 3,
+	Maximum = 25,
 	Decay = 5,
 	
 	Alerts = {
@@ -628,7 +648,7 @@ pStub.Register("Errors", {
 	Method = PUNISHMENT_LOG,
 
 	Scan = true,
-	ScanMethod = PUNISHMENT_LOG	
+	ScanMethod = PUNISHMENT_KICK
 })
 
 --- Command Enforcer ---
