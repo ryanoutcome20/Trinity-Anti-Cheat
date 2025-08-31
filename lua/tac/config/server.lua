@@ -96,7 +96,7 @@ Config.Logging = {
             "INSERT INTO trinity_db( sid, type, text ) VALUES( %s, %s, %s )",
             sql.SQLStr(User:SteamID64()),
             sql.SQLStr(Type),
-            sql.SQLStr(Message)    
+            sql.SQLStr(Message)
         )
 	end,
 	
@@ -130,7 +130,7 @@ Config.Punishment = {
 		Enabled = false,
 		Name = "Fallback",
 		Description = "",
-		Category = "None",
+		Category = "None", 
 		
 		-- Clientside
 		Client = false,
@@ -177,7 +177,7 @@ Config.Punishment = {
 				"{Name} [{SteamID64}] was flagged for \"{Info}\" ({ID})! [{Flags}]"
 			)
 		end,
-		
+
 		formatPunishment = function(Token)
 			return tFormat(
 				Token,
@@ -185,7 +185,7 @@ Config.Punishment = {
 			)
 		end,
 		
-		formatDelayedPunishment = function(Token, Time)
+		formatDelayedPunishment = function(Token)
 			return tFormat(
 				Token,
 				"{Name} [{SteamID64}] is about to be punished for \"{Info}\" ({ID})! [{Timer}s]"
@@ -665,7 +665,7 @@ pStub.Register("Command Enforcer", {
 	Commands = {
 		{
 			Name = "cl_interpolate",
-			Value = 1
+			Value = 1 
 		}
 	},
 	

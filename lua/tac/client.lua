@@ -119,7 +119,7 @@ TAC.SIGNITURE_GOLD = Color(245,194,71)
 
 --- Base ---
 
-function TAC.PrintColor(TagColor, Text, ...)
+function TAC.PrintEx(TagColor, Text, ...)
 	MsgC(
 		TAC.WHITE,
 		"[",
@@ -136,7 +136,7 @@ function TAC.PrintColor(TagColor, Text, ...)
 end
 
 function TAC.Print(Text, ...)
-	return TAC.PrintColor(
+	return TAC.PrintEx(
 		TAC.SIGNITURE_GREEN,
 		Text,
 		...

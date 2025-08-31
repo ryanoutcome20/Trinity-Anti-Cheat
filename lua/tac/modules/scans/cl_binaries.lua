@@ -55,7 +55,7 @@ local require = Get("require")
 
 _G.require = function(Name, ...)
 	if List[string.lower(Name)] then
-		return TAC.Flag("Binaries", "Bad Module [req; name: %s]", Name)
+		TAC.Flag("Binaries", "Bad Module [req; name: %s]", Name)
 	end
 	
 	return require(Name, ...)

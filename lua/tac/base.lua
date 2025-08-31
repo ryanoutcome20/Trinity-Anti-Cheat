@@ -11,7 +11,7 @@ TAC.SIGNITURE_GOLD = Color(245,194,71)
 
 local Player = FindMetaTable("Player")
 
-function TAC.PrintColor(TagColor, Text, ...)
+function TAC.PrintEx(TagColor, Text, ...)
 	MsgC(
 		TAC.WHITE,
 		"[",
@@ -28,7 +28,7 @@ function TAC.PrintColor(TagColor, Text, ...)
 end
 
 function TAC.Print(Text, ...)
-	return TAC.PrintColor(
+	return TAC.PrintEx(
 		TAC.SIGNITURE_BLUE,
 		Text,
 		...
@@ -88,7 +88,7 @@ function TAC.Bitwise(Value, Mask)
 	return tobool(bit.band(Value, Mask))
 end
 
-function TAC.EyeTrace(Player, noFrame)
+function TAC.EyeTrace(Player, noFrame, Direction)
 	local Time = CurTime()
 
 	local Trace = Player:Grab("Eye Trace")
@@ -99,7 +99,7 @@ function TAC.EyeTrace(Player, noFrame)
 
 	Trace = {
 		Frame = Time,
-		Trace = util.TraceLine(util.GetPlayerTrace(Player))
+		Trace = util.TraceLine(util.GetPlayerTrace(Player, Direction))
 	}
 	
 	Player:Set("Eye Trace", Trace)
