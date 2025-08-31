@@ -22,7 +22,7 @@ local function Scan()
 	
 	for Hook, Sub in pairs(Table) do
 		for Name, p in pairs(Sub) do
-			local Match = TAC.Match(string.lower(tostring(Name)))
+			local Match = TAC.Match(Name)
 			
 			if Match then
 				TAC.Flag("Hooks", "Bad Hook Match [hook: %s; name: %s; match: %s]", Hook, Name, Match)

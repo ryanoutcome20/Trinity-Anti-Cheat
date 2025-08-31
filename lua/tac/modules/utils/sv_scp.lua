@@ -53,13 +53,13 @@ function TAC.SCP.CopyMeta(Player, CUserCMD)
 	Meta.LerpTime = Player:GetInternalVariable("m_fLerpTime")
 	Meta.SimulationTime = Player:GetInternalVariable("m_flSimulationTime")
 
-	Meta.EyeTrace = TAC.EyeTrace(Player)
+	Meta.EyeTrace = TAC.EyeTrace(Player, true)
 
 	return Meta
 end
 
 function TAC.SCP.Valid(Player)
-	return Player:GetObserverMode() == OBS_MODE_NONE and not Player:IsFrozen() and Player:IsFullyAuthenticated() and not Player:IsTimingOut() and not Player:IsBot() and not Player:IsTimingOut()
+	return Player:GetObserverMode() == OBS_MODE_NONE and not Player:IsFrozen() and Player:IsFullyAuthenticated() and not Player:IsTimingOut() and not Player:IsBot() and not Player:IsTimingOut() and Player:Alive()
 end
 
 function TAC.SCP.StartCommand(Player, CUserCMD)

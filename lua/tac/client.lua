@@ -261,6 +261,8 @@ end
 local Match = TAC.Lists.Merge("Match")
 
 function TAC.Match(String)
+	String = string.lower(tostring(String))
+
 	for k, Name in ipairs(Match) do 
 		if string.find(String, Name) then
 			return Name

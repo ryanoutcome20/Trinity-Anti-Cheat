@@ -97,6 +97,11 @@ Config.Scans = {
 		Enabled = true,
 		
 		Delay = 45
+	},
+	Commands = {
+		Enabled = true,
+		
+		Delay = 600
 	}
 }
 

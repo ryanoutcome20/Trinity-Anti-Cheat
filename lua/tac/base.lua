@@ -69,7 +69,7 @@ function TAC.Fix(Text)
 		["\f"] = "\\f"
 	}
 	
-	Text = Text:sub(1, 64)
+	Text = Text:sub(1, TAC.Config.Sanitization)
 	
 	for k,v in pairs(Indexes) do 
 		Text = Text:Replace(k,v)
@@ -88,18 +88,18 @@ function TAC.Bitwise(Value, Mask)
 	return tobool(bit.band(Value, Mask))
 end
 
-function TAC.EyeTrace(Player)
+function TAC.EyeTrace(Player, noFrame)
 	local Time = CurTime()
 
 	local Trace = Player:Grab("Eye Trace")
 	
-	if Trace and Time - Trace.Frame < 1 then
+	if not noFrame and Trace and Time - Trace.Frame < 1 then
 		return Trace.Trace
 	end
 
 	Trace = {
 		Frame = Time,
-		Trace = Player:GetEyeTrace()
+		Trace = util.TraceLine(util.GetPlayerTrace(Player))
 	}
 	
 	Player:Set("Eye Trace", Trace)

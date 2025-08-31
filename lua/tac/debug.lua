@@ -21,3 +21,6 @@ concommand.Add("tac_reload", function()
 end)
 
 dbg = TAC.Print
+
+hook.Add("StartCommandPlus", "Mouse Batch Processing", function(Player, cNew, cOld)
+end)

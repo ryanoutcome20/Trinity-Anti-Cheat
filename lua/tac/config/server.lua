@@ -53,6 +53,8 @@ TAC.Config = Config
 
 Config.Contact = "github.com/ryanoutcome20/Trinity-Anti-Cheat/"
 
+Config.Sanitization = 96
+
 Config.Staff = {
 	Roles = {
 		admin = true,
@@ -363,7 +365,7 @@ pStub.Register("Static", {
 	Method = PUNISHMENT_KICK,
 		
 	Flags = true,
-	Maximum = 15,
+	Maximum = 40,
 	Decay = 0.5,
 	
 	Alerts = {
@@ -934,6 +936,19 @@ pStub.Register("Hooks", {
 	Client = true,
 	
 	Message = "Bad Hook: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
+pStub.Register("Commands", {
+	Enabled = true,
+	Name = "Commands",
+	Description = "Occurs when the player has a command or convar registered from the blacklist.",
+	Category = "Scans",
+	
+	Client = true,
+	
+	Message = "Bad Command: {Contact}",
 	
 	Method = PUNISHMENT_LOG
 })
