@@ -354,25 +354,6 @@ pStub.Register("Autoclicker", {
 	}
 })
 
-pStub.Register("Static", {
-	Enabled = true,
-	Name = "Static",
-	Description = "Detects players moving at constant mouse speeds.",
-	Category = "Aimbot",
-	
-	Message = "Unusual Mouse Input: {Contact}",
-	
-	Method = PUNISHMENT_KICK,
-		
-	Flags = true,
-	Maximum = 40,
-	Decay = 0.5,
-	
-	Alerts = {
-		Flags = ALERT_NONE
-	}
-})
-
 pStub.Register("Nospread", {
 	Enabled = true,
 	Name = "Nospread",
@@ -567,6 +548,7 @@ pStub.Register("Fakelag", {
 	Method = PUNISHMENT_LOG,
 	
 	Window = 32,
+	TimeSinceSpawned = 1,
 	
 	Flags = true,
 	Maximum = 15,
