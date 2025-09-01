@@ -22,5 +22,4 @@ end)
 
 dbg = TAC.Print
 
-hook.Add("StartCommandPlus", "Mouse Batch Processing", function(Player, cNew, cOld)
-end)
+hook.Add("PostEntityFireBullets", "Accuracy.Count", function() end)

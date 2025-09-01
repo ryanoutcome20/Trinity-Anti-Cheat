@@ -14,7 +14,7 @@ return {
 	["deaglerh/"] = true,
 	["dreambot_config/"] = true,
 	["configs/"] = true,
-	["sg/images/"] = true,
+	["sg/"] = true,
 	["FartClient/"] = true,
 	["gbot/"] = true,
 	["serj/"] = true,

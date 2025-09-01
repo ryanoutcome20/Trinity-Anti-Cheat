@@ -93,6 +93,9 @@ Config.Scans = {
 	Binaries = {
 		Enabled = true
 	},
+	Files = {
+		Enabled = true,
+	},
 	Hooks = {
 		Enabled = true,
 		

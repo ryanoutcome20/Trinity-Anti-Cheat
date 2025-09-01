@@ -632,6 +632,20 @@ pStub.Register("Errors", {
 	ScanMethod = PUNISHMENT_KICK
 })
 
+pStub.Register("Accuracy", {
+	Enabled = true,
+	Name = "Accuracy",
+	Description = "Gives reports about suspicious aiming accuracy.",
+	Category = "Extra",
+	
+	Method = PUNISHMENT_LOG,
+
+	Distance = 400,
+	Window = 10,
+	ShotWait = 0.1,
+	MinimumAccuracy = 0.5
+})
+
 --- Command Enforcer ---
 
 pStub.Register("Command Enforcer", {
@@ -667,7 +681,7 @@ pStub.Register("Command Enforcer", {
 ]]--
 
 Config.Interpolated = {
-	Enabled = true,
+	Enabled = false,
 	
 	Ratio = 0.00005,
 	Randomize = true,
@@ -708,6 +722,15 @@ Config.PVS = {
 	squareSize = 1,
 	squaredSize = 256,
 	intervalScale = 8
+}
+
+--- Spread Desyncer (Nospread Breaker) ---
+
+Config.Spread = {
+	Enabled = true,
+	
+	Minimum = 0,
+	Maximum = 0.05
 }
 
 --- Client Mouse ---
@@ -905,6 +928,19 @@ pStub.Register("Binaries", {
 	Client = true,
 	
 	Message = "Bad Module: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
+pStub.Register("Files", {
+	Enabled = true,
+	Name = "Files",
+	Description = "Occurs when a player uses a cheat that will leave traces in the data folder.",
+	Category = "Scans",
+	
+	Client = true,
+	
+	Message = "Bad File: {Contact}",
 	
 	Method = PUNISHMENT_LOG
 })
