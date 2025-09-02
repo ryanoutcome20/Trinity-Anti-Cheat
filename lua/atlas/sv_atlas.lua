@@ -146,7 +146,7 @@ function Atlas:Split(Data)
 
         Split[Count] = Split[Count] or { }
     
-        if #Split[Count] > 63000 then 
+        if #Split[Count] > 12000 then 
             Count = Count + 1
             
             Split[Count] = { }
