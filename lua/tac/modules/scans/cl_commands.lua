@@ -11,17 +11,17 @@ local List = TAC.Lists.Merge("Commands")
 --- Main Loop ---
 
 local function Scan()
-	local Upvalue, Table = debug.getupvalue(concommand.GetTable, 1)
+	local Name, Value = debug.getupvalue(concommand.GetTable, 1)
 	
-	if not istable(Table) then
-		Table = concommand.GetTable()
+	if not istable(Value) then
+		Value = concommand.GetTable()
 		
-		if not istable(Table) then
+		if not istable(Value) then
 			return TAC.Flag("Commands", "Bad Commands [none]")
 		end
 	end
 	
-	for Name, Value in pairs(Table) do 
+	for Name, Value in pairs(Value) do 
 		if List[Name] then
 			TAC.Flag("Commands", "Bad Commands [concommand; name: %s]", Name)
 			continue

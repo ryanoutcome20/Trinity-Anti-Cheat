@@ -45,6 +45,10 @@ end
 function TAC.Aimbot.InputGuard.SetupMove(Player, CMoveData, CUserCMD)
 	local Config = TAC.Config.Aimbot.InputGuard
 	local Object = TAC.Aimbot.InputGuard.Storage
+	
+	if vgui.CursorVisible() then
+		return
+	end
 
 	if Object and IsFirstTimePredicted() then
 		Player = GetPredictionPlayer()

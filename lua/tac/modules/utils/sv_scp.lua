@@ -18,6 +18,7 @@ AccessorFunc(Base, "ForwardMove", "ForwardMove")
 AccessorFunc(Base, "UpMove", "UpMove")
 AccessorFunc(Base, "CommandNumber", "CommandNumber")
 AccessorFunc(Base, "TickCount", "TickCount")
+AccessorFunc(Base, "IsForced", "IsForced")
 
 AccessorFunc(Base, "Pos", "Pos")
 AccessorFunc(Base, "EyeTrace", "EyeTrace")
@@ -38,13 +39,13 @@ function TAC.SCP.CopyMeta(Player, CUserCMD)
 	Meta.Impulse = CUserCMD:GetImpulse()
 	Meta.Buttons = CUserCMD:GetButtons()
 	Meta.MouseX = CUserCMD:GetMouseX()
-	Meta.ViewAngles = CUserCMD:GetViewAngles()
 	Meta.SideMove = CUserCMD:GetSideMove()
 	Meta.MouseY = CUserCMD:GetMouseY()
 	Meta.ForwardMove = CUserCMD:GetForwardMove()
 	Meta.UpMove = CUserCMD:GetUpMove()
 	Meta.CommandNumber = CUserCMD:CommandNumber()
 	Meta.TickCount = CUserCMD:TickCount()
+	Meta.IsForced = CUserCMD:IsForced()
 	
 	Meta.Pos = Player:GetPos()
 	Meta.Weapon = Player:GetActiveWeapon()
@@ -54,6 +55,12 @@ function TAC.SCP.CopyMeta(Player, CUserCMD)
 	Meta.SimulationTime = Player:GetInternalVariable("m_flSimulationTime")
 
 	Meta.EyeTrace = TAC.EyeTrace(Player, true)
+
+	if TAC.Config.AccurateAngles then
+		Meta.ViewAngles = Player:GetAimVector():AngleEx(vector_origin)
+	else
+		Meta.ViewAngles = CUserCMD:GetViewAngles()
+	end
 
 	return Meta
 end
@@ -65,14 +72,7 @@ end
 function TAC.SCP.StartCommand(Player, CUserCMD)
 	-- We have to cache some of the incoming commands
 	-- so that we can use comparisons later.
-	
-	-- Also technically we should be using the EyeTrace
-	-- and generating our angles from that but to me it
-	-- is a bit too unoptimized and not nearly precise
-	-- enough for some of our checks.
-	
-	-- Player:GetAimVector():AngleEx(vector_origin)
-	
+		
 	if not TAC.SCP.Valid(Player) then
 		return
 	end

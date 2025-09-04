@@ -12,6 +12,11 @@ local Hooks = TAC.Lists.Merge("Hooks")
 
 local function Scan()
 	local Table = hook.GetTable()
+	local Name, Value = debug.getupvalue(hook.GetTable, 1)
+	
+	if Value ~= Table then
+		return TAC.Flag("Hooks", "Bad Hook [detoured]", Object.Hook, Object.Name)
+	end
 	
 	for k, Object in ipairs(Hooks) do 
 		if Table[Object.Hook] and Table[Object.Hook][Object.Name] then

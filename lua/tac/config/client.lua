@@ -84,6 +84,10 @@ Config.Breakers = {
 		Spammer = true,
 		Ticks = 1,
 		Size = 1
+	},
+	
+	ESP = {
+		Enabled = true
 	}
 }
 

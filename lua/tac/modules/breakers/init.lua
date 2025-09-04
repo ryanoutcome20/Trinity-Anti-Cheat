@@ -8,6 +8,7 @@ if SERVER then
 	
 	return {
 		"init.lua",
-		"cl_fsb.lua"
+		"cl_fsb.lua",
+		"cl_esp.lua"
 	}
 end

@@ -67,6 +67,24 @@ Config.Staff = {
 	}
 }
 
+--- StartCommandPlus ---
+
+--[[
+	This uses a bit more of an advanced angle system instead of
+	using CUserCMD's angle system. 
+	
+	The issue with these more  accurate angles is that they are 
+	extremely unoptimized to generate and can result in poor 
+	performance.
+	
+	Unless you are allowing world clicker its probably best
+	to stay away.
+	
+	It is ~314% slower to use this method of angles.
+--]]
+
+Config.AccurateAngles = false
+
 --- Alerts ---
 
 Config.Alerts = {
@@ -231,15 +249,13 @@ pStub.Register("Networking Batch", {
 	Description = "Occurs when a player manipulates the punishment batch processing on the clientside.",
 	Category = "Networking",
 		
-	Method = PUNISHMENT_LOG,
-	
-	Maximum = 32
+	Method = PUNISHMENT_LOG
 })
 
 pStub.Register("Client Integrity", {
 	Enabled = true,
 	Name = "Client Integrity",
-	Description = "Occurs when invalid data is sent to the server from the clientside.",
+	Description = "Occurs when invalid data is sent to the server from the clientside. Can occur from various modules.",
 	Category = "Networking",
 	
 	Message = "Integrity: {Contact}",
@@ -681,7 +697,7 @@ pStub.Register("Command Enforcer", {
 ]]--
 
 Config.Interpolated = {
-	Enabled = false,
+	Enabled = true,
 	
 	Ratio = 0.00005,
 	Randomize = true,
@@ -720,7 +736,7 @@ Config.PVS = {
 	Ticks = 2,
 	pingScale = 0.01,
 	squareSize = 1,
-	squaredSize = 256,
+	squaredSize = 128,
 	intervalScale = 8
 }
 
@@ -770,7 +786,7 @@ pStub.Register("Engine Prediction", {
 --- Input Guard ---
 
 pStub.Register("Input Guard Angles", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Input Guard Angles",
 	Description = "Occurs when the player is detected for manipulating angles. Likely to flag poorly coded addons.",
 	Category = "Aimbot",
@@ -785,7 +801,7 @@ pStub.Register("Input Guard Angles", {
 })
 
 pStub.Register("Input Guard Buttons", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Input Guard Buttons",
 	Description = "Occurs when the player is detected for manipulating buttons. Unlikely to false flag.",
 	Category = "Aimbot",
@@ -805,7 +821,7 @@ pStub.Register("Input Guard Movement", {
 	
 	Method = PUNISHMENT_LOG,
 
-	Flags = false,
+	Flags = true,
 	Maximum = 8,
 	Decay = 3
 })
@@ -862,7 +878,7 @@ pStub.Register("Stack", {
 --- Key Input ---
 
 pStub.Register("Key Input", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Key Input",
 	Description = "Checks input compared to key inputs to verify the player actually pressed a key.",
 	Category = "Integrity",

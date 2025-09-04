@@ -1,4 +1,4 @@
-function TAC.FSB()
+function TAC.Breakers.FSB()
 	local Config = TAC.Config.Breakers.FSB
 
 	if Config.Enabled then
@@ -23,4 +23,4 @@ function TAC.FSB()
 	end
 end
 
-TAC.FSB()
+TAC.Breakers.FSB()

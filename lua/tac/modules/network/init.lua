@@ -30,7 +30,7 @@ function TAC.Networking.FlagBatch(Stage, Player, Objects)
 	
 	local Config = TAC.Config["Networking Batch"]
 	
-	if #Objects == 0 or #Objects > Config.Maximum then
+	if #Objects == 0 then
 		return TAC.Punishment.Wrapper("Networking Batch", Player, "Networking Batch [got: %i]", #Objects)
 	end
 	

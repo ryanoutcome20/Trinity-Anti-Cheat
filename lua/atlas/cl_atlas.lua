@@ -136,7 +136,7 @@ function Atlas:Unpack(Data)
         elseif Data.Type == TYPE_NUMBER then
             Constructed[k] = tonumber(self:Unpack(Data.Value))
         elseif Data.Type == TYPE_BOOL then
-            Constructed[k] = self:Unpack(Data.Value) == "true"
+            Constructed[k] = self:Unpack(tostring(Data.Value)) == "true"
         else
             Constructed[k] = self:Unpack(Data.Value)
         end
@@ -205,7 +205,7 @@ function Atlas:Send(Port, ...)
             net.Start("tac-networking")
                 self:Write(table.concat(Split[i]), Size, Checksum, i, Port)
             net.SendToServer()
-        end)
+		end)
     end
 end
 

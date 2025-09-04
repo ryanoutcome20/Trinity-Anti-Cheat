@@ -155,6 +155,22 @@ function TAC.Random(Length)
 	return Text
 end
 
+function TAC.Size(Table)
+	-- Close enough.
+	
+	if not istable(Table) then
+		return #tostring(Table)
+	end
+
+	local Size = 0
+	
+	for k,v in pairs(Table) do 
+		Size = Size + #tostring(v)
+	end
+	
+	return Size
+end
+
 function TAC.Visible(Mask, Target, From)
 	From = From or LocalPlayer():EyePos()
 	
@@ -179,60 +195,107 @@ function TAC.StandardAngle(Yaw)
 	return Yaw - 360
 end
 
---- Flag System ---
+--- Batch System ---
 
-TAC.Flags = { 
-	Buffer = { }
+TAC.Batch = {
+	Cache = { },
+	Buffer = { },
+	Head = 1
 }
 
-function TAC.Flags.Flag(cID, Message, ...)	
-	table.insert(TAC.Flags.Buffer, {
-		cID = cID,
-		Message = string.format(
-			Message,
-			...
-		)
-	})
+function TAC.Batch.Add(Message, Data, Size)
+	TAC.Batch.Buffer[#TAC.Batch.Buffer + 1] = {
+		Message = Message,
+		Data = Data,
+		Size = Size
+	}
 end
 
-function TAC.Flags.Process()
-	timer.Simple(0.25, TAC.Flags.Process)
+function TAC.Batch.Process()
+	-- Check if we have anything to process.
+	if TAC.Batch.Head > #TAC.Batch.Buffer then
+		TAC.Batch.Head = 1
+		TAC.Batch.Buffer = { }
+		return
+	end
 	
 	-- Get our batch that we're sending.
-	local Objects, Size = { }, 0
+	local Objects = {
+		Send = { },
+		Size = 0
+	}
 	
-	while Size < TAC.Config.BatchSize and #Objects < TAC.Config.BatchCount do 
-		local Object = table.remove(TAC.Flags.Buffer)
+	while true do 
+		local Object = TAC.Batch.Buffer[TAC.Batch.Head]
 		
 		if not Object then
 			break
 		end
 		
-		Size = Size + #Object.Message + #Object.cID
+		if Objects.Size + Object.Size > TAC.Config.BatchSize then
+			break
+		end
 		
-		table.insert(Objects, Object)
+		Objects.Size = Objects.Size + Object.Size
+		
+		Objects.Send[Object.Message] = Objects.Send[Object.Message] or { }
+		
+		table.insert(Objects.Send[Object.Message], Object.Data)
+		
+		TAC.Batch.Head = TAC.Batch.Head + 1
 	end
 	
 	-- Check if we even have anything to process.
-	if #Objects == 0 then
+	if Objects.Size == 0 then
 		return
 	end
 	
-	-- Send our alert.
-	TAC.Atlas:Send(
-		"Flag Batch", 
-		Objects
-	)
-	
-	-- Clamp flags.
-	while #TAC.Flags.Buffer > 15 do 
-		table.remove(TAC.Flags.Buffer)
+	-- Send our alerts.
+	for Name, Send in pairs(Objects.Send) do 
+		TAC.Atlas:Send(
+			Name .. " Batch",
+			Send
+		)
 	end
 end
 
-timer.Simple(0.25, TAC.Flags.Process)
+timer.Create("Batch", 0.25, 0, TAC.Batch.Process)
 
-TAC.Flag = TAC.Flags.Flag
+--- Flag System ---
+
+function TAC.FlagEx(Buffered, cID, Message, ...)
+	local Data = {
+		cID = cID,
+		Message = string.format(
+			Message,
+			...
+		)
+	}
+
+	if Buffered then
+		TAC.Batch.Add(
+			"Flag", 
+			Data, 
+			#Data.cID + #Data.Message
+		)
+		
+		return
+	end
+	
+	TAC.Atlas:Send(
+		"Flag", 
+		Data
+	)
+end
+
+function TAC.Flag(cID, Message, ...)	
+	return TAC.FlagEx(
+		true,
+		cID,
+		Message,
+		...
+	)
+end
 
 --- List Manager ---
 
@@ -274,22 +337,40 @@ end
 
 --- Function Buffers ---
 
-function TAC.GenerateBuffer(Function)
+function TAC.GenerateBuffer(Function, noFormat)
 	local GetInfo, FuncInfo = debug.getinfo(Function), jit.util.funcinfo(Function)
 
+	local Data = {
+		source = tostring(GetInfo.source or "s"):gsub("\\", "/"), -- OS specific. (#13)
+		short_src = GetInfo.short_src or "sh",
+		what = GetInfo.what or "wh",
+		linedefined = GetInfo.linedefined or "ld",
+		lastlinedefined = GetInfo.lastlinedefined or "lld",
+		
+		j_linedefined = FuncInfo.linedefined or "ld",
+		j_ffid = FuncInfo.ffid or "ffid",
+		j_upvalues = FuncInfo.upvalues or "uv",
+		
+		isfunc = GetInfo.name and GetInfo.namewhat and GetInfo.linedefined > 0,
+		
+		equals = (GetInfo.func == Function) and "fde" or "fne"
+	}
+	
+	if noFormat then
+		return Data
+	end
+
 	return string.format(
-		"%s:%s:%s:%s:%s %s:%s:%s %s",
-		tostring(GetInfo.source or "s"):gsub("\\", "/"), -- OS specific.
-		GetInfo.short_src or "sh",
-		GetInfo.what or "wh",
-		GetInfo.linedefined or "ld",
-		GetInfo.lastlinedefined or "lld",
-		
-		FuncInfo.linedefined or "ld",
-		FuncInfo.ffid or "ffid",
-		FuncInfo.upvalues or "uv",
-		
-		(GetInfo.func == Function) and "fde" or "fne"
+		"%s:%s:%s:%s:%s:%s:%s:%s:%s",
+		Data.source,
+		Data.short_src,
+		Data.what,
+		Data.linedefined,
+		Data.lastlinedefined,
+		Data.j_linedefined,
+		Data.j_ffid,
+		Data.j_upvalues,
+		Data.equals
 	)
 end
 
