@@ -875,6 +875,17 @@ pStub.Register("Stack", {
 	Method = PUNISHMENT_LOG
 })
 
+--- Honeypot ---
+
+pStub.Register("Honeypot", {
+	Enabled = true,
+	Name = "Honeypot",
+	Description = "Emulates popular anti-cheat plugins to detect players attempting bruteforce bypasses.",
+	Category = "Integrity",
+	
+	Method = PUNISHMENT_LOG
+})
+
 --- Key Input ---
 
 pStub.Register("Key Input", {

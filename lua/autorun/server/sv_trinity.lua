@@ -108,14 +108,14 @@ local function LoadPlugins(Root)
         if file.Exists(Formatted, "LUA") then
 			TAC.Plugins = TAC.Plugins + 1
 			
-            local Clientside = include(Formatted)
+            local Clientside, Absolute = include(Formatted)
 
             if not Clientside then
                 continue
             end
 
             for k, Sub in ipairs(Clientside) do
-                local Path = Directory .. "/" .. Sub
+                local Path = Absolute and Sub or Directory .. "/" .. Sub
                 mStub.Register(Path)
             end
         end
