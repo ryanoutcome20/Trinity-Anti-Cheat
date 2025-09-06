@@ -642,10 +642,7 @@ pStub.Register("Errors", {
 	Description = "Logs errors, if given the option it can also scan for errors from files that aren't supposed to exist.",
 	Category = "Extra",
 	
-	Method = PUNISHMENT_LOG,
-
-	Scan = true,
-	ScanMethod = PUNISHMENT_KICK
+	Method = PUNISHMENT_LOG
 })
 
 pStub.Register("Accuracy", {
