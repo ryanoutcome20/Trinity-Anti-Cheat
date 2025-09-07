@@ -16,6 +16,10 @@ function TAC.Detours.Capture(Function, Message, ...)
 		)
 	}
 	
+	if TAC.Detours.Whitelist.Whitelisted(Data.Function, Function) then
+		return
+	end
+	
 	TAC.Batch.Add(
 		"Function", 
 		Data, 
