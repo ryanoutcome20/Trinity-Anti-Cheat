@@ -94,10 +94,6 @@ function TAC.Breakers.PVS.Run(Player)
 			continue
 		end
 		
-		for k, Data in ipairs(Positions) do 
-			debugoverlay.Box(Data, Vector(1,1,1), Vector(5,5,5), 0.03, HSVToColor(CurTime()%360*k*5, 1, 1))
-		end
-		
 		local Validated = false
 		
 		for k = 1, #Positions do
