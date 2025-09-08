@@ -63,13 +63,13 @@ function TAC.Execute(Token, noDelay)
 	end
 		
 	if Token.Method == PUNISHMENT_BAN then
-		Backend.Ban(
+		Backend:Ban(
 			Token.Player,
 			Message,
 			Token.Time
 		)
 	else
-		Backend.Kick(
+		Backend:Kick(
 			Token.Player,
 			Message
 		)
@@ -86,7 +86,7 @@ function TAC.ExecuteSID(Token)
 	local Backend = TAC.Punishment.Backend(Token)
 	
 	if Token.Method == PUNISHMENT_BAN then
-		Backend.BanID(
+		Backend:BanID(
 			Token.SID,
 			Token.Message,
 			Token.Time

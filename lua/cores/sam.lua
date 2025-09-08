@@ -14,6 +14,6 @@ return "SAM", {
 	end,
 	
 	Kick = function(Player, Reason)
-		return sam.player.kick_id(Player:SteamID64(), Reason)
+		return sam.player.kick_id(Player:SteamID(), Reason)
 	end
 }

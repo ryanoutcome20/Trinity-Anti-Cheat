@@ -14,6 +14,6 @@ return "Default", {
 	end,
 	
 	Kick = function(Player, Reason)
-		return game.KickID(Player:SteamID64(), Reason)
+		return game.KickID(Player:SteamID(), Reason)
 	end
 }

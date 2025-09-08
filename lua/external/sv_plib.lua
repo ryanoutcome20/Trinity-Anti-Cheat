@@ -5,15 +5,15 @@ pLib = {
 --- Punishment Functionality ---
 
 function pLib:Ban(Player, Reason, Time)
-	return self:GetCore():Ban(Player, Reason, Time)
+	return self:GetCore().Ban(Player, Reason, Time)
 end
 
 function pLib:BanID(SID, Reason, Time)
-	return self:GetCore():BanID(SID, Reason, Time)
+	return self:GetCore().BanID(SID, Reason, Time)
 end
 
 function pLib:Kick(Player, Reason)
-	return self:GetCore():Kick(Player, Reason)
+	return self:GetCore().Kick(Player, Reason)
 end
 
 --- Core Management Functionality ---
