@@ -1,15 +1,7 @@
 function TAC.Punishment.Backend(Token)
-	local Backend = TAC.Backends[string.lower(Token.Backend)]
+	pLib:SetCore(string.lower(Token.Backend))
 	
-	if not Backend then
-		TAC.Print("No backend for punishment! (%s -> %s, doesn't exist)", Token.ID, Token.Backend)
-		return TAC.Backends.default
-	elseif not Backend.Valid() then
-		TAC.Print("Invalid backend for punishment! (%s -> %s, valid failed)", Token.ID, Token.Backend)
-		return TAC.Backends.default
-	end
-	
-	return Backend
+	return pLib
 end
 
 function TAC.Execute(Token, noDelay)

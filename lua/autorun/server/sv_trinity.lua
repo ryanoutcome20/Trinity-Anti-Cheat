@@ -54,22 +54,6 @@ AddCSLuaFile("external/atlas/cl_atlas.lua")
 MsgN("  Creating pLib instance")
 include("external/sv_plib.lua")
 
---- Backends ---
-
-MsgN("  Loading backend managers")
-
-TAC.Backends = { }
-
-for k, Backend in ipairs(file.Find("tac/backends/*.lua", "LUA")) do 
-	local Name, Data = include("tac/backends/" .. Backend)
-	
-	if not Name or not Data then
-		continue
-	end
-	
-	TAC.Backends[string.lower(Name)] = Data
-end
-
 --- Lists ---
  
 MsgN("  Caching lists")
