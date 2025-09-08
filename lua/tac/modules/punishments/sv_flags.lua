@@ -24,7 +24,7 @@ function TAC.Punishment.Flag(Token)
 	
 	if Token.AlertFlagsMinimum <= Token.FlagsCount then
 		TAC.Tell(
-			Token.formatFlags(Token),
+			tFormat(Token, Token.formatFlags),
 			Token.Alerts.Flags,
 			NOTIFY_GENERIC,
 			TAC.Config.Alerts.Sounds.Important,

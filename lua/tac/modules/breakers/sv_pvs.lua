@@ -1,4 +1,23 @@
-TAC.Breakers.PVS = { }
+TAC.Breakers.PVS = {
+	Interval = engine.TickInterval()
+}
+
+function TAC.Breakers.PVS.BuildOffset()
+	TAC.Breakers.PVS.Offsets = { }
+
+	local Size, Squared = TAC.Config.PVS.squareSize, TAC.Config.PVS.squaredSize
+
+    for i = -Size, Size do
+        for k = -Size, Size do
+            for v = -Size, Size do				
+				table.insert(
+					TAC.Breakers.PVS.Offsets, 
+					Vector(i * Squared, k * Squared, v * Squared)
+				)
+            end
+        end
+    end
+end
 
 function TAC.Breakers.PVS.Set(Player, ENT, Status)
 	ENT:SetPreventTransmit(Player, Status)
@@ -10,10 +29,10 @@ function TAC.Breakers.PVS.Set(Player, ENT, Status)
 	end
 end
 
-function TAC.Breakers.PVS.Check(Player, Position, Target)
+function TAC.Breakers.PVS.Check(Player, Start, End, Target)
 	local Trace = util.TraceLine({
 		start = Position,
-		endpos = Target:EyePos(),
+		endpos = End,
 		mask = MASK_VISIBLE,
 		filter = {
 			Player, 
@@ -24,51 +43,37 @@ function TAC.Breakers.PVS.Check(Player, Position, Target)
 	return not Trace.Hit or Trace.Entity == Target
 end
 
-function TAC.Breakers.PVS.Predict(Player, Ticks)
-	-- No, we won't do any AABB checks in here since it would be
+function TAC.Breakers.PVS.Predict(Player)
+	-- No, we won't do any AABB checks in here since it would be 
 	-- too expensive.
-		
-    local Data = { }
 
-    local Gravity = Player:GetGravity()
-    local Grounded = Player:IsOnGround()
-    local Position = Player:EyePos()
-    local Velocity = Player:GetVelocity()
-	local Friction = Player:GetFriction()
+    local Data, Index = { }, 1
+
+    local Gravity   = Player:GetGravity()
+    local Velocity  = Player:GetVelocity()
+    local Position  = Player:EyePos()
 
 	-- Insert squared size.
-	
-	local Size, Squared = TAC.Config.PVS.squareSize, TAC.Config.PVS.squaredSize
-	
-	for i = -Size, Size do 
-		for k = -Size, Size do 
-			for v = -Size, Size do
-				table.insert(Data, {
-					Position = Position + (Vector(i, k, v) * Squared),
-					Velocity = Velocity
-				})
-			end
-		end
+    if not TAC.Breakers.PVS.Offsets then
+		TAC.Breakers.PVS.BuildOffset()
 	end
-
-	-- Insert ticks.
 	
-    for i = 1, Ticks do
-        if not Grounded then
-            Velocity = Velocity + (-vector_up * Gravity * TAC.Breakers.PVS.Interval)
-        else
-            Velocity = Velocity * Friction
-        end
-
-        Position = Position + Velocity * TAC.Breakers.PVS.Interval
-
-        table.insert(Data, {
-            Position = Position,
-            Velocity = Velocity
-        })
+    for i = 1, #TAC.Breakers.PVS.Offsets do
+		local Offset = TAC.Breakers.PVS.Offsets[i]
+		
+		Data[Index] = Position + Offset
+		
+		Index = Index + 1
     end
-	
-    return Data
+
+	-- Insert tick.
+    local Tick = TAC.Breakers.PVS.Interval + (Player:Ping() / 1000) * TAC.Config.PVS.intervalScale
+
+    Velocity = Velocity + (-vector_up * Gravity * Tick)
+
+    Data[Index] = Position + Velocity * Tick
+
+    return Data, Position
 end
 
 function TAC.Breakers.PVS.Run(Player)
@@ -78,30 +83,32 @@ function TAC.Breakers.PVS.Run(Player)
 		return
 	end
 	
-	TAC.Breakers.PVS.Interval = engine.TickInterval() * Config.intervalScale
-	
-	local Positions = TAC.Breakers.PVS.Predict(Player, Config.Ticks + math.ceil(Player:Ping() * Config.pingScale))
+	local Positions, End = TAC.Breakers.PVS.Predict(Player)
 
-	for k, Target in ipairs(ents.FindInPVS(Player)) do 
+	local PVS = ents.FindInPVS(Player)
+
+	for i = 1, #PVS do 
+		local Target = PVS[i]
+	
 		if not Target:IsPlayer() or Target == Player then
 			continue
 		end
 		
 		local Validated = false
 		
-		for k, Data in ipairs(Positions) do 
-			debugoverlay.Box(Data.Position, Vector(1,1,1), Vector(5,5,5), 0.03, HSVToColor(CurTime()%360*k*5, 1, 1))
-		end
-		
-		for k, Data in ipairs(Positions) do
-			if TAC.Breakers.PVS.Check(Player, Data.Position, Target) then
+		for k = 1, #Positions do
+			if TAC.Breakers.PVS.Check(Player, Positions[k], End, Target) then
 				Validated = true
 				break
 			end
-		end		
+		end
 		
 		TAC.Breakers.PVS.Set(Player, Target, not Validated)
 	end
 end
 
 hook.Add("StartCommandPlus", "TAC.Breakers.PVS.Run", TAC.Breakers.PVS.Run)
+
+concommand.Add("tac_recompute_pvs", function()
+	TAC.Breakers.PVS.Offsets = { }
+end)

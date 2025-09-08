@@ -182,40 +182,11 @@ Config.Punishment = {
 		},
 		
 		-- Formats.
-		formatEvaluate = function(Token)
-			return tFormat(
-				Token,
-				"{Name} [{SteamID64}] was evaluated for \"{Info}\" ({ID})!"
-			)
-		end,
-		
-		formatFlags = function(Token)
-			return tFormat(
-				Token,
-				"{Name} [{SteamID64}] was flagged for \"{Info}\" ({ID})! [{Flags}]"
-			)
-		end,
-
-		formatPunishment = function(Token)
-			return tFormat(
-				Token,
-				"{Name} [{SteamID64}] was punished for \"{Info}\" ({ID})!"
-			)
-		end,
-		
-		formatDelayedPunishment = function(Token)
-			return tFormat(
-				Token,
-				"{Name} [{SteamID64}] is about to be punished for \"{Info}\" ({ID})! [{Timer}s]"
-			)
-		end,
-		
-		formatLog = function(Token)
-			return tFormat(
-				Token,
-				"{Name} [{SteamID64}] was logged for \"{Info}\" ({ID})!"
-			)
-		end,
+		formatEvaluate = "{Name} [{SteamID64}] was evaluated for \"{Info}\" ({ID})!",	
+		formatFlags = "{Name} [{SteamID64}] was flagged for \"{Info}\" ({ID})! [{Flags}]",
+		formatPunishment = "{Name} [{SteamID64}] was punished for \"{Info}\" ({ID})!",
+		formatDelayedPunishment = "{Name} [{SteamID64}] is about to be punished for \"{Info}\" ({ID})! [{Timer}s]",
+		formatLog = "{Name} [{SteamID64}] was logged for \"{Info}\" ({ID})!",
 		
 		-- Avoidance
 		Ping = -1,
@@ -225,6 +196,7 @@ Config.Punishment = {
 		Noclip = false,
 		SWEPs = {
 			-- ...
+			-- weapon_smg1 = true
 		},
 
 		-- Extra
@@ -730,11 +702,9 @@ Config.WorldClicker = true
 Config.PVS = {
 	Enabled = true,
 	
-	Ticks = 2,
-	pingScale = 0.01,
 	squareSize = 1,
 	squaredSize = 128,
-	intervalScale = 8
+	intervalScale = 1
 }
 
 --- Spread Desyncer (Nospread Breaker) ---

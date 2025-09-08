@@ -77,7 +77,9 @@ function TAC.Punishment.Valid(Player, Config, isToken, noDelay)
 	local SWEP = Player:GetActiveWeapon()
 	
 	if SWEP and IsValid(SWEP) then
-		if Config[SWEP:GetClass()] then
+		local Class = SWEP:GetClass()
+		
+		if Class and Config.SWEPs[Class] then
 			return
 		end
 	end

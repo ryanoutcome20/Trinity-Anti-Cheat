@@ -11,7 +11,7 @@ function TAC.Punishment.Delay(Token)
 	Token.Timer = math.random(Token.DelayMinimum, Token.DelayMaximum)
 		
 	-- Get formatted.
-	local Formatted =  Token.formatDelayedPunishment(Token)
+	local Formatted = tFormat(Token, Token.formatDelayedPunishment)
 		
 	-- Log.
 	Token.Player:tLog(
@@ -35,7 +35,7 @@ function TAC.Punishment.Delay(Token)
 		
 		if Token.Player and IsValid(Token.Player) then
 			TAC.Execute(Token, true)
-		elseif Token.DelaySID then
+		elseif Token.DelaySID and Token.SID then
 			TAC.ExecuteSID(Token)
 		end
 	end)

@@ -39,7 +39,7 @@ function TAC.Execute(Token, noDelay)
 	end
 	
 	-- Log specific override stuff.
-	local Formatted = onlyLog and Token.formatLog(Token) or Token.formatPunishment(Token)
+	local Formatted = onlyLog and tFormat(Token, Token.formatLog) or tFormat(Token, Token.formatPunishment)
 	local Sound = onlyLog and TAC.Config.Alerts.Sounds.Notify or TAC.Config.Alerts.Sounds.Punishment
 
 	-- Log.
