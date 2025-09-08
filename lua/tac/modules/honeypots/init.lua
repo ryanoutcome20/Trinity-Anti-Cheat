@@ -21,6 +21,8 @@ else
 	return
 end
 
+MsgN("  Loading honeypots")
+
 local Found = file.Find("tac/honeypots/*", "LUA")
 
 for Index, Name in ipairs(Found) do 

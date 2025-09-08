@@ -51,12 +51,10 @@ end
 
 -- Detour ---
 
-local require = Get("require")
-
-_G.require = function(Name, ...)
+TAC.Detour.Register("require", function(Original, Name, ...)
 	if List[string.lower(Name)] then
 		TAC.Flag("Binaries", "Bad Module [req; name: %s]", Name)
 	end
 	
-	return require(Name, ...)
-end
+	return Original(Name, ...)
+end)

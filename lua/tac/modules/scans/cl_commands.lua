@@ -42,9 +42,7 @@ timer.Simple(Config.Delay, Scan)
 
 -- Detours ---
 
-local CreateConVar = Get("CreateConVar")
-
-_G.CreateConVar = function(Name, ...)
+TAC.Detour.Register("CreateConVar", function(Original, Name, ...)
 	if List[string.lower(Name)] then
 		return TAC.Flag("Commands", "Bad Commands [convar; name: %s]", Name)
 	end
@@ -56,15 +54,13 @@ _G.CreateConVar = function(Name, ...)
 		return
 	end
 	
-	return CreateConVar(Name, ...)
-end
+	return Original(Name, ...)
+end)
 
-local AddConsoleCommand = Get("AddConsoleCommand")
-
-_G.AddConsoleCommand = function(Name, ...)
+TAC.Detour.Register("AddConsoleCommand", function(Original, Name, ...)
 	if List[string.lower(Name)] then
 		return TAC.Flag("Commands", "Bad Commands [acc; name: %s]", Name)
 	end
 	
-	return AddConsoleCommand(Name, ...)
-end
+	return Original(Name, ...)
+end)

@@ -79,7 +79,7 @@ end
 
 TAC.Localizers.Table = TAC.Localizers.Localize()
 
-Get = TAC.Localizers.Get
+local Get = TAC.Localizers.Get
 
 --- Manual Localizers ---
 
@@ -103,6 +103,7 @@ local Vector = Get("Vector")
 local include = Get("include")
 local CreateClientConVar = Get("CreateClientConVar")
 local LocalPlayer = Get("LocalPlayer")
+local FindMetaTable = Get("FindMetaTable")
 
 --- Colors ---
 
@@ -391,6 +392,66 @@ function TAC.GenerateUpvalueTree(Function)
 	return Variables
 end
 
+--- Detour System ---
+
+TAC.Detour = {
+    Registry = {}
+}
+
+function TAC.Detour.Register(Name, Callback, Meta)
+    local Table, Key, Original;
+
+    if Meta then
+        Table = FindMetaTable(Meta)
+       
+		if not Table then 
+			return 
+		end
+        
+		Key = Name
+        Original = Table[Key]
+        Table[Key] = function(...)
+			return Callback(Original, ...)
+		end
+    else
+        local Split = string.Split(Name, ".")
+		
+        Table = _G
+		
+        for i = 1, #Split - 1 do
+            Table = Table[Split[i]]
+			
+            if not Table then 
+				return 
+			end
+        end
+		
+        Key = Split[#Split]
+        Original = Table[Key]
+        Table[Key] = function(...)
+			return Callback(Original, ...)
+		end
+    end
+
+    TAC.Detour.Registry[Name .. (Meta or "")] = {
+        Table = Table,
+        Key = Key,
+        Original = Original
+    }
+end
+
+function TAC.Detour.Unregister(Name, Meta)
+    local Entry = TAC.Detour.Registry[Name .. (Meta or "")]
+    
+	if not Entry then 
+		return 
+	end
+
+    Entry.Table[Entry.Key] = Entry.Original
+	
+    TAC.Detour.Registry[Name .. (Meta or "")] = nil
+end
+
 --- PIC ---
 
 TAC.PIC = { }
@@ -490,9 +551,11 @@ end
 
 TAC.Environment = setmetatable({
 	TAC = TAC,
-	_G = _G
+	
+	_G = _G,
+	_T = TAC.Localizers.Table
 }, {
-	__index = _G
+	__index = TAC.Localizers.Table
 })
 
 function TAC.LoadCode(Code, File)

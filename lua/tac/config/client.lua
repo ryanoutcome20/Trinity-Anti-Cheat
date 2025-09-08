@@ -87,7 +87,7 @@ Config.Breakers = {
 	},
 	
 	ESP = {
-		Enabled = true
+		Enabled = false
 	}
 }
 

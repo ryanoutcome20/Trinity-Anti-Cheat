@@ -20,7 +20,7 @@ end
 
 Atlas:Listen("Honeypot", "TAC.Honeypot.Receive", MODE_DONE, TAC.Honeypot.Receive)
 
--- MAC
+--- MAC ---
 
 util.AddNetworkString("m_loaded")
 util.AddNetworkString("m_validate_player")
@@ -33,7 +33,7 @@ net.Receive("m_validate_player", function(Length, Player)
 	TAC.Honeypot.Wrapper(Player, "Honeypot [MAC: m_validate_player]")
 end)
 
--- QAC
+--- QAC ---
 
 util.AddNetworkString("gcontrolled_vars")
 util.AddNetworkString("controlled_vars")

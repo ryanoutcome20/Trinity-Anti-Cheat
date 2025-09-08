@@ -792,7 +792,7 @@ pStub.Register("Input Guard Angles", {
 	
 	Method = PUNISHMENT_LOG,
 	
-	Flags = false,
+	Flags = true,
 	Maximum = 10,
 	Decay = 3
 })
@@ -809,7 +809,7 @@ pStub.Register("Input Guard Buttons", {
 })
 
 pStub.Register("Input Guard Movement", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Input Guard Movement",
 	Description = "Occurs when the player is detected for manipulating movement values. Likely to flag poorly coded addons.",
 	Category = "Aimbot",
@@ -819,7 +819,7 @@ pStub.Register("Input Guard Movement", {
 	Method = PUNISHMENT_LOG,
 
 	Flags = true,
-	Maximum = 8,
+	Maximum = 15,
 	Decay = 3
 })
 

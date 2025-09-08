@@ -1,14 +1,10 @@
---- Originals ---
+--- Localization ---
 
-local Get = TAC.Localizers.Get
-
-local RunString = Get("RunString")
-local RunStringEx = Get("RunStringEx")
-local CompileString = Get("CompileString")
+local Detour = TAC.Detour.Register
 
 --- Whitelist ---
 
-function _G.RunString(Code, Identifier, ...)
+Detour("RunString", function(Original, Code, Identifier, ...)
 	TAC.Detours.CaptureStack("RunString")
 	
 	if Identifier then
@@ -24,10 +20,10 @@ function _G.RunString(Code, Identifier, ...)
 	
 	TAC.Detours.Whitelist.Increment()
 	
-	return RunString(Code, Identifier, ...)
-end
+	return Original(Code, Identifier, ...)
+end)
 
-function _G.RunStringEx(Code, Identifier, ...)
+Detour("RunStringEx", function(Original, Code, Identifier, ...)
 	TAC.Detours.CaptureStack("RunStringEx")
 	
 	if Identifier then
@@ -43,17 +39,17 @@ function _G.RunStringEx(Code, Identifier, ...)
 	
 	TAC.Detours.Whitelist.Increment()
 	
-	return RunStringEx(Code, Identifier, ...)
-end
+	return Original(Code, Identifier, ...)
+end)
 
-function _G.CompileString(Code, Identifier, ...)
+Detour("CompileString", function(Original, Code, Identifier, ...)
 	TAC.Detours.CaptureStack("CompileString")
 	
 	if Identifier then
 		TAC.Detours.Whitelist.Identifiers[Identifier] = true
 	end
 	
-	local Output = CompileString(Code, Identifier, ...)
+	local Output = Original(Code, Identifier, ...)
 
 	if isfunction(Output) then		
 		table.insert(
@@ -65,10 +61,15 @@ function _G.CompileString(Code, Identifier, ...)
 	TAC.Detours.Whitelist.Increment()
 	
 	return Output
-end
+end)
 
 --- Testing ---
-
-function _G.Test()
-	TAC.Detours.CaptureStack("CompileString")
+ 
+_G.Test = function(Value)
+	print("Test: " .. Value)
 end
+
+Detour("Test", function(Original, ...)
+	MsgN("Test: detoured")
+	return Original(...)
+end)

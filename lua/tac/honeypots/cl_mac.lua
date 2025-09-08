@@ -1,3 +1,5 @@
+local net = _G.net -- We want the globalized one.
+
 net.Receive("m_network_data", function() end)
 net.Receive("m_validate_player", function() end)
 
