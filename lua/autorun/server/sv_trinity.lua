@@ -45,11 +45,14 @@ MsgN("  Creating clientside")
 AddCSLuaFile("tac/client.lua")
 AddCSLuaFile("tac/config/client.lua")
 
---- Atlas ---
+--- External Libraries ---
 
 MsgN("  Creating Atlas instance")
-include("atlas/sv_atlas.lua")
-AddCSLuaFile("atlas/cl_atlas.lua")
+include("external/atlas/sv_atlas.lua")
+AddCSLuaFile("external/atlas/cl_atlas.lua")
+
+MsgN("  Creating pLib instance")
+include("external/sv_plib.lua")
 
 --- Backends ---
 
