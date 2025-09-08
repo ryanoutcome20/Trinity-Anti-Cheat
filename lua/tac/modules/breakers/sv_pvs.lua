@@ -29,10 +29,10 @@ function TAC.Breakers.PVS.Set(Player, ENT, Status)
 	end
 end
 
-function TAC.Breakers.PVS.Check(Player, Start, End, Target)
+function TAC.Breakers.PVS.Check(Player, Position, Target)
 	local Trace = util.TraceLine({
 		start = Position,
-		endpos = End,
+		endpos = Target:EyePos(),
 		mask = MASK_VISIBLE,
 		filter = {
 			Player, 
@@ -73,7 +73,7 @@ function TAC.Breakers.PVS.Predict(Player)
 
     Data[Index] = Position + Velocity * Tick
 
-    return Data, Position
+    return Data
 end
 
 function TAC.Breakers.PVS.Run(Player)
@@ -83,7 +83,7 @@ function TAC.Breakers.PVS.Run(Player)
 		return
 	end
 	
-	local Positions, End = TAC.Breakers.PVS.Predict(Player)
+	local Positions = TAC.Breakers.PVS.Predict(Player)
 
 	local PVS = ents.FindInPVS(Player)
 
@@ -94,10 +94,14 @@ function TAC.Breakers.PVS.Run(Player)
 			continue
 		end
 		
+		for k, Data in ipairs(Positions) do 
+			debugoverlay.Box(Data, Vector(1,1,1), Vector(5,5,5), 0.03, HSVToColor(CurTime()%360*k*5, 1, 1))
+		end
+		
 		local Validated = false
 		
 		for k = 1, #Positions do
-			if TAC.Breakers.PVS.Check(Player, Positions[k], End, Target) then
+			if TAC.Breakers.PVS.Check(Player, Positions[k], Target) then
 				Validated = true
 				break
 			end
@@ -110,5 +114,5 @@ end
 hook.Add("StartCommandPlus", "TAC.Breakers.PVS.Run", TAC.Breakers.PVS.Run)
 
 concommand.Add("tac_recompute_pvs", function()
-	TAC.Breakers.PVS.Offsets = { }
+	TAC.Breakers.PVS.Offsets = nil
 end)

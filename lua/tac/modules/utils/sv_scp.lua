@@ -25,9 +25,6 @@ AccessorFunc(Base, "EyeTrace", "EyeTrace")
 AccessorFunc(Base, "Weapon", "Weapon")
 AccessorFunc(Base, "OnGround", "OnGround")
 
-AccessorFunc(Base, "SimulationTime", "SimulationTime")
-AccessorFunc(Base, "LerpTime", "LerpTime")
-
 AccessorFunc(Base, "Delta", "Delta")
 AccessorFunc(Base, "TraceData", "TraceData")
 
@@ -51,9 +48,6 @@ function TAC.SCP.CopyMeta(Player, CUserCMD)
 	Meta.Weapon = Player:GetActiveWeapon()
 	Meta.OnGround = Player:IsOnGround()
 	
-	Meta.LerpTime = Player:GetInternalVariable("m_fLerpTime")
-	Meta.SimulationTime = Player:GetInternalVariable("m_flSimulationTime")
-
 	Meta.EyeTrace = TAC.EyeTrace(Player, true)
 
 	if TAC.Config.AccurateAngles then
