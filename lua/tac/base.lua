@@ -96,10 +96,16 @@ function TAC.EyeTrace(Player, noFrame, Direction)
 	if not noFrame and Trace and Time - Trace.Frame < 1 then
 		return Trace.Trace
 	end
+	
+	Direction = Direction or Player:GetAimVector()
 
+	Trace.Trace.start = Player:EyePos()
+	Trace.Trace.endpos = Trace.Trace.start + (Direction * 32768)
+	Trace.Trace.filter = Player
+	
 	Trace = {
-		Frame = Time,
-		Trace = util.TraceLine(util.GetPlayerTrace(Player, Direction))
+		Trace = util.TraceLine(Trace.Trace),
+		Frame = Time
 	}
 	
 	Player:Set("Eye Trace", Trace)

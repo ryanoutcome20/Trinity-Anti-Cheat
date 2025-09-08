@@ -8,7 +8,6 @@ TAC.SCP = { }
 
 local Base = { }
 
-AccessorFunc(Base, "Impulse", "Impulse")
 AccessorFunc(Base, "Buttons", "Buttons")
 AccessorFunc(Base, "MouseX", "MouseX")
 AccessorFunc(Base, "ViewAngles", "ViewAngles")
@@ -33,7 +32,6 @@ function TAC.SCP.CopyMeta(Player, CUserCMD)
 		__index = Base
 	})
 
-	Meta.Impulse = CUserCMD:GetImpulse()
 	Meta.Buttons = CUserCMD:GetButtons()
 	Meta.MouseX = CUserCMD:GetMouseX()
 	Meta.SideMove = CUserCMD:GetSideMove()
