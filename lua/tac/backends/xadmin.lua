@@ -16,6 +16,6 @@ return "xAdmin", {
 	Kick = function(Player, Reason)
 		-- Wrapper with fancy print message.
 		-- https://github.com/TheXYZNetwork/xAdmin/blob/d54527de884390758999469e1bdab42f428e4342/lua/xadmin/commands/discipline.lua#L33
-		return Player:Kick(Reason)
+		return game.KickID(Player:SteamID64(), Reason)
 	end
 }

@@ -99,12 +99,13 @@ function TAC.EyeTrace(Player, noFrame, Direction)
 	
 	Direction = Direction or Player:GetAimVector()
 
-	Trace.Trace.start = Player:EyePos()
-	Trace.Trace.endpos = Trace.Trace.start + (Direction * 32768)
-	Trace.Trace.filter = Player
+	local Info = { }
+	Info.start = Player:EyePos()
+	Info.endpos = Info.start + (Direction * 32768)
+	Info.filter = Player
 	
 	Trace = {
-		Trace = util.TraceLine(Trace.Trace),
+		Trace = util.TraceLine(Info),
 		Frame = Time
 	}
 	

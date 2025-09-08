@@ -16,6 +16,6 @@ return "SAM", {
 	Kick = function(Player, Reason)
 		-- SAM is just an annoying wrapper here.
 		-- see: lua/sam/player/sv_player.lua
-		return Player:Kick(Reason)
+		return game.KickID(Player:SteamID64(), Reason)
 	end
 }

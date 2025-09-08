@@ -6,7 +6,7 @@ return "Default", {
 	Ban = function(Player, Reason, Time)
 		Player:Ban(Time, false)
 		
-		return Player:Kick(Reason)
+		return game.KickID(Player:SteamID64(), Reason)
 	end,
 	
 	BanID = function(SID, Reason, Time)
@@ -14,6 +14,6 @@ return "Default", {
 	end,
 	
 	Kick = function(Player, Reason)
-		return Player:Kick(Reason)
+		return game.KickID(Player:SteamID64(), Reason)
 	end
 }
