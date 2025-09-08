@@ -154,7 +154,7 @@ Config.Punishment = {
 		Client = false,
 		
 		-- Punishment section.
-		Backend = "ULX", -- See "backends/" for adding new ones.
+		Backend = "ULX", -- See "cores/" for adding new ones.
 		Method = PUNISHMENT_LOG,
 		Message = "Unfair Advantage: {Contact}",
 		Time = 0,

@@ -18,6 +18,6 @@ return "ServerGuard", {
 	Kick = function(Player, Reason)
 		-- SG is just an annoying wrapper here.
 		-- see: lua/modules/sh_commands.lua
-		return game.KickID(Player:SteamID64(), Reason)
+		return game.KickID(Player:SteamID(), Reason)
 	end
 }

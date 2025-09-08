@@ -1,15 +1,7 @@
 function TAC.Punishment.Backend(Token)
-	local Backend = TAC.Backends[string.lower(Token.Backend)]
+	pLib:SetCore(string.lower(Token.Backend))
 	
-	if not Backend then
-		TAC.Print("No backend for punishment! (%s -> %s, doesn't exist)", Token.ID, Token.Backend)
-		return TAC.Backends.default
-	elseif not Backend.Valid() then
-		TAC.Print("Invalid backend for punishment! (%s -> %s, valid failed)", Token.ID, Token.Backend)
-		return TAC.Backends.default
-	end
-	
-	return Backend
+	return pLib
 end
 
 function TAC.Execute(Token, noDelay)
@@ -71,13 +63,13 @@ function TAC.Execute(Token, noDelay)
 	end
 		
 	if Token.Method == PUNISHMENT_BAN then
-		Backend.Ban(
+		Backend:Ban(
 			Token.Player,
 			Message,
 			Token.Time
 		)
 	else
-		Backend.Kick(
+		Backend:Kick(
 			Token.Player,
 			Message
 		)
@@ -94,7 +86,7 @@ function TAC.ExecuteSID(Token)
 	local Backend = TAC.Punishment.Backend(Token)
 	
 	if Token.Method == PUNISHMENT_BAN then
-		Backend.BanID(
+		Backend:BanID(
 			Token.SID,
 			Token.Message,
 			Token.Time

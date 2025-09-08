@@ -7,7 +7,7 @@
 local TAC = { }
 
 TAC.Config = include("tac/config/client.lua")
-TAC.Atlas = include("atlas/cl_atlas.lua")
+TAC.Atlas = include("external/atlas/cl_atlas.lua")
 
 TAC.Loaded = 0
 
