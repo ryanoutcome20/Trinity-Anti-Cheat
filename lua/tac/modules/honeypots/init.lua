@@ -2,7 +2,7 @@ TAC.Honeypot = { }
 
 if SERVER then
 	if modern_anti_cheat_config or QAC then
-		TAC.Print("Avoiding honeypot! QAC/MAC are installed.")
+		MsgN("  Avoiding honeypot! QAC/MAC are installed.")
 		return
 	end
 	
