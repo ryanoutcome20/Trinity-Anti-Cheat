@@ -9,7 +9,13 @@ end
 
 function TAC.Punishment.LoadStubs(Player)
 	if Player and not Player:IsSuperAdmin() then
-		Player:ChatPrint("Super Admin only!")
+		Player:tAlert(
+			"This command is restricted to Super Admin only!",
+			NOTIFY_ERROR
+		)
+		
+		TAC.Print("Blocked client '%s' from loading pstubs!", Player:Name())
+		
 		return
 	end
 
