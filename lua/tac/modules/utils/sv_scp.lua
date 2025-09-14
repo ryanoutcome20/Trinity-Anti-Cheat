@@ -64,7 +64,7 @@ end
 function TAC.SCP.StartCommand(Player, CUserCMD)
 	-- We have to cache some of the incoming commands
 	-- so that we can use comparisons later.
-		
+	
 	if not TAC.SCP.Valid(Player) then
 		return
 	end
