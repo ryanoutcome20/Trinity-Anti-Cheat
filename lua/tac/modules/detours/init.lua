@@ -18,6 +18,10 @@ function TAC.Detours.Integrity(Player, Message, ...)
 	return TAC.Punishment.Wrapper("Client Integrity", Player, Message, ...)
 end
 
+function TAC.Detours.Wrapper(Player, Message, ...)
+	return TAC.Punishment.Wrapper("Detours", Player, Message, ...)
+end
+
 return {
 	"init.lua",
 	"cl_whitelist.lua",

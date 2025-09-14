@@ -62,14 +62,3 @@ Detour("CompileString", function(Original, Code, Identifier, ...)
 	
 	return Output
 end)
-
---- Testing ---
- 
-_G.Test = function(Value)
-	print("Test: " .. Value)
-end
-
-Detour("Test", function(Original, ...)
-	MsgN("Test: detoured")
-	return Original(...)
-end)

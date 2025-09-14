@@ -964,3 +964,24 @@ pStub.Register("Commands", {
 	
 	Method = PUNISHMENT_LOG
 })
+
+--- Detours ---
+
+--[[
+	This check detours things clientside and transfers them dynamically
+	to the server for review. Contains various checks including emulated C
+	functions, invalid sources, detoured info, etc. 
+	
+	Disable if its causing you issues but please report issues on the GitHub.
+]]--
+
+pStub.Register("Detours", {
+	Enabled = true,
+	Name = "Detours",
+	Description = "Occurs when detours are triggered clientside and called from invalid files, contains C function checks as well.",
+	Category = "Scans",
+	
+	Message = "Detour System: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})

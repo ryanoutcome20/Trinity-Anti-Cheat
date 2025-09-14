@@ -43,9 +43,6 @@ function TAC.Detours.Whitelist.Whitelisted(Info, Function)
 	
 	local Hash = TAC.Detours.Whitelist.Hash(Function)
 	
-	MsgN(Hash)
-	PrintTable(Info)
-	
 	if not Hash then
 		return false
 	end

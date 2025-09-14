@@ -2,9 +2,7 @@ function TAC.Detours.Capture(Function, Message, ...)
 	if TAC.Detours.Ran[Function] then
 		return
 	end
-	
-	MsgN(Function)
-	
+		
 	local Data = {
 		Function = TAC.GenerateBuffer(
 			Function, 

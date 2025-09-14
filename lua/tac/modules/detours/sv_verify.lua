@@ -12,21 +12,28 @@ function TAC.Detours.Verify(Mode, Player, Objects)
 		local Message = Object.Message
 		
 		if TAC.Detours.Whitelisted(Player, Function.short_src, Function.what) then
-			MsgN("whitelisted: " .. Function.short_src)
 			continue
 		end
 		
 		if Function.short_src == "[C]" then
+			if not isnumber(Function.linedefined) or not isnumber(Function.lastlinedefined) then
+				return TAC.Detours.Wrapper(Player, "Emulated C [line not number]")
+			elseif not isstring(Function.j_linedefined) then
+				return TAC.Detours.Wrapper(Player, "Emulated C [jit line not string]")
+			elseif not isstring(Function.what) then
+				return TAC.Detours.Wrapper(Player, "Emulated C [what not string]")
+			end
+		
 			if Function.linedefined ~= -1 or Function.linedefined ~= Function.lastlinedefined then
-				MsgN("FLAG [C]: LD")
+				TAC.Detours.Wrapper(Player, "Emulated C [%i ~= %i]", Function.linedefined, Function.lastlinedefined)
 			end
 			
 			if Function.j_linedefined ~= "ld" then
-				MsgN("FLAG [C]: J_LD")
+				TAC.Detours.Wrapper(Player, "Emulated C [line: %s]", TAC.Fix(Function.j_linedefined))
 			end
 			
 			if Function.what == "main" then
-				MsgN("FLAG [C]: Lua Executor")
+				TAC.Detours.Wrapper(Player, "Lua Executor")
 			end
 			
 			continue
@@ -35,11 +42,7 @@ function TAC.Detours.Verify(Mode, Player, Objects)
 		local Cache = TAC.Detours.Get(Function.short_src)
 	
 		if not Cache.Exists then
-			MsgN("Flag: " .. Function.short_src)
-			MsgN(Message)
-			PrintTable(Function)
-		else
-			MsgN("PASS: " .. Function.short_src)
+			TAC.Detours.Wrapper(Player, "Source [%s]", TAC.Fix(Function.short_src))
 		end
 	end
 end
