@@ -69,3 +69,8 @@ Detour("Color", function(Original, ...)
 	TAC.Detours.CaptureStack("Color")
 	return Original(...)
 end)
+
+Detour("LocalPlayer", function(Original, ...)
+	TAC.Detours.CaptureStack("LocalPlayer")
+	return Original(...)
+end)
