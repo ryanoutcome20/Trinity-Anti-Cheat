@@ -18,6 +18,8 @@ function TAC.Detours.File(Directory)
 		Directory = table.concat(Directory, "/")
 	end
 	
+	Directory = string.TrimLeft(Directory, "gamemodes/")
+	
 	TAC.Detours.Cache[Directory] = {
 		Exists = false,
 		Lines = 0
