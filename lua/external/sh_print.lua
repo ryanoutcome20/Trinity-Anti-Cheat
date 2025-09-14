@@ -15,6 +15,7 @@ local Realm = {
 	Color = SERVER and TAC.SIGNITURE_BLUE or Color(66,255,96)
 }
 
+local White = SERVER and TAC.WHITE or Color(255,255,255)
 local Gray = SERVER and TAC.GRAY or Color(180,180,180)
 
 local Length = 0
@@ -25,7 +26,7 @@ for k, Scheme in pairs(Schemes) do
 	end
 end
 
-local function printf(Level, Module, Text, ...)
+return function(Level, Module, Text, ...)
 	if not Level or not Module then
 		return
 	end
@@ -55,7 +56,7 @@ local function printf(Level, Module, Text, ...)
 		string.upper(Module), 
 		Gray, 
 		" : ",
-		color_white, 
+		White, 
 		string.format(
 			Text,
 			...
@@ -63,5 +64,3 @@ local function printf(Level, Module, Text, ...)
 		"\n" 
 	)
 end
-
-return printf

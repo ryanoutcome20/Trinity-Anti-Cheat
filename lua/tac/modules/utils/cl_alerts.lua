@@ -13,12 +13,13 @@ TAC.Atlas:Listen("Alert", "TAC.Alert", MODE_DONE, function(Mode, Data)
 	
 	if tac_notify_chat:GetBool() then
 		chat.AddText(
-			TAC.WHITE,
-			"[",
+			TAC.GRAY,
+			"[ ",
 			TAC.SIGNITURE_GREEN,
-			"TAC",
+			"Trinity",
+			TAC.GRAY,
+			" : ALERT ] ",
 			TAC.WHITE,
-			"] ",
 			Message
 		)
 	end
