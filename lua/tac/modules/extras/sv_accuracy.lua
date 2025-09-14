@@ -10,7 +10,7 @@ function TAC.Accuracy.Process(Player, Hits, Shots, Target)
 	TAC.Punishment.Wrapper(
 		"Accuracy",
 		Player,
-		"Accuracy [%i/%i shots at %i%%%%%%%%]",
+		"Accuracy [%i/%i shots at %i percent]",
 		Hits,
 		Shots,
 		math.Round(Percentage, 2) * 100

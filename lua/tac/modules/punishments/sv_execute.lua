@@ -37,6 +37,13 @@ function TAC.Execute(Token, noDelay)
 	-- Log.
 	Player:tLog(
 		"PUNISHMENT", 
+		Formatted,
+		true
+	)
+	
+	TAC.Print(
+		PRINT_INFO,
+		Token.ID,
 		Formatted
 	)
 

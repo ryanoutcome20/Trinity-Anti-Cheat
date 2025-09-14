@@ -7,7 +7,7 @@ function Player:tLog(Type, Text, Override)
 
     Type = string.upper(Type)
 
-	if TAC.Config.Logging.Console then 
+	if TAC.Config.Logging.Console and Override ~= true then 
 		TAC.Print(
 			PRINT_WARN,
 			Type,
