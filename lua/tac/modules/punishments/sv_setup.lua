@@ -7,7 +7,12 @@ function TAC.Punishment.Register(ID, Token)
 	)
 end
 
-function TAC.Punishment.LoadStubs()
+function TAC.Punishment.LoadStubs(Player)
+	if Player and not Player:IsSuperAdmin() then
+		Player:ChatPrint("Super Admin only!")
+		return
+	end
+
 	for k, Data in pairs(pStub.Registers) do 
 		TAC.Punishment.Register(
 			Data.ID,

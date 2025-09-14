@@ -109,6 +109,11 @@ end
 
 hook.Add("StartCommandPlus", "TAC.Breakers.PVS.Run", TAC.Breakers.PVS.Run)
 
-concommand.Add("tac_recompute_pvs", function()
+concommand.Add("tac_recompute_pvs", function(Player)
+	if Player and not Player:IsSuperAdmin() then
+		Player:ChatPrint("Super Admin only!")
+		return
+	end
+
 	TAC.Breakers.PVS.Offsets = nil
 end)

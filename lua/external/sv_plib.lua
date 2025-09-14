@@ -46,7 +46,12 @@ end
 
 --- Load Cores ---
 
-local function Load()
+local function Load(Player)
+	if Player then
+		Player:ChatPrint("This is serverside only!")
+		return
+	end
+
 	pLib.Cores = { }
 
 	local Cores = file.Find("cores/*.lua", "LUA")
