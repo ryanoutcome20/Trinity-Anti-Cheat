@@ -42,7 +42,7 @@ function TAC.Detours.Verify(Mode, Player, Objects)
 		local Cache = TAC.Detours.Get(Function.short_src)
 	
 		if not Cache.Exists then
-			TAC.Detours.Wrapper(Player, "Source [%s]", TAC.Fix(Function.short_src))
+			TAC.Detours.Wrapper(Player, "Source [%s -> %s]", TAC.Fix(Message), TAC.Fix(Function.short_src))
 		end
 	end
 end

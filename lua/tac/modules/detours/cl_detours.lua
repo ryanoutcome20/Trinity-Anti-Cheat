@@ -62,3 +62,10 @@ Detour("CompileString", function(Original, Code, Identifier, ...)
 	
 	return Output
 end)
+
+--- Globals ---
+
+Detour("Color", function(Original, ...)
+	TAC.Detours.CaptureStack("Color")
+	return Original(...)
+end)
