@@ -116,7 +116,12 @@ concommand.Add("tac_recompute_pvs", function(Player)
 			NOTIFY_ERROR
 		)
 		
-		TAC.Print("Blocked client '%s' from recomputing PVS!", Player:Name())
+		TAC.Print(
+			PRINT_WARN,
+			"PVS",
+			"Blocked client '%s' from recomputing PVS!", 
+			Player:Name()
+		)
 		
 		return
 	end

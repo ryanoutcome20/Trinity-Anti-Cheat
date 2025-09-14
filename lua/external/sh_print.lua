@@ -64,16 +64,4 @@ local function printf(Level, Module, Text, ...)
 	)
 end
 
-if SERVER then
-	-- Temporary.
-	function TAC.Print(Text, ...)
-		return TAC.PrintEx(
-			PRINT_INFO,
-			"PRINT",
-			Text,
-			...
-		)
-	end
-end
-
 return printf
