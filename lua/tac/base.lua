@@ -12,6 +12,8 @@ TAC.SIGNITURE_GOLD = Color(245,194,71)
 
 local Player = FindMetaTable("Player")
 
+TAC.Print = include("external/sh_print.lua")
+
 function TAC.StandardAngle(Yaw)
 	if Yaw >= 0 and Yaw <= 180 then
 		return Yaw
@@ -260,75 +262,3 @@ TAC.Enum(
 	"EXECUTE_SUCCESS",
 	"EXECUTE_BYPASSED"
 )
-
-TAC.Enum(
-	"PRINT_DEBUG",
-	"PRINT_INFO",
-	"PRINT_WARN",
-	"PRINT_ERROR"
-)
-
-local Schemes = {
-    [PRINT_DEBUG] = {Name = "DEBUG", Color = Color( 0, 200, 150 )},
-    [PRINT_INFO] = {Name = "INFO",  Color = Color( 255, 135, 255 )},
-    [PRINT_WARN] = {Name = "WARN",  Color = Color( 255, 130, 90 )},
-    [PRINT_ERROR] = {Name = "ERROR", Color = Color( 250, 55, 40 )},
-}
-
-local Realm = SERVER and "SERVER" or "CLIENT"
-
-local Length = 0
-
-for k, Scheme in pairs(Schemes) do
-    if #Scheme.Name > Length then 
-		Length = #Scheme.Name
-	end
-end
-
-function TAC.PrintEx(Level, Module, Text, ...)
-	if not Level or not Module then
-		return
-	end
-
-	local Scheme = Schemes[Level]
-	
-	if not Scheme then
-		return
-	end
-	
-	local Padding = string.format("%-" .. Length .. "s", Scheme.Name)
-
-    MsgC(
-		TAC.GRAY, 
-		"[ ",
-		TAC.SIGNITURE_BLUE,
-		"Trinity",
-		TAC.GRAY,
-		" : ",
-		Realm,
-		" ] ",
-		Scheme.Color, 
-		Padding,
-		TAC.GRAY, 
-		" --> ", 
-		TAC.SIGNITURE_BLUE, 
-		Module, 
-		TAC.GRAY, 
-		" : ",
-		color_white, 
-		string.format(
-			Text,
-			...
-		), 
-		"\n" 
-	)
-end
-
-function TAC.Print(Text, ...)
-	return TAC.PrintEx(
-		PRINT_INFO,
-		"PRINT",
-		Text,
-		...
-	)
-end

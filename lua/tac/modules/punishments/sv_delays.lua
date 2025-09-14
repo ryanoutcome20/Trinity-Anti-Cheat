@@ -30,7 +30,11 @@ function TAC.Punishment.Delay(Token)
 	-- Main timer.
 	timer.Create(TAC.Punishment.ID(Token.SID), Token.Timer, 1, function()
 		if not Token then
-			return TAC.Print("Delayed punishment missing token!")
+			return TAC.Print(
+				PRINT_ERROR,
+				"Punishment",
+				"No token for delayed ban/kick?"
+			)
 		end
 		
 		if Token.Player and IsValid(Token.Player) then

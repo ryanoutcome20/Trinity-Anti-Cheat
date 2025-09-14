@@ -1,11 +1,20 @@
 local Player = FindMetaTable("Player")
 
-function Player:tLog(Type, Text)
+function Player:tLog(Type, Text, Override)
 	if not Type or not Text then 
 		return
 	end
 
     Type = string.upper(Type)
+
+	if TAC.Config.Logging.Console then 
+		TAC.Print(
+			PRINT_WARN,
+			Type,
+			Override or Text
+		)
+	end
+
 	Text = TAC.Config.Logging.Prefix(Type) .. Text
 	
 	if TAC.Config.Logging.DB then 
@@ -24,10 +33,6 @@ function Player:tLog(Type, Text)
 			Text,
 			true
 		)
-	end
-	
-	if TAC.Config.Logging.Console then 
-		TAC.Print("LOG: %s", Text)
 	end
 	
 	TAC.Config.Logging.Callback(

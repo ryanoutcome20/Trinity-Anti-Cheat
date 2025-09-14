@@ -47,6 +47,9 @@ AddCSLuaFile("tac/config/client.lua")
 
 --- External Libraries ---
 
+MsgN("  Creating Print instance")
+AddCSLuaFile("external/sh_print.lua")
+
 MsgN("  Creating Atlas instance")
 include("external/atlas/sv_atlas.lua")
 AddCSLuaFile("external/atlas/cl_atlas.lua")
@@ -135,5 +138,9 @@ Header()
 --- Dedicated Server ---
 
 if not game.IsDedicated() then
-	TAC.Print("Loopback / LAN server detected, anti-cheat cannot run at full capacity!")
+	TAC.Print(
+		PRINT_WARN,
+		"Info",
+		"Loopback / LAN server detected, anti-cheat cannot run at full capacity!"
+	)
 end

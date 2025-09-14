@@ -8,6 +8,7 @@ local TAC = { }
 
 TAC.Config = include("tac/config/client.lua")
 TAC.Atlas = include("external/atlas/cl_atlas.lua")
+TAC.Print = include("external/sh_print.lua")
 
 TAC.Loaded = 0
 
@@ -105,6 +106,11 @@ local CreateClientConVar = Get("CreateClientConVar")
 local LocalPlayer = Get("LocalPlayer")
 local FindMetaTable = Get("FindMetaTable")
 
+local PRINT_DEBUG = Get("PRINT_DEBUG")
+local PRINT_INFO = Get("PRINT_INFO")
+local PRINT_WARN = Get("PRINT_WARN")
+local PRINT_ERROR = Get("PRINT_ERROR")
+
 --- Colors ---
 
 TAC.RED = Color(255,0,0)
@@ -119,30 +125,6 @@ TAC.SIGNITURE_RED = Color(225, 1, 26)
 TAC.SIGNITURE_GOLD = Color(245,194,71)
 
 --- Base ---
-
-function TAC.PrintEx(TagColor, Text, ...)
-	MsgC(
-		TAC.WHITE,
-		"[",
-		TagColor,
-		"TAC",
-		TAC.WHITE,
-		"] ",
-		string.format(
-			Text,
-			...
-		),
-		"\n"
-	)
-end
-
-function TAC.Print(Text, ...)
-	return TAC.PrintEx(
-		TAC.SIGNITURE_GREEN,
-		Text,
-		...
-	)
-end
 
 function TAC.Random(Length)
 	Length = Length or math.random(20, 40)
@@ -544,7 +526,11 @@ end
 --- Load Message ---
 
 if not TAC.Config.Silent then
-	TAC.Print("Trinity Pre-Init Loaded!")
+	TAC.Print(
+		PRINT_WARN,
+		"Info",
+		"Trinity Pre-Init Loaded!"
+	)
 end
 
 --- Load Plugins ---
@@ -575,10 +561,21 @@ end)
 local Debug = true
 
 if Debug then
-	TAC.Print("Trinity Debug Enabled!")
+	TAC.Print(
+		PRINT_DEBUG,
+		"Debug",
+		"Trinity Debug Enabled!"
+	)
 
 	concommand.Add("tac_globalize", function()
 		_G.TAC = TAC
+		
+		TAC.Print(
+			PRINT_DEBUG,
+			"Debug",
+			"Object '%s' dumped to globals!",
+			tostring(_G.TAC)
+		)
 	end)
 	
 	concommand.Add("tac_dbg_out", function()
@@ -587,6 +584,11 @@ if Debug then
 	
 	concommand.Add("tac_reload_config", function()
 		TAC.Config = include("tac/config/client.lua")
-		TAC.Print("Reloaded config!")
+		
+		TAC.Print(
+			PRINT_DEBUG,
+			"Debug",
+			"Reloaded config!"
+		)
 	end)
 end

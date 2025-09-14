@@ -89,6 +89,7 @@ function TAC.Verbose.Dump(Player)
 
 	Player:tLog(
 		"VERBOSE",
-		Dump
+		Dump,
+		"Verbose dump completed!"
 	)
 end

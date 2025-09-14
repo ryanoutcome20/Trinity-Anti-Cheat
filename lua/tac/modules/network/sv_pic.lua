@@ -21,7 +21,11 @@ function TAC.Networking.PIC.Run(Player, Checksum)
 	local Config = TAC.Config.PIC
 	
 	if Config.PIC == "" then
-		return TAC.Print("No PIC checksum set! Cannot run PIC commands!")
+		return TAC.Print(
+			PRINT_WARN,
+			"PIC",
+			"Please setup a PIC checksum, we cannot run PIC checks without it!"
+		)
 	elseif Config.PIC ~= Checksum then
 		return TAC.Punishment.Wrapper("PIC", Player, "PIC [cs: %s; got: %s]", Config.PIC, Checksum)	
 	end
