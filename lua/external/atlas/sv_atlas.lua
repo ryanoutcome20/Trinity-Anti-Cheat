@@ -95,6 +95,10 @@ function Atlas:Pack(Data, alreadyPacked)
 
         return util.Compress(util.TableToJSON(Constructed))
     end
+	
+	if #Data < 12000 then
+		return Data
+	end
 
     return util.Compress(Data)
 end
