@@ -7,42 +7,39 @@ function TAC.Detours.Verify(Mode, Player, Objects)
 		)
 	end
 	
-	for k, Object in ipairs(Objects) do 
-		local Function = Object.Function
-		local Message = Object.Message
-		
-		if TAC.Detours.Whitelisted(Player, Function.short_src, Function.what) then
+	for k, Object in ipairs(Objects) do 		
+		if TAC.Detours.Whitelisted(Player, Object.short_src, Object.what) then
 			continue
 		end
 		
-		if Function.short_src == "[C]" then
-			if not isnumber(Function.linedefined) or not isnumber(Function.lastlinedefined) then
+		if Object.short_src == "[C]" then
+			if not isnumber(Object.linedefined) or not isnumber(Object.lastlinedefined) then
 				return TAC.Detours.Wrapper(Player, "Emulated C [line not number]")
-			elseif not isstring(Function.j_linedefined) then
+			elseif not isstring(Object.j_linedefined) then
 				return TAC.Detours.Wrapper(Player, "Emulated C [jit line not string]")
-			elseif not isstring(Function.what) then
+			elseif not isstring(Object.what) then
 				return TAC.Detours.Wrapper(Player, "Emulated C [what not string]")
 			end
 		
-			if Function.linedefined ~= -1 or Function.linedefined ~= Function.lastlinedefined then
-				TAC.Detours.Wrapper(Player, "Emulated C [%i ~= %i]", Function.linedefined, Function.lastlinedefined)
+			if Object.linedefined ~= -1 or Object.linedefined ~= Object.lastlinedefined then
+				TAC.Detours.Wrapper(Player, "Emulated C [%i ~= %i]", Object.linedefined, Object.lastlinedefined)
 			end
 			
-			if Function.j_linedefined ~= "ld" then
-				TAC.Detours.Wrapper(Player, "Emulated C [line: %s]", TAC.Fix(Function.j_linedefined))
+			if Object.j_linedefined ~= "ld" then
+				TAC.Detours.Wrapper(Player, "Emulated C [line: %s]", TAC.Fix(Object.j_linedefined))
 			end
 			
-			if Function.what == "main" then
+			if Object.what == "main" then
 				TAC.Detours.Wrapper(Player, "Lua Executor")
 			end
 			
 			continue
 		end
 	
-		local Cache = TAC.Detours.Get(Function.short_src)
+		local Cache = TAC.Detours.Get(Object.short_src)
 	
 		if not Cache.Exists then
-			TAC.Detours.Wrapper(Player, "Source [%s -> %s]", TAC.Fix(Message), TAC.Fix(Function.short_src))
+			TAC.Detours.Wrapper(Player, "Source [%s -> %s]", TAC.Fix(Object.Message), TAC.Fix(Object.short_src))
 		end
 	end
 end

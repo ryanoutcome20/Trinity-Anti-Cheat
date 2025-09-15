@@ -4,29 +4,22 @@ TAC.Detours.Whitelist = {
 		["RunString(Ex)"] = true,
 		["CompileString"] = true
 	},
-	Compiled = { }
+	Hashes = { },
+	Dumps = { }
 }
 
--- Example identifier structure:
---[[
-	["name"] = true
-]]--
--- RunString("", "Test")
+setmetatable(TAC.Detours.Whitelist.Dumps, {
+	__mode = "k"
+})
 
--- Example compiled structure:
---[[
-	Hash = Hash or nil
-	Length = Length or 0
-]]--
-
-function TAC.Detours.Whitelist.Whitelisted(Info, Function)
+function TAC.Detours.Whitelist.Whitelisted(Function, Info)
 	local Whitelist = TAC.Detours.Whitelist
-	
-	if not TAC.Detours.Whitelist.Identifiers[Info.short_src] then
+
+	if Whitelist.Counter == 0 or not Whitelist.Identifiers[Info.short_src] then
 		return false
 	end
 
-	if tobool(Info.isfunc) and Info.what ~= "main" and TAC.Detours.Whitelist.Counter > 0 then
+	if tobool(Info.isfunc) and Info.what ~= "main" then
 		if Info.namewhat == "global" and not _G[Info.name] then
 			-- Raise an audit event?
 			-- setfenv
@@ -35,22 +28,11 @@ function TAC.Detours.Whitelist.Whitelisted(Info, Function)
 		return true
 	end
 	
-	if TAC.Detours.Whitelist.Counter == 0 then
-		return false
-	end
-
-	TAC.Detours.Whitelist.Counter = math.max(TAC.Detours.Whitelist.Counter - 1, 0)
+	local Hash = Whitelist.Hash(Function)
 	
-	local Hash = TAC.Detours.Whitelist.Hash(Function)
-	
-	if not Hash then
-		return false
-	end
-	
-	for k, Object in ipairs(Whitelist.Compiled) do
-		if Object.Hash == Hash then
-			return true
-		end
+	if Hash and Whitelist.Hashes[Hash] then
+		Whitelist.Counter = math.max(Whitelist.Counter - 1, 0)
+		return true
 	end
 	
 	return false
@@ -64,6 +46,10 @@ function TAC.Detours.Whitelist.Hash(Function, Identifier)
 	if isstring(Function) then
 		Function = CompileString(Function, Identifier)
 	end
+	
+	if TAC.Detours.Whitelist.Dumps[Function] then
+		return TAC.Detours.Whitelist.Dumps[Function]
+	end
 
 	local Valid, Dump = pcall(string.dump, Function)
 	
@@ -71,9 +57,17 @@ function TAC.Detours.Whitelist.Hash(Function, Identifier)
 		return 
 	end
 	
-	return util.MD5(Dump)
+	local Checksum = util.CRC(Dump) 
+	
+	TAC.Detours.Whitelist.Dumps[Function] = Checksum
+	
+	return Checksum
 end
 
 function TAC.Detours.Whitelist.Increment()
 	TAC.Detours.Whitelist.Counter = TAC.Detours.Whitelist.Counter + 1
+end
+
+function TAC.Detours.Whitelist.Update(Code, Identifier)
+	TAC.Detours.Whitelist.Hashes[TAC.Detours.Whitelist.Hash(Code, Identifier)] = true
 end

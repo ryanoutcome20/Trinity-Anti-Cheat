@@ -1,45 +1,43 @@
-function TAC.Detours.Capture(Function, Message, ...)
-	if TAC.Detours.Ran[Function] then
-		return
-	end
-		
-	local Data = {
-		Function = TAC.GenerateBuffer(
-			Function, 
-			true
-		),
-		Message = string.format(
-			Message,
-			...
-		)
-	}
+TAC.Captures = {
+	Data = { },
+	Ran = { }
+}
+
+function TAC.Captures.Direct(Function, Message)
+	TAC.Captures.Data = TAC.GenerateBuffer(Function, true)
 	
-	if TAC.Detours.Whitelist.Whitelisted(Data.Function, Function) then
+	if TAC.Detours.Whitelist.Whitelisted(Function, TAC.Captures.Data) then
 		return
 	end
+
+	TAC.Captures.Data.Message = Message
 	
 	TAC.Batch.Add(
 		"Function", 
-		Data, 
-		TAC.Size(Data.Function) + #Data.Message
+		TAC.Captures.Data, 
+		TAC.Size(TAC.Captures.Data)
 	)
-	
-	TAC.Detours.Ran[Function] = true
 end
 
-function TAC.Detours.CaptureStack(Message, ...)
-	for i = 1, 32 do 
-		local Info = debug.getinfo(i)
+function TAC.Captures.Stack(Message)
+	for i = 2, 8 do 
+		local Info = debug.getinfo(i, "f")
 		
 		if not Info then
 			break
 		end
+	
+		local Hash = tostring(Info.func)
 		
-		if Info.func then
-			TAC.Detours.Capture(Info.func, Message, ...)
+		if TAC.Captures.Ran[Hash] then
+			continue
 		end
+		
+		TAC.Captures.Direct(Info.func, Message)
+		
+		TAC.Captures.Ran[Hash] = true
 	end
 end
 
-TAC.Capture = TAC.Detours.Capture
-TAC.CaptureStack = TAC.Detours.CaptureStack
+TAC.Capture = TAC.Captures.Direct
+TAC.CaptureStack = TAC.Captures.Stack

@@ -1,14 +1,11 @@
+if CLIENT then
+	TAC.Detours = {	}
+	return
+end
+
 TAC.Detours = { 
 	Cache = { }
 }
-
-if CLIENT then
-	TAC.Detours = {
-		Ran = { }
-	}
-
-	return
-end
 
 include("sv_whitelist.lua")
 include("sv_cache.lua")
@@ -24,7 +21,7 @@ end
 
 return {
 	"init.lua",
-	"cl_whitelist.lua",
 	"cl_capture.lua",
+	"cl_whitelist.lua",
 	"cl_detours.lua"
 }

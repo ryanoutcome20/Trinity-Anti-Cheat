@@ -211,7 +211,7 @@ Config.Punishment = {
 
 Config.Networking = {
 	Overreach = 2,
-	Delay = 1.5,
+	Delay = 0.1,
 	Step = 0.15
 }
 

@@ -5,17 +5,14 @@ local Detour = TAC.Detour.Register
 --- Whitelist ---
 
 Detour("RunString", function(Original, Code, Identifier, ...)
-	TAC.Detours.CaptureStack("RunString")
+	TAC.CaptureStack("RunString")
 	
 	if Identifier then
 		TAC.Detours.Whitelist.Identifiers[Identifier] = true
 	end
 	
 	if isstring(Code) then
-		table.insert(
-			TAC.Detours.Whitelist.Compiled,
-			TAC.Detours.Whitelist.Hash(Code, Identifier)
-		) 
+		TAC.Detours.Whitelist.Update(Code, Identifier)
 	end
 	
 	TAC.Detours.Whitelist.Increment()
@@ -24,17 +21,14 @@ Detour("RunString", function(Original, Code, Identifier, ...)
 end)
 
 Detour("RunStringEx", function(Original, Code, Identifier, ...)
-	TAC.Detours.CaptureStack("RunStringEx")
+	TAC.CaptureStack("RunStringEx")
 	
 	if Identifier then
 		TAC.Detours.Whitelist.Identifiers[Identifier] = true
 	end
 	
 	if isstring(Code) then
-		table.insert(
-			TAC.Detours.Whitelist.Compiled,
-			TAC.Detours.Whitelist.Hash(Code, Identifier)
-		) 
+		TAC.Detours.Whitelist.Update(Code, Identifier)
 	end
 	
 	TAC.Detours.Whitelist.Increment()
@@ -43,7 +37,7 @@ Detour("RunStringEx", function(Original, Code, Identifier, ...)
 end)
 
 Detour("CompileString", function(Original, Code, Identifier, ...)
-	TAC.Detours.CaptureStack("CompileString")
+	TAC.CaptureStack("CompileString")
 	
 	if Identifier then
 		TAC.Detours.Whitelist.Identifiers[Identifier] = true
@@ -52,10 +46,7 @@ Detour("CompileString", function(Original, Code, Identifier, ...)
 	local Output = Original(Code, Identifier, ...)
 
 	if isfunction(Output) then		
-		table.insert(
-			TAC.Detours.Whitelist.Compiled,
-			TAC.Detours.Whitelist.Hash(Output, Identifier)
-		)
+		TAC.Detours.Whitelist.Update(Output, Identifier)
 	end
 	
 	TAC.Detours.Whitelist.Increment()
@@ -66,11 +57,6 @@ end)
 --- Globals ---
 
 Detour("Color", function(Original, ...)
-	TAC.Detours.CaptureStack("Color")
-	return Original(...)
-end)
-
-Detour("LocalPlayer", function(Original, ...)
-	TAC.Detours.CaptureStack("LocalPlayer")
+	TAC.CaptureStack("Color")
 	return Original(...)
 end)

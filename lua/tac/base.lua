@@ -40,6 +40,10 @@ function TAC.Mean(Data)
 end
 
 function TAC.Fix(Text)
+	if not isstring(Text) then
+		return "N/A"
+	end
+
 	local Indexes = {
 		["\r"] = "\\r",
 		["\n"] = "\\n",
