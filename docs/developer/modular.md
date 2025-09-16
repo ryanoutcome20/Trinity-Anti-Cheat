@@ -56,42 +56,6 @@ TAC.Lists.Merge(Name, Shared) - Merges list automatically, returns the data from
 TAC.Lists.Grab(Name) - Grabs the list by name from the cache.
 ```
 
-# Backends
+# Cores
 
-Backends manage the punishment system of the anti-cheat. They will be called if the current punishment token has a punishment ID pointing to that specific backend ID (`Backend`).
-
-Registering a backend requires making a file in the directory: `lua/backends/example.lua`. Usually you want to keep the file name the same as the registered backend ID.
-
-Within the backend file:
-```lua
-return "Example", {
-	Valid = function()
-		-- If this fails then the punishment will fallback to
-		-- the backend ID: "Default". Default is the same code
-		-- as this example (minus comments).
-		
-		return true
-	end,
-
-	Ban = function(Player, Reason, Time)
-		-- Player is being banned by punishment system.
-		
-		Player:Ban(Time, false)
-		
-		return Player:Kick(Reason)
-	end,
-	
-	BanID = function(SID, Reason, Time)
-		-- Player is being banned by punishment system but
-		-- they have disconnected.
-		
-		return RunConsoleCommand("banid", SID, Time, Reason)
-	end,
-	
-	Kick = function(Player, Reason)
-		-- Player is being kicked by punishment system.
-	
-		return Player:Kick(Reason)
-	end
-}
-```
+Cores are modules of the punishment system. Refer to the [pLib](https://github.com/ryanoutcome20/pLib) documentation to understand how to use these cores.
