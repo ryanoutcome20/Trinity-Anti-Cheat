@@ -261,7 +261,7 @@ pStub.Register("Snap", {
 	
 	Method = PUNISHMENT_KICK,
 	
-	Delta = 5,
+	Delta = 25,
 	Distance = 65000,
 	TimeSinceSpawned = 3.5,
 	
@@ -360,7 +360,7 @@ pStub.Register("Nospread", {
 })
 
 pStub.Register("Emulated Mouse", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Emulated Mouse",
 	Description = "Detects emulated mouse movements by verifying mouse step amounts relative to sensitivity.",
 	Category = "Aimbot",
