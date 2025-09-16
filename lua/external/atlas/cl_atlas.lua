@@ -1,0 +1,266 @@
+-- Fork of:
+-- https://github.com/ryanoutcome20/Atlas/tree/main
+
+local table = table.Copy(table)
+local util = table.Copy(util)
+local net = table.Copy(net)
+
+local tostring = tostring
+local tonumber = tonumber
+
+local pairs = pairs
+
+local Atlas = {
+    Ports = { },
+
+    Cache = { }
+}
+
+MODE_FAILED = -2
+
+MODE_NONE = -1
+MODE_ALL  = 0
+
+MODE_PARSING  = 1
+MODE_DONE     = 2
+
+function Atlas:Call(Function, Meta, ...)
+    if not Function then 
+        return
+    end
+
+    if Meta then 
+        Function(Meta, ...)
+    else
+        Function(...)
+    end
+end
+
+function Atlas:Listen(Port, Identifier, Mode, Callback, Meta)
+    Mode = Mode or MODE_NONE
+    
+    self.Ports[Port] = self.Ports[Port] or { }
+
+    self.Ports[Port][Identifier] = {
+        Callback = Callback,
+        Meta     = Meta,
+        Mode     = Mode
+    }
+end
+
+function Atlas:Close(Port, Identifier)
+    if not self.Ports[Port] then 
+        return
+    end
+
+    self.Ports[Port][Identifier] = nil
+end
+
+function Atlas:Pack(Data, alreadyPacked)
+    alreadyPacked = alreadyPacked or { }
+
+    local Type = TypeID(Data)
+
+    -- Skip invalid types.
+    if not Data or Type == TYPE_FUNCTION then 
+        return 
+    end
+
+    -- Only tables and strings need compression.
+    if Type ~= TYPE_TABLE and Type ~= TYPE_STRING then 
+        return Data
+    end
+
+    -- Avoid infinite loops.
+    if alreadyPacked[Data] then 
+        return
+    end
+
+    -- Mark table as packed before recursion
+    if Type == TYPE_TABLE then 
+        alreadyPacked[Data] = true
+    end
+
+    -- Table compression.
+    if Type == TYPE_TABLE then
+        local Constructed = { }
+
+        for k, subData in pairs(Data) do
+            if alreadyPacked[subData] then
+                continue
+            end
+            
+            local Value = self:Pack(subData, alreadyPacked)
+
+            if Value then
+                Constructed[k] = {
+                    Value = Value,
+                    Type = TypeID(subData)
+                }
+            end
+        end
+
+        return util.Compress(util.TableToJSON(Constructed))
+    end
+
+	if #Data < 12000 then
+		return Data
+	end
+
+    return util.Compress(Data)
+end
+
+function Atlas:Unpack(Data)
+    -- Attempt decompression.
+    local Decompressed = util.Decompress(Data)
+    
+    -- If decompression fails, return the original data (not compressed).
+    if not Decompressed or Decompressed == "" then
+        return Data
+    end
+
+    -- Try parsing JSON to check if it"s a table.
+    local Parsed = util.JSONToTable(Decompressed)
+    
+    -- If JSON parsing fails, return decompressed string.
+    if not Parsed then
+        return Decompressed
+    end
+
+    -- Recursive unpacking for nested tables.
+    local Constructed = { }
+
+    for k, Data in pairs(Parsed) do
+        if not Data.Value or not Data.Type then
+            continue
+        end
+
+        if Data.Type == TYPE_STRING then
+            Constructed[k] = tostring(self:Unpack(Data.Value))
+        elseif Data.Type == TYPE_NUMBER then
+            Constructed[k] = tonumber(self:Unpack(Data.Value))
+        elseif Data.Type == TYPE_BOOL then
+            Constructed[k] = self:Unpack(tostring(Data.Value)) == "true"
+        else
+            Constructed[k] = self:Unpack(Data.Value)
+        end
+    end
+
+    return Constructed
+end
+
+function Atlas:Split(Data)
+    local Split, Count = { }, 1
+
+    for i = 1, #Data do
+        local Character = Data[i]     
+
+        Split[Count] = Split[Count] or { }
+    
+        if #Split[Count] > 12000 then 
+            Count = Count + 1
+            
+            Split[Count] = { }
+        end
+        
+        table.insert(Split[Count], Character)
+    end
+
+    return Split, Count
+end
+
+function Atlas:Read()
+    local Data = { }
+
+    Data.Chunk = net.ReadData(net.ReadUInt(16))
+    
+    Data.Index = net.ReadUInt(12)
+    Data.Size  = net.ReadUInt(12)
+    Data.Final = net.ReadBool()
+
+    Data.Checksum = net.ReadString()
+    Data.Port     = net.ReadString()
+
+    return Data
+end
+
+function Atlas:Write(Chunk, Size, Checksum, Index, Port)
+    net.WriteUInt(#Chunk, 16)
+    net.WriteData(Chunk, #Chunk)
+    
+    net.WriteUInt(Index, 12)
+    net.WriteUInt(Size, 12)
+
+    net.WriteBool(Size == Index)
+
+    net.WriteString(Checksum)
+    net.WriteString(Port)
+end
+
+function Atlas:Send(Port, ...)
+    local Data         = self:Pack({ ... })
+    local Split, Count = self:Split(Data)
+
+    local Checksum = util.SHA256(Data)
+    local Size     = Count
+
+    for i = 1, Size do 
+        timer.Simple(i, function()
+            net.Start("tac-networking")
+                self:Write(table.concat(Split[i]), Size, Checksum, i, Port)
+            net.SendToServer()
+		end)
+    end
+end
+
+function Atlas:Process(Callbacks, Stage, ...)
+    for Identifier, Data in pairs(Callbacks) do 
+        if Data.Mode == MODE_NONE then 
+            continue
+        end
+
+        if Data.Mode ~= MODE_ALL and Data.Mode ~= Stage then 
+            continue
+        end
+
+        self:Call(Data.Callback, Data.Meta, Stage, ...)
+    end
+end
+
+function Atlas:Receive()
+    local Data = self:Read()
+
+    if not Data or not Data.Port then 
+        return
+    end
+
+    local Callbacks = self.Ports[Data.Port]
+
+    if not Callbacks then 
+        return
+    end
+
+    local Index = (self.Cache[Data.Port] or "") .. Data.Chunk
+
+    self:Process(Callbacks, MODE_PARSING, Data, Index)
+
+    if Data.Final then 
+        if Data.Checksum == util.SHA256(Index) then 
+            local Arguments = self:Unpack(Index)
+
+            self:Process(Callbacks, MODE_DONE, unpack(Arguments))
+        else
+            self:Process(Callbacks, MODE_FAILED, Index)
+        end
+
+        Index = ""
+    end
+
+    self.Cache[Data.Port] = Index
+end
+
+net.Receive("tac-networking", function()
+    Atlas:Receive()
+end)
+
+return Atlas
