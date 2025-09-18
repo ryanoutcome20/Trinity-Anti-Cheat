@@ -435,6 +435,46 @@ function TAC.Detour.Unregister(Name, Meta)
     TAC.Detour.Registry[Name .. (Meta or "")] = nil
 end
 
+--- Hook System ---
+
+TAC.Hooks = { 
+	ULX = file.Exists("ulib/shared/hook.lua", "LUA")
+}
+
+function TAC.Hooks.Add(Event, Name, Callback)
+	if TAC.Hooks.ULX then
+		return _G.hook.Add(Event, Name, Callback)
+	end
+
+	TAC.Hooks[Event] = TAC.Hooks[Event] or { }
+	
+	TAC.Hooks[Event][Name] = Callback
+end
+
+if not TAC.Hooks.ULX then
+	TAC.Detour.Register("hook.Call", function(Original, Event, Gamemode, ...)
+		TAC.Hooks[Event] = TAC.Hooks[Event] or { }
+		
+		for k, Callback in pairs(TAC.Hooks[Event]) do 
+			local Data = { Callback(...) }
+
+			if #Data ~= 0 then
+				return unpack(Data)
+			end
+		end
+
+		return Original(Event, Gamemode, ...)
+	end)
+else
+	TAC.Print(
+		PRINT_WARN,
+		"HOOKS",
+		"ULX system is overriding hooks, using insecure hooks!"
+	)
+end
+
+TAC.Localizers.Table.hook.Add = TAC.Hooks.Add
+
 --- PIC ---
 
 TAC.PIC = { }
@@ -528,7 +568,7 @@ end
 
 if not TAC.Config.Silent then
 	TAC.Print(
-		PRINT_WARN,
+		PRINT_INFO,
 		"Info",
 		"Trinity Pre-Init Loaded!"
 	)
