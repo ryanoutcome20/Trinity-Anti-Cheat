@@ -666,7 +666,7 @@ pStub.Register("Command Enforcer", {
 ]]--
 
 Config.Interpolated = {
-	Enabled = true,
+	Enabled = false,
 	
 	Ratio = 0.00005,
 	Randomize = true,

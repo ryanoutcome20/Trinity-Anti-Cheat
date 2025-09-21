@@ -56,5 +56,7 @@ function TAC.Keys.Verify(Player, CMoveData, CUserCMD)
 	end
 end
 
+--[[
 hook.Add("PlayerBindPress", "TAC.Keys.Press", TAC.Keys.Press)
 hook.Add("SetupMove", "TAC.Keys.Verify", TAC.Keys.Verify)
+--]]

@@ -5,7 +5,9 @@ function TAC.Extra.Keypresses(Player, Button)
 		return
 	end
 	
-	if Config.Keys[Button] then
+	local Key = Config.Keys[Button]
+	
+	if Key then
 		local Presses = Player:Grab("Keypresses", 0)
 
 		if Config.MaximumLogs == -1 or Presses < Config.MaximumLogs then

@@ -18,12 +18,12 @@ Config.Aimbot = {
 	Mouse = true,
 	EnginePrediction = true,
 	InputGuard = {
-		Buttons = true,
+		Buttons = false,
 		
-		Angles = true,
+		Angles = false,
 		Offset = 1,
 		
-		Movement = true
+		Movement = false
 	},
 	EmulatedMouse = {
 		Enabled = true,
