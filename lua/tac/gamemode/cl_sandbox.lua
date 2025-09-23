@@ -1,1 +1,0 @@
-MsgN("HELLO, WORLD!")
