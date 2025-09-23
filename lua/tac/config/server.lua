@@ -815,10 +815,10 @@ pStub.Register("PIC", {
 	
 	Message = "Bad PIC Checksum: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
-	
 	PIC = "387594818",
-	Await = 24
+	Await = 24,
+
+	Method = PUNISHMENT_LOG
 })
 
 --- Stack ---
@@ -984,4 +984,29 @@ pStub.Register("Detours", {
 	Message = "Detour System: {Contact}",
 	
 	Method = PUNISHMENT_LOG
+})
+
+--- Heartbeat ---
+
+--[[
+	This module is designed specifically to insure proper loading of the clientside.
+	
+	Yes, theortically if you have issues in the transfer system this will false flag 
+	but ideally the hook that causes this check to start its routine won't get called
+	if you have errors.
+
+	Probably shouldn't turn this off, if you have issues make a GitHub issue.
+]]--
+
+pStub.Register("Heartbeat", {
+	Enabled = true,
+	Name = "Heartbeat",
+	Description = "Occurs when the clientside doesn't boot properly.",
+	Category = "Integrity",
+	
+	Message = "Failed to load! Rejoin!",
+	
+	Await = 2.5,
+
+	Method = PUNISHMENT_KICK
 })
