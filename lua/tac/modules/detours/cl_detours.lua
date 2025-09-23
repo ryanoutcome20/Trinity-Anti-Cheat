@@ -73,7 +73,7 @@ Wrap("print")
 Wrap("MsgN")
 Wrap("MsgC")
 
---- CUserCMD ---
+--- Classes ---
 
 Wrap("CommandNumber", "CUserCmd")
 Wrap("TickCount", "CUserCmd")
@@ -83,18 +83,12 @@ Wrap("SetMouseY", "CUserCmd")
 Wrap("SetSideMove", "CUserCmd")
 Wrap("SetForwardMove", "CUserCmd")
 
---- Angle ---
-
 Wrap("RotateAroundAxis", "Angle")
 Wrap("Normalize", "Angle")
-
---- Vector ---
 
 Wrap("Forward", "Vector")
 Wrap("Angle", "Vector")
 Wrap("AngleEx", "Vector")
-
---- Player ---
 
 Wrap("Nick", "Player")
 Wrap("Ping", "Player")
@@ -104,6 +98,26 @@ Wrap("IsUserGroup", "Player")
 Wrap("IsAdmin", "Player")
 Wrap("IsSuperAdmin", "Player")
 
---- Entity ---
-
 Wrap("IsDormant", "Entity")
+
+--- Libraries ---
+
+Wrap("timer.Simple")
+Wrap("timer.Create")
+
+Wrap("util.IsBinaryModuleInstalled")
+Wrap("util.TraceLine")
+Wrap("util.TraceHull")
+
+Wrap("math.random")
+Wrap("math.randomseed")
+
+Wrap("hook.Add")
+Wrap("hook.Remove")
+
+Wrap("concommand.Add")
+Wrap("concommand.Remove")
+
+Wrap("input.SetCursorPos")
+
+Wrap("net.SendToServer")
