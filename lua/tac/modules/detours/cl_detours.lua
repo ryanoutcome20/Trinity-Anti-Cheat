@@ -2,6 +2,13 @@
 
 local Detour = TAC.Detour.Register
 
+local Wrap = function(ID, Meta)
+	Detour(ID, function(Original, ...)
+		TAC.CaptureStack(ID)
+		return Original(...)
+	end, Meta)
+end
+
 --- Whitelist ---
 
 Detour("RunString", function(Original, Code, Identifier, ...)
@@ -56,59 +63,47 @@ end)
 
 --- Globals ---
 
-Detour("Color", function(Original, ...)
-	TAC.CaptureStack("Color")
-	return Original(...)
-end)
+Wrap("Color")
+Wrap("Angle")
+Wrap("Vector")
+Wrap("getmetatable")
+Wrap("setmetatable")
+Wrap("FindMetaTable")
+Wrap("print")
+Wrap("MsgN")
+Wrap("MsgC")
 
-Detour("Angle", function(Original, ...)
-	TAC.CaptureStack("Angle")
-	return Original(...)
-end)
+--- CUserCMD ---
 
-Detour("Vector", function(Original, ...)
-	TAC.CaptureStack("Vector")
-	return Original(...)
-end)
+Wrap("CommandNumber", "CUserCmd")
+Wrap("TickCount", "CUserCmd")
+Wrap("SetViewAngles", "CUserCmd")
+Wrap("SetMouseX", "CUserCmd")
+Wrap("SetMouseY", "CUserCmd")
+Wrap("SetSideMove", "CUserCmd")
+Wrap("SetForwardMove", "CUserCmd")
 
-Detour("getmetatable", function(Original, ...)
-	TAC.CaptureStack("getmetatable")
-	return Original(...)
-end)
+--- Angle ---
 
-Detour("setmetatable", function(Original, ...)
-	TAC.CaptureStack("setmetatable")
-	return Original(...)
-end)
+Wrap("RotateAroundAxis", "Angle")
+Wrap("Normalize", "Angle")
 
-Detour("FindMetaTable", function(Original, ...)
-	TAC.CaptureStack("FindMetaTable")
-	return Original(...)
-end)
+--- Vector ---
 
-Detour("print", function(Original, ...)
-	TAC.CaptureStack("print")
-	return Original(...)
-end)
+Wrap("Forward", "Vector")
+Wrap("Angle", "Vector")
+Wrap("AngleEx", "Vector")
 
-Detour("MsgN", function(Original, ...)
-	TAC.CaptureStack("MsgN")
-	return Original(...)
-end)
+--- Player ---
 
-Detour("MsgC", function(Original, ...)
-	TAC.CaptureStack("MsgC")
-	return Original(...)
-end)
+Wrap("Nick", "Player")
+Wrap("Ping", "Player")
+Wrap("Team", "Player")
+Wrap("GetUserGroup", "Player")
+Wrap("IsUserGroup", "Player")
+Wrap("IsAdmin", "Player")
+Wrap("IsSuperAdmin", "Player")
 
-Detour("RunString", function(Original, ...)
-	TAC.CaptureStack("RunString")
-	return Original(...)
-end)
+--- Entity ---
 
-Detour("CompileString", function(Original, ...)
-	TAC.CaptureStack("CompileString")
-	return Original(...)
-end)
-
----  ---
+Wrap("IsDormant", "Entity")
