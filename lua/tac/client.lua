@@ -614,7 +614,7 @@ if Debug then
 		TAC.Print(
 			PRINT_DEBUG,
 			"Debug",
-			"Object '%s' dumped to globals!",
+			"Object `%s` dumped to globals!",
 			tostring(_G.TAC)
 		)
 	end)
