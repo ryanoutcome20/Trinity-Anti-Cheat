@@ -31,4 +31,4 @@ function TAC.Heartbeat.Initialize(Player)
 end
 
 Atlas:Listen("Heartbeat", "TAC.Heartbeat.Receive", MODE_DONE, TAC.Heartbeat.Receive)
-hook.Add("TransferStopped", "TAC.Heartbeat.Initialize", TAC.Heartbeat.Initialize)
+hook.Add("TAC.TransferStopped", "TAC.Heartbeat.Initialize", TAC.Heartbeat.Initialize)
