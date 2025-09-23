@@ -853,19 +853,6 @@ pStub.Register("Honeypot", {
 	Method = PUNISHMENT_LOG
 })
 
---- Key Input ---
-
-pStub.Register("Key Input", {
-	Enabled = true,
-	Name = "Key Input",
-	Description = "Checks input compared to key inputs to verify the player actually pressed a key.",
-	Category = "Integrity",
-	
-	Client = true,
-	
-	Method = PUNISHMENT_LOG
-})
-
 --- Static Script ---
 
 pStub.Register("Static Script", {

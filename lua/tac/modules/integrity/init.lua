@@ -4,6 +4,5 @@ if SERVER then
 		"cl_stack.lua",
 		"cl_libraries.lua",
 		"cl_pic.lua",
-		"cl_key_input.lua"
 	}
 end
