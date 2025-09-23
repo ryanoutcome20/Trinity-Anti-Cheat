@@ -1,5 +1,5 @@
 --
--- Trinity
+-- Trinity Anti-Cheat
 --
 if ( CLIENT ) then
 	include("tac/client.lua")
