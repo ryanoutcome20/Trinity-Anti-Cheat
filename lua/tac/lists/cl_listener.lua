@@ -1,21 +1,21 @@
 return {
     -- Global.
-    "PreFrameStageNotify",
-    "PostFrameStageNotify",
-    "DrawModelExecute",
-    "RunOnClient",
-    "RunOnMenu",
+    {Name = "PreFrameStageNotify", Type = "Global"},
+    {Name = "PostFrameStageNotify", Type = "Global"},
+    {Name = "DrawModelExecute", Type = "Global"},
+    {Name = "RunOnClient", Type = "Global"},
+    {Name = "RunOnMenu", Type = "Global"},
 
-    -- Proxi.
-    "CreateMoveEx",
+    -- proxi.
+    {Name = "CreateMoveEx", Type = "proxi"},
 
-    -- ZXC.
-    "PreCreateMove",
-    "PostCreateMove",
-    "ShouldUpdateAnimation",
-    "EndSceneOverlay",
-    "SendNetMsg",
-    "OnImpact",
-    "ViewRenderDraw",
-    "RunStringEx"
+    -- zxcmodule.
+    {Name = "PreCreateMove", Type = "zxcmodule"},
+    {Name = "PostCreateMove", Type = "zxcmodule"},
+    {Name = "ShouldUpdateAnimation", Type = "zxcmodule"},
+    {Name = "EndSceneOverlay", Type = "zxcmodule"},
+    {Name = "SendNetMsg", Type = "zxcmodule"},
+    {Name = "OnImpact", Type = "zxcmodule"},
+    {Name = "ViewRenderDraw", Type = "zxcmodule"},
+    {Name = "RunStringEx", Type = "zxcmodule"}
 }

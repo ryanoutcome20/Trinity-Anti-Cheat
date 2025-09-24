@@ -952,6 +952,19 @@ pStub.Register("Commands", {
 	Method = PUNISHMENT_LOG
 })
 
+pStub.Register("Listener", {
+	Enabled = true,
+	Name = "Listener",
+	Description = "Occurs when the player runs a hook that is considered blacklisted. Usually occurs with C++ modules.",
+	Category = "Scans",
+	
+	Client = true,
+	
+	Message = "Bad Listener: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
 --- Detours ---
 
 --[[
