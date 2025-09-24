@@ -5,12 +5,10 @@
 -- Don't touch these.
 local Config = { }
 
---- General ---
 
-Config.Silent = false
+--- Flag Batches ---
 
-Config.BatchSize = 32000
-Config.BatchCount = 32
+Config.Batch = 32000
 
 --- Aimbot ---
 
@@ -53,8 +51,7 @@ Config.Integrity = {
 		
 		Net = true,
 		Nets = 4
-	},
-	Keys = true
+	}
 }
 
 --- Static Cheats / Scripts ---
