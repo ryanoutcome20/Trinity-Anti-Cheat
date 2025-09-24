@@ -4,7 +4,7 @@ local Listeners = TAC.Lists.Merge("Listeners")
 
 --- Hooks ---
 
-for k, Data in ipairs(Listeners) do 
+for k, Data in pairs(Listeners) do 
     local Name, Type = Data.Name, Data.Type
 
     hook.Add(Name, "TAC.Listener." .. Name, function(...)
