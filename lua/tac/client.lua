@@ -6,7 +6,6 @@
 
 local TAC = { }
 
-TAC.Config = include("tac/config/client.lua")
 TAC.Atlas = include("external/atlas/cl_atlas.lua")
 TAC.Print = include("external/sh_print.lua")
 
@@ -566,13 +565,11 @@ end
 
 --- Load Message ---
 
-if not TAC.Config.Silent then
-	TAC.Print(
-		PRINT_INFO,
-		"Info",
-		"Trinity Pre-Init Loaded!"
-	)
-end
+TAC.Print(
+	PRINT_INFO,
+	"Info",
+	"Trinity Pre-Init Loaded!"
+)
 
 --- Load Plugins ---
 
@@ -621,15 +618,5 @@ if Debug then
 	
 	concommand.Add("tac_dbg_out", function()
 		PrintTable(TAC)
-	end)
-	
-	concommand.Add("tac_reload_config", function()
-		TAC.Config = include("tac/config/client.lua")
-		
-		TAC.Print(
-			PRINT_DEBUG,
-			"Debug",
-			"Reloaded config!"
-		)
 	end)
 end
