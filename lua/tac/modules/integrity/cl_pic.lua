@@ -10,14 +10,12 @@ function TAC.PIC.Run()
 		Checksum
 	)
 	
-	if not TAC.Config.Silent then
-		TAC.Print(
-			PRINT_INFO,
-			"PIC",
-			"PIC Checksum: %s", 
-			Checksum
-		)
-	end
+	TAC.Print(
+		PRINT_INFO,
+		"PIC",
+		"PIC Checksum: %s", 
+		Checksum
+	)
 end
 
 TAC.PIC.Run()

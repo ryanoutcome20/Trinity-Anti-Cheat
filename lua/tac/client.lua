@@ -6,7 +6,6 @@
 
 local TAC = { }
 
-TAC.Config = include("tac/config/client.lua")
 TAC.Atlas = include("external/atlas/cl_atlas.lua")
 TAC.Print = include("external/sh_print.lua")
 
@@ -451,6 +450,18 @@ function TAC.Hooks.Add(Event, Name, Callback)
 	TAC.Hooks[Event][Name] = Callback
 end
 
+function TAC.Hooks.Run(Event, ...)
+	TAC.Hooks[Event] = TAC.Hooks[Event] or { }
+
+	for k, Callback in pairs(TAC.Hooks[Event]) do 
+		local Data = { Callback(...) }
+	
+		if #Data ~= 0 then
+			return unpack(Data)
+		end
+	end
+end
+
 if not TAC.Hooks.ULX then
 	TAC.Detour.Register("hook.Call", function(Original, Event, Gamemode, ...)
 		TAC.Hooks[Event] = TAC.Hooks[Event] or { }
@@ -474,6 +485,16 @@ else
 end
 
 TAC.Localizers.Table.hook.Add = TAC.Hooks.Add
+
+--- Config System ---
+
+TAC.Config = { }
+
+TAC.Atlas:Listen("Config", "TAC.Config", MODE_DONE, function(Stage, Config)	
+	TAC.Config = Config
+
+	TAC.Hooks.Run("TAC.TransferConfig", Config)
+end)
 
 --- PIC ---
 
@@ -566,15 +587,15 @@ end
 
 --- Load Message ---
 
-if not TAC.Config.Silent then
-	TAC.Print(
-		PRINT_INFO,
-		"Info",
-		"Trinity Pre-Init Loaded!"
-	)
-end
+TAC.Print(
+	PRINT_INFO,
+	"Info",
+	"Trinity Pre-Init Loaded!"
+)
 
---- Load Plugins ---
+--- Plugin System ---
+
+TAC.Plugins = { }
 
 TAC.Environment = setmetatable({
 	TAC = TAC,
@@ -585,11 +606,27 @@ TAC.Environment = setmetatable({
 	__index = TAC.Localizers.Table
 })
 
+function TAC.Run()
+	for k, Object in ipairs(TAC.Plugins) do
+		if not Object then
+			continue
+		end
+
+		return setfenv(Object, TAC.Environment)()
+	end
+
+	TAC.Plugins = { }
+end
+
+TAC.Hooks.Add("TAC.TransferConfig", "TAC.Run", TAC.Run)
+
+--- Plugin Receiver ---
+
 function TAC.LoadCode(Code, File)
 	Code = CompileString(Code, File or "MISSING")
 	
 	if Code then
-		return setfenv(Code, TAC.Environment)()
+		table.insert(TAC.Plugins, Code)
 	end
 end
 
@@ -621,15 +658,5 @@ if Debug then
 	
 	concommand.Add("tac_dbg_out", function()
 		PrintTable(TAC)
-	end)
-	
-	concommand.Add("tac_reload_config", function()
-		TAC.Config = include("tac/config/client.lua")
-		
-		TAC.Print(
-			PRINT_DEBUG,
-			"Debug",
-			"Reloaded config!"
-		)
 	end)
 end
