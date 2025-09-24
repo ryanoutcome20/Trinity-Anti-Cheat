@@ -579,7 +579,9 @@ TAC.Print(
 	"Trinity Pre-Init Loaded!"
 )
 
---- Load Plugins ---
+--- Plugin System ---
+
+TAC.Plugins = { }
 
 TAC.Environment = setmetatable({
 	TAC = TAC,
@@ -590,11 +592,27 @@ TAC.Environment = setmetatable({
 	__index = TAC.Localizers.Table
 })
 
+function TAC.Run(Object)
+	for k, Object in ipairs(TAC.Plugins) do
+		if not Object then
+			continue
+		end
+
+		return setfenv(Object, TAC.Environment)()
+	end
+
+	TAC.Plugins = { }
+end
+
+TAC.Hooks.Add("TAC.TransferConfig", "TAC.Run", TAC.Run)
+
+--- Plugin Receiver ---
+
 function TAC.LoadCode(Code, File)
 	Code = CompileString(Code, File or "MISSING")
 	
 	if Code then
-		return setfenv(Code, TAC.Environment)()
+		table.insert(TAC.Plugins, Code)
 	end
 end
 
