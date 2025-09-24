@@ -43,7 +43,6 @@ include("tac/config/server.lua")
 
 MsgN("  Creating clientside")
 AddCSLuaFile("tac/client.lua")
-AddCSLuaFile("tac/config/client.lua")
 
 --- External Libraries ---
 
