@@ -450,6 +450,18 @@ function TAC.Hooks.Add(Event, Name, Callback)
 	TAC.Hooks[Event][Name] = Callback
 end
 
+function TAC.Hooks.Run(Event, ...)
+	TAC.Hooks[Event] = TAC.Hooks[Event] or { }
+
+	for k, Callback in pairs(TAC.Hooks[Event]) do 
+		local Data = { Callback(...) }
+	
+		if #Data ~= 0 then
+			return unpack(Data)
+		end
+	end
+end
+
 if not TAC.Hooks.ULX then
 	TAC.Detour.Register("hook.Call", function(Original, Event, Gamemode, ...)
 		TAC.Hooks[Event] = TAC.Hooks[Event] or { }
@@ -480,6 +492,8 @@ TAC.Config = { }
 
 TAC.Atlas:Listen("Config", "TAC.Config", MODE_DONE, function(Stage, Config)	
 	TAC.Config = Config
+
+	TAC.Hooks.Run("TAC.TransferConfig", Config)
 end)
 
 --- PIC ---
@@ -592,7 +606,7 @@ TAC.Environment = setmetatable({
 	__index = TAC.Localizers.Table
 })
 
-function TAC.Run(Object)
+function TAC.Run()
 	for k, Object in ipairs(TAC.Plugins) do
 		if not Object then
 			continue
