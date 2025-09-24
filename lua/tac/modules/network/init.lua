@@ -2,6 +2,7 @@ TAC.Networking = { }
 
 include("sv_pic.lua")
 include("sv_transfer.lua")
+include("sv_config_stream.lua")
 
 function TAC.Networking.Integrity(Player, Message, ...)
 	return TAC.Punishment.Wrapper("Client Integrity", Player, Message, ...)
