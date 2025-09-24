@@ -474,6 +474,14 @@ end
 
 TAC.Localizers.Table.hook.Add = TAC.Hooks.Add
 
+--- Config System ---
+
+TAC.Config = { }
+
+TAC.Atlas:Listen("Config", "TAC.Config", MODE_DONE, function(Stage, Config)	
+	TAC.Config = Config
+end)
+
 --- PIC ---
 
 TAC.PIC = { }
