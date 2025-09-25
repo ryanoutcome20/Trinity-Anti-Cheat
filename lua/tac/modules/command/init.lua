@@ -27,7 +27,7 @@ function TAC.Command.Run(Player)
 end
 
 function TAC.Command.Hook(Player)
-	hook.Run("TAC-Command", Player)
+	hook.Run("TAC.Command", Player)
 	
 	TAC.Timer(
 		Player, 
@@ -37,4 +37,4 @@ function TAC.Command.Hook(Player)
 end
 
 hook.Add("PlayerInitialSpawn", "TAC.Command.Hook", TAC.Command.Hook)
-hook.Add("TAC-Command", "TAC.Command.Run", TAC.Command.Run)
+hook.Add("TAC.Command", "TAC.Command.Run", TAC.Command.Run)

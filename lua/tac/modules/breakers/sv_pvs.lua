@@ -107,7 +107,7 @@ function TAC.Breakers.PVS.Run(Player)
 	end
 end
 
-hook.Add("StartCommandPlus", "TAC.Breakers.PVS.Run", TAC.Breakers.PVS.Run)
+hook.Add("TAC.StartCommandPlus", "TAC.Breakers.PVS.Run", TAC.Breakers.PVS.Run)
 
 concommand.Add("tac_recompute_pvs", function(Player)
 	if Player and not Player:IsSuperAdmin() then
@@ -119,7 +119,7 @@ concommand.Add("tac_recompute_pvs", function(Player)
 		TAC.Print(
 			PRINT_WARN,
 			"PVS",
-			"Blocked client '%s' from recomputing PVS!", 
+			"Blocked client `%s` from recomputing PVS!", 
 			Player:Name()
 		)
 		

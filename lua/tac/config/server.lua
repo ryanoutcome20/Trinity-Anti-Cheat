@@ -666,7 +666,7 @@ pStub.Register("Command Enforcer", {
 ]]--
 
 Config.Interpolated = {
-	Enabled = true,
+	Enabled = false,
 	
 	Ratio = 0.00005,
 	Randomize = true,
@@ -815,10 +815,10 @@ pStub.Register("PIC", {
 	
 	Message = "Bad PIC Checksum: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
-	
 	PIC = "387594818",
-	Await = 24
+	Await = 24,
+
+	Method = PUNISHMENT_LOG
 })
 
 --- Stack ---
@@ -849,19 +849,6 @@ pStub.Register("Honeypot", {
 	Name = "Honeypot",
 	Description = "Emulates popular anti-cheat plugins to detect players attempting bruteforce bypasses.",
 	Category = "Integrity",
-	
-	Method = PUNISHMENT_LOG
-})
-
---- Key Input ---
-
-pStub.Register("Key Input", {
-	Enabled = true,
-	Name = "Key Input",
-	Description = "Checks input compared to key inputs to verify the player actually pressed a key.",
-	Category = "Integrity",
-	
-	Client = true,
 	
 	Method = PUNISHMENT_LOG
 })
@@ -965,6 +952,19 @@ pStub.Register("Commands", {
 	Method = PUNISHMENT_LOG
 })
 
+pStub.Register("Listener", {
+	Enabled = true,
+	Name = "Listener",
+	Description = "Occurs when the player runs a hook that is considered blacklisted. Usually occurs with C++ modules.",
+	Category = "Scans",
+	
+	Client = true,
+	
+	Message = "Bad Listener: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
 --- Detours ---
 
 --[[
@@ -984,4 +984,29 @@ pStub.Register("Detours", {
 	Message = "Detour System: {Contact}",
 	
 	Method = PUNISHMENT_LOG
+})
+
+--- Heartbeat ---
+
+--[[
+	This module is designed specifically to insure proper loading of the clientside.
+	
+	Yes, theortically if you have issues in the transfer system this will false flag 
+	but ideally the hook that causes this check to start its routine won't get called
+	if you have errors.
+
+	Probably shouldn't turn this off, if you have issues make a GitHub issue.
+]]--
+
+pStub.Register("Heartbeat", {
+	Enabled = true,
+	Name = "Heartbeat",
+	Description = "Occurs when the clientside doesn't boot properly.",
+	Category = "Integrity",
+	
+	Message = "Failed to load! Rejoin!",
+	
+	Await = 10,
+
+	Method = PUNISHMENT_KICK
 })

@@ -14,4 +14,4 @@ function TAC.Aimbot.Angles(Player, cNew, cOld, CUserCMD)
 	end
 end
 
-hook.Add("StartCommandPlus", "TAC.Aimbot.Angles", TAC.Aimbot.Angles)
+hook.Add("TAC.StartCommandPlus", "TAC.Aimbot.Angles", TAC.Aimbot.Angles)

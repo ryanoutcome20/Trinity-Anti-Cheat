@@ -5,12 +5,10 @@
 -- Don't touch these.
 local Config = { }
 
---- General ---
 
-Config.Silent = false
+--- Flag Batches ---
 
-Config.BatchSize = 32000
-Config.BatchCount = 32
+Config.Batch = 32000
 
 --- Aimbot ---
 
@@ -18,12 +16,12 @@ Config.Aimbot = {
 	Mouse = true,
 	EnginePrediction = true,
 	InputGuard = {
-		Buttons = true,
+		Buttons = false,
 		
-		Angles = true,
+		Angles = false,
 		Offset = 1,
 		
-		Movement = true
+		Movement = false
 	},
 	EmulatedMouse = {
 		Enabled = true,
@@ -53,8 +51,7 @@ Config.Integrity = {
 		
 		Net = true,
 		Nets = 4
-	},
-	Keys = true
+	}
 }
 
 --- Static Cheats / Scripts ---

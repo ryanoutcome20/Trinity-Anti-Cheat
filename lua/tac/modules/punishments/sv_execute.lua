@@ -102,7 +102,7 @@ function TAC.ExecuteSID(Token)
 		TAC.Print(
 			PRINT_INFO,
 			"Punishment",
-			"Was going to kick player but early disconnect: \"%s\"", 
+			"Was going to kick player but early disconnect: `%s`", 
 			Token.SID
 		)
 	end

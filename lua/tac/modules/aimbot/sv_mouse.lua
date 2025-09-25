@@ -22,4 +22,4 @@ function TAC.Aimbot.Mouse(Player, cNew, cOld, CUserCMD)
 	end
 end
 
-hook.Add("StartCommandPlus", "TAC.Aimbot.Mouse", TAC.Aimbot.Mouse)
+hook.Add("TAC.StartCommandPlus", "TAC.Aimbot.Mouse", TAC.Aimbot.Mouse)

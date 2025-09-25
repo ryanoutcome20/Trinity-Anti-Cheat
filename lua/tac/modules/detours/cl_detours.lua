@@ -2,6 +2,13 @@
 
 local Detour = TAC.Detour.Register
 
+local Wrap = function(ID, Meta)
+	Detour(ID, function(Original, ...)
+		TAC.CaptureStack(ID)
+		return Original(...)
+	end, Meta)
+end
+
 --- Whitelist ---
 
 Detour("RunString", function(Original, Code, Identifier, ...)
@@ -56,7 +63,61 @@ end)
 
 --- Globals ---
 
-Detour("Color", function(Original, ...)
-	TAC.CaptureStack("Color")
-	return Original(...)
-end)
+Wrap("Color")
+Wrap("Angle")
+Wrap("Vector")
+Wrap("getmetatable")
+Wrap("setmetatable")
+Wrap("FindMetaTable")
+Wrap("print")
+Wrap("MsgN")
+Wrap("MsgC")
+
+--- Classes ---
+
+Wrap("CommandNumber", "CUserCmd")
+Wrap("TickCount", "CUserCmd")
+Wrap("SetViewAngles", "CUserCmd")
+Wrap("SetMouseX", "CUserCmd")
+Wrap("SetMouseY", "CUserCmd")
+Wrap("SetSideMove", "CUserCmd")
+Wrap("SetForwardMove", "CUserCmd")
+
+Wrap("RotateAroundAxis", "Angle")
+Wrap("Normalize", "Angle")
+
+Wrap("Forward", "Vector")
+Wrap("Angle", "Vector")
+Wrap("AngleEx", "Vector")
+
+Wrap("Nick", "Player")
+Wrap("Ping", "Player")
+Wrap("Team", "Player")
+Wrap("GetUserGroup", "Player")
+Wrap("IsUserGroup", "Player")
+Wrap("IsAdmin", "Player")
+Wrap("IsSuperAdmin", "Player")
+
+Wrap("IsDormant", "Entity")
+
+--- Libraries ---
+
+Wrap("timer.Simple")
+Wrap("timer.Create")
+
+Wrap("util.IsBinaryModuleInstalled")
+Wrap("util.TraceLine")
+Wrap("util.TraceHull")
+
+Wrap("math.random")
+Wrap("math.randomseed")
+
+Wrap("hook.Add")
+Wrap("hook.Remove")
+
+Wrap("concommand.Add")
+Wrap("concommand.Remove")
+
+Wrap("input.SetCursorPos")
+
+Wrap("net.SendToServer")

@@ -12,4 +12,4 @@ function TAC.Movement.Autostrafe(Player, cNew, cOld, CUserCMD)
 	end
 end
 
-hook.Add("StartCommandPlus", "TAC.Movement.Autostrafe", TAC.Movement.Autostrafe)
+hook.Add("TAC.StartCommandPlus", "TAC.Movement.Autostrafe", TAC.Movement.Autostrafe)

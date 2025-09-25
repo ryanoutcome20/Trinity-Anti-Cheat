@@ -33,7 +33,7 @@ MsgN("  Caching resources")
 
 --- Config ---
 
-TAC.Version = "0.2.0"
+TAC.Version = "0.2.1"
 TAC.Edition = "Pre-Alpha"
 
 MsgN("  Loading config")
@@ -43,7 +43,6 @@ include("tac/config/server.lua")
 
 MsgN("  Creating clientside")
 AddCSLuaFile("tac/client.lua")
-AddCSLuaFile("tac/config/client.lua")
 
 --- External Libraries ---
 

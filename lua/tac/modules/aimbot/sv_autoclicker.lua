@@ -20,4 +20,4 @@ function TAC.Aimbot.Autoclicker(Player, Cache)
 	TAC.Batch.Punish(Flags, "Autoclicker", Player, "Autoclicker [batch: %i/%i]", Flags, #Cache)
 end
 
-hook.Add("StartCommandBatch", "TAC.Aimbot.Autoclicker", TAC.Aimbot.Autoclicker)
+hook.Add("TAC.StartCommandBatch", "TAC.Aimbot.Autoclicker", TAC.Aimbot.Autoclicker)

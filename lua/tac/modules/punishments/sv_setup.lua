@@ -17,7 +17,7 @@ function TAC.Punishment.LoadStubs(Player)
 		TAC.Print(
 			PRINT_WARN,
 			"Punishment",
-			"Blocked client '%s' from reloading pStubs!", 
+			"Blocked client `%s` from reloading pStubs!", 
 			Player:Name()
 		)
 		

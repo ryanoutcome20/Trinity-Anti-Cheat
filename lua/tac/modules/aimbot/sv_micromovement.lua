@@ -30,4 +30,4 @@ function TAC.Aimbot.Micromovement(Player, cNew, cOld, CUserCMD)
 	end
 end
 
-hook.Add("StartCommandPlus", "TAC.Aimbot.Micromovement", TAC.Aimbot.Micromovement)
+hook.Add("TAC.StartCommandPlus", "TAC.Aimbot.Micromovement", TAC.Aimbot.Micromovement)

@@ -43,4 +43,4 @@ function TAC.Aimbot.Snap(Player, Cache)
 	TAC.Batch.Punish(Flags.Amount, "Snap", Player, "Snapped [batch: %i/%i; highest: %f]", Flags.Amount, #Cache, Flags.Highest)
 end
 
-hook.Add("StartCommandBatch", "TAC.Aimbot.Snap", TAC.Aimbot.Snap)
+hook.Add("TAC.StartCommandBatch", "TAC.Aimbot.Snap", TAC.Aimbot.Snap)

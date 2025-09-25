@@ -23,7 +23,7 @@ function TAC.Batch.StartCommandPlus(Player, cNew, cOld)
 	})
 	
 	if #Cache >= 40 then
-		hook.Run("StartCommandBatch", Player, Cache)
+		hook.Run("TAC.StartCommandBatch", Player, Cache)
 	
 		Cache = { }
 	end
@@ -31,4 +31,4 @@ function TAC.Batch.StartCommandPlus(Player, cNew, cOld)
 	Player:Set("Batch Storage", Cache)
 end
 
-hook.Add("StartCommandPlus", "TAC.Batch.StartCommandPlus", TAC.Batch.StartCommandPlus)
+hook.Add("TAC.StartCommandPlus", "TAC.Batch.StartCommandPlus", TAC.Batch.StartCommandPlus)

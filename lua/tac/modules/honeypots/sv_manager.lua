@@ -13,7 +13,7 @@ function TAC.Honeypot.Receive(Stage, Player, Message)
 
 	TAC.Honeypot.Wrapper(
 		Player, 
-		"Honeypot [client: \"%s\"]", 
+		"Honeypot [client: `%s`]", 
 		TAC.Fix(Message)
 	)
 end

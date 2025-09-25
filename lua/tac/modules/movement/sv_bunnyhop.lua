@@ -26,4 +26,4 @@ function TAC.Movement.Bunnyhop(Player, cNew, cOld, CUserCMD)
 	TAC.Punishment.Wrapper("Bunnyhop", Player, "Bunnyhop")
 end
 
-hook.Add("StartCommandPlus", "TAC.Movement.Bunnyhop", TAC.Movement.Bunnyhop)
+hook.Add("TAC.StartCommandPlus", "TAC.Movement.Bunnyhop", TAC.Movement.Bunnyhop)

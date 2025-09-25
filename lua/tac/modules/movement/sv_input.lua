@@ -20,4 +20,4 @@ function TAC.Movement.Input(Player, cNew, cOld, CUserCMD)
 	
 end
 
-hook.Add("StartCommandPlus", "TAC.Movement.Input", TAC.Movement.Input)
+hook.Add("TAC.StartCommandPlus", "TAC.Movement.Input", TAC.Movement.Input)
