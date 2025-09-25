@@ -215,7 +215,7 @@ function TAC.Batch.Process()
 			break
 		end
 		
-		if Objects.Size + Object.Size > TAC.Config.BatchSize then
+		if Objects.Size + Object.Size > TAC.Config.Batch then
 			break
 		end
 		
