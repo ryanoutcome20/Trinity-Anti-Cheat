@@ -1006,7 +1006,7 @@ pStub.Register("Heartbeat", {
 	
 	Message = "Failed to load! Rejoin!",
 	
-	Await = 2.5,
+	Await = 10,
 
 	Method = PUNISHMENT_KICK
 })
