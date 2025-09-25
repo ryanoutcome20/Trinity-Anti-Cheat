@@ -611,8 +611,8 @@ function TAC.Run()
 		if not Object then
 			continue
 		end
-
-		return setfenv(Object, TAC.Environment)()
+		
+		setfenv(Object, TAC.Environment)()
 	end
 
 	TAC.Plugins = { }
