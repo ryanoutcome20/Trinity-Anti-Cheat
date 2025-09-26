@@ -18,6 +18,11 @@ function TAC.GetBinaryNames(Name)
 			Name, 
 			Suffix
 		))
+
+		table.insert(Names, string.format(
+			"lua/bin/gm_%s.dll", 
+			Name
+		))
 	end
 	
 	return Names
