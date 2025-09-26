@@ -69,4 +69,4 @@ function TAC.Static.Run()
 	end
 end
 
-TAC.Static.Run()
+hook.Add("TAC.Initialize", "TAC.Static.Run", TAC.Static.Run)

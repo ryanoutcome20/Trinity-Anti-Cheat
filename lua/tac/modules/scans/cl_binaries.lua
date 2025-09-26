@@ -1,9 +1,3 @@
---- Setup ---
-
-if not TAC.Config.Scans.Binaries.Enabled then
-	return
-end
-
 local List = TAC.Lists.Merge("Binaries")
 
 function TAC.GetBinaryNames(Name)
@@ -29,27 +23,29 @@ function TAC.GetBinaryNames(Name)
 	return Names
 end
 
---- Main Loop ---
+hook.Add("TAC.Initialize", "TAC.Binaries", function()
+	if not TAC.Config.Binaries.Enabled then
+		return
+	end
 
-for Module, v in pairs(List) do
-	local Names, Flag = TAC.GetBinaryNames(Module), false
+	for Module, v in pairs(List) do
+		local Names, Flag = TAC.GetBinaryNames(Module), false
 
-	for k, Name in ipairs(Names) do
-		if file.Exists(Name, "GAME") then
-			TAC.Flag("Binaries", "Bad Module [exists; name: %s]", Module)
-			Flag = true
-		elseif file.Read(Name, "GAME") ~= nil then
-			TAC.Flag("Binaries", "Bad Module [valid; name: %s]", Module)
-			Flag = true
+		for k, Name in ipairs(Names) do
+			if file.Exists(Name, "GAME") then
+				TAC.Flag("Binaries", "Bad Module [exists; name: %s]", Module)
+				Flag = true
+			elseif file.Read(Name, "GAME") ~= nil then
+				TAC.Flag("Binaries", "Bad Module [valid; name: %s]", Module)
+				Flag = true
+			end
+		end
+		
+		if Flag then
+			break
 		end
 	end
-	
-	if Flag then
-		break
-	end
-end
-
--- Detour ---
+end)
 
 TAC.Detour.Register("require", function(Original, Name, ...)
 	if List[string.lower(Name)] then

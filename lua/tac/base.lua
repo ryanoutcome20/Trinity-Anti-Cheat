@@ -167,7 +167,7 @@ function TAC.Tell(What, Who, Type, Sound, Ignore)
 	
 	Type = Type or NOTIFY_GENERIC
 
-	for k, Player in ipairs(player.GetHumans()) do 
+	for k, Player in player.Iterator() do 
 		if Ignore == Player then
 			continue
 		end

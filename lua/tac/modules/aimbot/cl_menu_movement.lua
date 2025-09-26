@@ -1,7 +1,7 @@
-TAC.Mouse = { }
+TAC.MenuMovement = { }
 
-function TAC.Mouse.Run(CUserCMD)
-	if not TAC.Config.Aimbot.Mouse then
+function TAC.MenuMovement.Run(CUserCMD)
+	if not TAC.Config.MenuMovement.Enabled then
 		return
 	end
 	
@@ -16,4 +16,4 @@ function TAC.Mouse.Run(CUserCMD)
 	TAC.Flag("Client Mouse", "Menu Movement")
 end
 
-hook.Add("CreateMove", "TAC.Mouse.Run", TAC.Mouse.Run)
+hook.Add("CreateMove", "TAC.MenuMovement.Run", TAC.MenuMovement.Run)

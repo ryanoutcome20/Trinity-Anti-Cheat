@@ -1,16 +1,11 @@
---- Setup ---
-
-local Config = TAC.Config.Scans.Commands
-
-if not Config.Enabled then
-	return
-end
-
+local Config = TAC.Config.Commands
 local List = TAC.Lists.Merge("Commands")
 
---- Main Loop ---
-
 local function Scan()
+	if not Config.Enabled then
+		return
+	end
+
 	local Name, Value = debug.getupvalue(concommand.GetTable, 1)
 	
 	if not istable(Value) then
@@ -39,8 +34,6 @@ local function Scan()
 end
 
 timer.Simple(Config.Delay, Scan)
-
--- Detours ---
 
 TAC.Detour.Register("CreateConVar", function(Original, Name, ...)
 	if List[string.lower(Name)] then

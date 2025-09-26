@@ -1,6 +1,6 @@
-TAC.Aimbot.InputGuard = { }
+TAC.InputGuard = { }
 
-function TAC.Aimbot.InputGuard.Verify(Config, Object, CUserCMD)
+function TAC.InputGuard.Verify(Config, Object, CUserCMD)
 	-- Verify angles.
 	
 	local Angles = Object.Angles - CUserCMD:GetViewAngles()
@@ -33,8 +33,8 @@ function TAC.Aimbot.InputGuard.Verify(Config, Object, CUserCMD)
 	end
 end
 
-function TAC.Aimbot.InputGuard.StartCommand(Player, CUserCMD)
-	TAC.Aimbot.InputGuard.Storage = {
+function TAC.InputGuard.StartCommand(Player, CUserCMD)
+	TAC.InputGuard.Storage = {
 		Angles = CUserCMD:GetViewAngles(),
 		Buttons = CUserCMD:GetButtons(),
 		
@@ -42,10 +42,14 @@ function TAC.Aimbot.InputGuard.StartCommand(Player, CUserCMD)
 	}
 end
 
-function TAC.Aimbot.InputGuard.SetupMove(Player, CMoveData, CUserCMD)
-	local Config = TAC.Config.Aimbot.InputGuard
-	local Object = TAC.Aimbot.InputGuard.Storage
+function TAC.InputGuard.SetupMove(Player, CMoveData, CUserCMD)
+	local Config = TAC.Config.InputGuard
+	local Object = TAC.InputGuard.Storage
 	
+	if not Config.Enabled then
+		return
+	end
+
 	if vgui.CursorVisible() then
 		return
 	end
@@ -55,12 +59,12 @@ function TAC.Aimbot.InputGuard.SetupMove(Player, CMoveData, CUserCMD)
 		CUserCMD = Player:GetCurrentCommand()
 	
 		if not CUserCMD:IsForced() then
-			TAC.Aimbot.InputGuard.Verify(Config, Object, CUserCMD)
+			TAC.InputGuard.Verify(Config, Object, CUserCMD)
 		end
 		
-		TAC.Aimbot.InputGuard.Storage = nil
+		TAC.InputGuard.Storage = nil
 	end
 end
 
-hook.Add("StartCommand", "TAC.Aimbot.InputGuard.StartCommand", TAC.Aimbot.InputGuard.StartCommand)
-hook.Add("SetupMove", "TAC.Aimbot.InputGuard.SetupMove", TAC.Aimbot.InputGuard.SetupMove)
+hook.Add("StartCommand", "TAC.InputGuard.StartCommand", TAC.InputGuard.StartCommand)
+hook.Add("SetupMove", "TAC.InputGuard.SetupMove", TAC.InputGuard.SetupMove)

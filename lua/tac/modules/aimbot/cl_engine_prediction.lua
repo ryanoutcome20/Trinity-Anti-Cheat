@@ -11,7 +11,7 @@ function TAC.Engine.CreateMove(CUserCMD)
 end
 
 function TAC.Engine.SetupMove(Player, CMoveData, CUserCMD)
-	if not TAC.Config.Aimbot.EnginePrediction then
+	if not TAC.Config.Prediction.Enabled then
 		return
 	end
 

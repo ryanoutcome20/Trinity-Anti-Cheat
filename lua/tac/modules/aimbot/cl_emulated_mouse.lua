@@ -1,11 +1,11 @@
-TAC.EmulatedMouse = { }
+TAC.Mouse = { }
 
 local sensitivity = GetConVar("sensitivity")
 
 local m_yaw = GetConVar("m_yaw")
 local m_pitch = GetConVar("m_pitch")
 
-function TAC.EmulatedMouse.Scan(CUserCMD)
+function TAC.Mouse.Scan(CUserCMD)
 	-- I know its flipped but it doesn't work the other way around
 	-- so I dunno.
 	
@@ -19,7 +19,7 @@ function TAC.EmulatedMouse.Scan(CUserCMD)
 		Capture = Current
 	end
 	
-	local Config = TAC.Config.Aimbot.EmulatedMouse
+	local Config = TAC.Config.Mouse
 
 	if not Config.Enabled then
 		return
@@ -36,15 +36,15 @@ function TAC.EmulatedMouse.Scan(CUserCMD)
     local actualPitch = Current.p - Capture.p
 
 	-- Compare.
-	if Config.Yaw and math.abs(actualYaw - expectedYaw) > Config.YawOffset and expectedYaw == 0 then
+	if Config.CheckY and math.abs(actualYaw - expectedYaw) > Config.OffsetY and expectedYaw == 0 then
 		TAC.Flag("Emulated Mouse", "Emulated Mouse [yaw; in: %f; out: %f]", expectedYaw, actualYaw)
 	end
 
-	if Config.Pitch and math.abs(actualPitch - expectedPitch) > Config.PitchOffset and expectedPitch == 0 then
+	if Config.CheckX and math.abs(actualPitch - expectedPitch) > Config.OffsetX and expectedPitch == 0 then
 		TAC.Flag("Emulated Mouse", "Emulated Mouse [pitch; in: %f; out: %f]", expectedPitch, actualPitch)
 	end
 
     Capture = Current
 end
 
-hook.Add("CreateMove", "TAC.EmulatedMouse.Scan", TAC.EmulatedMouse.Scan)
+hook.Add("CreateMove", "TAC.Mouse.Scan", TAC.Mouse.Scan)

@@ -616,6 +616,8 @@ function TAC.Run()
 	end
 
 	TAC.Plugins = { }
+
+	TAC.Hooks.Run("TAC.Initialize", TAC.Config)
 end
 
 TAC.Hooks.Add("TAC.TransferConfig", "TAC.Run", TAC.Run)

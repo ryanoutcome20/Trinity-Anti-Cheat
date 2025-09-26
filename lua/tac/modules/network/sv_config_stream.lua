@@ -11,3 +11,25 @@ function TAC.Networking.SendConfig(Player)
 end
 
 hook.Add("TAC.TransferStopped", "TAC.Networking.SendConfig", TAC.Networking.SendConfig)
+
+concommand.Add("tac_reload_config", function(Player)
+	if Player and not Player:IsSuperAdmin() then
+		Player:tAlert(
+			"This command is restricted to Super Admin only!",
+			NOTIFY_ERROR
+		)
+		
+		TAC.Print(
+			PRINT_WARN,
+			"Networking",
+			"Blocked client `%s` from reloading clientside configs!", 
+			Player:Name()
+		)
+		
+		return
+	end
+
+    for k, Player in player.Iterator() do
+        TAC.Networking.SendConfig(Player)
+    end
+end)
