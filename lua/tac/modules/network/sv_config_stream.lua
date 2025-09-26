@@ -29,6 +29,12 @@ concommand.Add("tac_reload_config", function(Player)
 		return
 	end
 
+	TAC.Print(
+		PRINT_WARN,
+		"Networking",
+		"`tac_reload-config` is considered a debug feature! It may break things or affect performance!"
+	)
+
     for k, Player in player.Iterator() do
         TAC.Networking.SendConfig(Player)
     end

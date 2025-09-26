@@ -23,8 +23,10 @@ function TAC.GetBinaryNames(Name)
 	return Names
 end
 
-hook.Add("TAC.Initialize", "TAC.Binaries", function()
-	if not TAC.Config.Binaries.Enabled then
+local function Scan()
+	local Config = TAC.Config.Binaries
+
+	if not Config.Enabled then
 		return
 	end
 
@@ -45,12 +47,18 @@ hook.Add("TAC.Initialize", "TAC.Binaries", function()
 			break
 		end
 	end
-end)
 
-TAC.Detour.Register("require", function(Original, Name, ...)
-	if List[string.lower(Name)] then
-		TAC.Flag("Binaries", "Bad Module [req; name: %s]", Name)
+	if not Config.Detour then
+		return
 	end
-	
-	return Original(Name, ...)
-end)
+
+	TAC.Detour.Register("require", function(Original, Name, ...)
+		if List[string.lower(Name)] then
+			TAC.Flag("Binaries", "Bad Module [req; name: %s]", Name)
+		end
+		
+		return Original(Name, ...)
+	end)
+end
+
+hook.Add("TAC.Initialize", "TAC.Binaries", Scan)

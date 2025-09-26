@@ -119,7 +119,16 @@ Config.ESP = {
 --- Scans ---
 
 Config.Binaries = {
-	Enabled = true
+	Enabled = true,
+	
+	Detour = true
+}
+
+Config.Commands = {
+	Enabled = true,
+	Delay = 600,
+
+	Detour = true
 }
 
 Config.Files = {
@@ -132,10 +141,10 @@ Config.Hooks = {
 	Delay = 45
 }
 
-Config.Commands = {
-	Enabled = true,
+--- Listeners ---
 
-	Delay = 600
+Config.Listeners = {
+	Enabled = true
 }
 
 return Config

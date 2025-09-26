@@ -1,16 +1,12 @@
- --- Setup ---
-
-local Config = TAC.Config.Scans.Hooks
-
-if not Config.Enabled then
-	return
-end
-
 local Hooks = TAC.Lists.Merge("Hooks")
 
---- Main Loop ---
-
 local function Scan()
+	local Config = TAC.Config.Scans.Hooks
+
+	if not Config.Enabled then
+		return
+	end
+	
 	local Table = hook.GetTable()
 	
 	for k, Object in ipairs(Hooks) do 

@@ -1,15 +1,19 @@
---- Setup ---
-
 local Listeners = TAC.Lists.Merge("Listeners")
 
---- Hooks ---
+hook.Add("TAC.Initialize", "TAC.SetupListeners", function()
+    local Config = TAC.Config.Listeners
 
-for k, Data in pairs(Listeners) do 
-    local Name, Type = Data.Name, Data.Type
+    if not Config.Enabled then
+        return
+    end
+    
+    for k, Data in pairs(Listeners) do 
+        local Name, Type = Data.Name, Data.Type
 
-    hook.Add(Name, "TAC.Listener." .. Name, function(...)
-        TAC.Flag("Listener", "Bad Hook Listener [name: %s; type: %s]", Name, Type)
+        hook.Add(Name, "TAC.Listener." .. Name, function(...)
+            TAC.Flag("Listener", "Bad Hook Listener [name: %s; type: %s]", Name, Type)
 
-        hook.Remove(Name, "TAC.Listener." .. Name)
-    end)
-end
+            hook.Remove(Name, "TAC.Listener." .. Name)
+        end)
+    end
+end)
