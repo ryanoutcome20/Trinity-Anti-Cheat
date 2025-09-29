@@ -1,8 +1,8 @@
 local Hooks = TAC.Lists.Merge("Hooks")
 
-local function Scan()
-	local Config = TAC.Config.Hooks
+local Config = TAC.Config.Hooks
 
+local function Scan()
 	if not Config.Enabled then
 		return
 	end
@@ -29,4 +29,6 @@ local function Scan()
 	timer.Simple(Config.Delay, Scan)
 end
 
-timer.Simple(Config.Delay, Scan)
+hook.Add("TAC.Initialize", "TAC.Hooks", function()
+	timer.Simple(Config.Delay, Scan)
+end)

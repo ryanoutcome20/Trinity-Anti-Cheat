@@ -625,6 +625,15 @@ TAC.Hooks.Add("TAC.TransferConfig", "TAC.Run", TAC.Run)
 --- Plugin Receiver ---
 
 function TAC.LoadCode(Code, File)
+	if not Code then
+		return TAC.Print(
+			PRINT_ERROR,
+			"Plugins",
+			"Invalid file format provided `%s`",
+			File
+		)
+	end
+
 	Code = CompileString(Code, File or "MISSING")
 	
 	if Code then
@@ -644,7 +653,7 @@ if Debug then
 	TAC.Print(
 		PRINT_DEBUG,
 		"Debug",
-		"Trinity Debug Enabled!"
+		"Trinity Debug Enabled"
 	)
 
 	concommand.Add("tac_globalize", function()

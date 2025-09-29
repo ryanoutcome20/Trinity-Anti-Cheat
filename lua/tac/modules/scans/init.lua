@@ -4,6 +4,6 @@ if SERVER then
 		"cl_hooks.lua",
 		"cl_commands.lua",
 		"cl_files.lua",
-		"cl_listeners.lua"
+		"cl_listener.lua"
 	}
 end

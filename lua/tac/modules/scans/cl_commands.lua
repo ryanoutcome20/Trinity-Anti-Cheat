@@ -33,10 +33,14 @@ local function Scan()
 	timer.Simple(Config.Delay, Scan)
 end
 
-timer.Simple(Config.Delay, Scan)
-
 local function Detour()
-	if not Config.Enabled or not Config.Detour then
+	if not Config.Enabled then
+		return
+	end
+
+	timer.Simple(Config.Delay, Scan)
+
+	if not Config.Detour then
 		return
 	end
 
