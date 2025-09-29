@@ -480,7 +480,7 @@ else
 	TAC.Print(
 		PRINT_WARN,
 		"HOOKS",
-		"ULX system is overriding hooks, using insecure hooks!"
+		"ULX system is overriding hooks, using insecure hooks"
 	)
 end
 
@@ -590,7 +590,7 @@ end
 TAC.Print(
 	PRINT_INFO,
 	"Info",
-	"Trinity Pre-Init Loaded!"
+	"Trinity Pre-Init Loaded"
 )
 
 --- Plugin System ---
@@ -662,7 +662,7 @@ if Debug then
 		TAC.Print(
 			PRINT_DEBUG,
 			"Debug",
-			"Object `%s` dumped to globals!",
+			"Object `%s` dumped to globals",
 			tostring(_G.TAC)
 		)
 	end)

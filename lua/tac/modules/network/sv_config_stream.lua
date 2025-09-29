@@ -15,14 +15,14 @@ hook.Add("TAC.TransferStopped", "TAC.Networking.SendConfig", TAC.Networking.Send
 concommand.Add("tac_reload_config", function(Player)
 	if Player and not Player:IsSuperAdmin() then
 		Player:tAlert(
-			"This command is restricted to Super Admin only!",
+			"This command is restricted to Super Admin only",
 			NOTIFY_ERROR
 		)
 		
 		TAC.Print(
 			PRINT_WARN,
 			"Networking",
-			"Blocked client `%s` from reloading clientside configs!", 
+			"Blocked client `%s` from reloading clientside configs", 
 			Player:Name()
 		)
 		
@@ -32,7 +32,7 @@ concommand.Add("tac_reload_config", function(Player)
 	TAC.Print(
 		PRINT_WARN,
 		"Networking",
-		"`tac_reload-config` is considered a debug feature! It may break things or affect performance!"
+		"`tac_reload-config` is considered a debug feature! It may break things or affect performance"
 	)
 
     for k, Player in player.Iterator() do

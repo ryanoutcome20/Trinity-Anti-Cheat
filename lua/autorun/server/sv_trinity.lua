@@ -140,6 +140,6 @@ if not game.IsDedicated() then
 	TAC.Print(
 		PRINT_WARN,
 		"Info",
-		"Loopback / LAN server detected, anti-cheat cannot run at full capacity!"
+		"Loopback / LAN server detected, anti-cheat cannot run at full capacity"
 	)
 end

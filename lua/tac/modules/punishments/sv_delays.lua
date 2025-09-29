@@ -33,7 +33,7 @@ function TAC.Punishment.Delay(Token)
 			return TAC.Print(
 				PRINT_ERROR,
 				"Punishment",
-				"No token for delayed ban/kick?"
+				"No token for delayed ban/kick"
 			)
 		end
 		
