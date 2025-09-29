@@ -63,7 +63,12 @@ Config.Staff = {
 	},
 	
 	IDs = {
-		-- SteamID
+		-- ["SteamID64"] = true,
+		-- ["SteamID"] = true
+	},
+
+	IPs = {
+		-- ["1.1.1.1"] = true
 	}
 }
 
@@ -73,7 +78,7 @@ Config.Staff = {
 	This uses a bit more of an advanced angle system instead of
 	using CUserCMD's angle system. 
 	
-	The issue with these more  accurate angles is that they are 
+	The issue with these more accurate angles is that they are 
 	extremely unoptimized to generate and can result in poor 
 	performance.
 	
@@ -136,10 +141,10 @@ Config.Logging = {
 --- Punishment ---
 
 Config.Punishment = {
-	ignoreStaff = false,
+	IgnoreStaff = false,
 
-	globalFilter = false,
-	globalFilterCallback = function(Player, Config)
+	GlobalFilter = false,
+	GlobalFilterCallback = function(Player, Config)
 		return false
 	end,
 
@@ -182,11 +187,11 @@ Config.Punishment = {
 		},
 		
 		-- Formats.
-		formatEvaluate = "{Name} [{SteamID64}] was evaluated for \"{Info}\" ({ID})!",	
-		formatFlags = "{Name} [{SteamID64}] was flagged for \"{Info}\" ({ID})! [{Flags}]",
-		formatPunishment = "{Name} [{SteamID64}] was punished for \"{Info}\" ({ID})!",
-		formatDelayedPunishment = "{Name} [{SteamID64}] is about to be punished for \"{Info}\" ({ID})! [{Timer}s]",
-		formatLog = "{Name} [{SteamID64}] was logged for \"{Info}\" ({ID})!",
+		FormatEvaluate = "{Name} [{SteamID64}] was evaluated for \"{Info}\" ({ID})!",	
+		FormatFlags = "{Name} [{SteamID64}] was flagged for \"{Info}\" ({ID})! [{Flags}]",
+		FormatPunishment = "{Name} [{SteamID64}] was punished for \"{Info}\" ({ID})!",
+		FormatDelayedPunishment = "{Name} [{SteamID64}] is about to be punished for \"{Info}\" ({ID})! [{Timer}s]",
+		FormatLog = "{Name} [{SteamID64}] was logged for \"{Info}\" ({ID})!",
 		
 		-- Avoidance
 		Ping = -1,
@@ -633,6 +638,21 @@ pStub.Register("Accuracy", {
 
 --- Command Enforcer ---
 
+--[[
+	Patch in this context applies a patch to fix
+	shared ConVars by making sure the values are
+	replicated on the server. 
+	
+	In simple terms, if your config uses a shared 
+	value (sv_cheats) and the config is desynced 
+	with the server (sv_cheats 1) then it'll get 
+	fixed automatically.
+
+	Log makes the command log only. Useful for
+	commands that are capable of being seperated
+	but suspicious.
+--]]
+
 pStub.Register("Command Enforcer", {
 	Enabled = true,
 	Name = "Command Enforcer",
@@ -644,9 +664,16 @@ pStub.Register("Command Enforcer", {
 	Method = PUNISHMENT_LOG,
 	
 	Commands = {
-		{
-			Name = "cl_interpolate",
-			Value = 1 
+		["sv_cheats"] = {
+			Value = "0",
+			Patch = true,
+			Log = false
+		},
+
+		["m_yaw"] = {
+			Value = "0.22",
+			Patch = false,
+			Log = true
 		}
 	},
 	

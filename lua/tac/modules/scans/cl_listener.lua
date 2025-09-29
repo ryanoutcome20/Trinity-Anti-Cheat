@@ -1,4 +1,4 @@
-local Listeners = TAC.Lists.Merge("Listeners")
+local Listeners = TAC.Lists.Merge("Listener")
 
 hook.Add("TAC.Initialize", "TAC.SetupListeners", function()
     local Config = TAC.Config.Listeners

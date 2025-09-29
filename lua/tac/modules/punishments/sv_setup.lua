@@ -53,11 +53,11 @@ function TAC.Punishment.Valid(Player, Config, isToken, noDelay)
 		return
 	end
 	
-	if TAC.Config.Punishment.ignoreStaff and TAC.IsStaff(Player) then
+	if TAC.Config.Punishment.IgnoreStaff and TAC.IsStaff(Player) then
 		return
 	end
 	
-	if TAC.Config.Punishment.globalFilter and not TAC.globalFilterCallback(Player, Config) then
+	if TAC.Config.Punishment.GlobalFilter and not TAC.GlobalFilterCallback(Player, Config) then
 		return
 	end
 	

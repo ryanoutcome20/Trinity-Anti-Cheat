@@ -178,6 +178,34 @@ function TAC.StandardAngle(Yaw)
 	return Yaw - 360
 end
 
+function TAC.GetBinaryNames(Name)
+	-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/lua/includes/extensions/util.lua#L394-L418
+
+	local Names = { }
+	local Suffixes = { "osx64", "osx", "linux64", "linux", "linux32", "win64", "win32" }
+	
+	for k, Suffix in ipairs(Suffixes) do 
+		table.insert(Names, string.format(
+			"lua/bin/gmcl_%s_%s.dll", 
+			Name, 
+			Suffix
+		))
+		
+		table.insert(Names, string.format(
+			"lua/bin/gmsv_%s_%s.dll", 
+			Name, 
+			Suffix
+		))
+
+		table.insert(Names, string.format(
+			"lua/bin/gm_%s.dll", 
+			Name
+		))
+	end
+	
+	return Names
+end
+
 --- Batch System ---
 
 TAC.Batch = {
@@ -450,7 +478,21 @@ function TAC.Hooks.Add(Event, Name, Callback)
 	TAC.Hooks[Event][Name] = Callback
 end
 
+function TAC.Hooks.Remove(Event, Name)
+	if TAC.Hooks.ULX then
+		return _G.hook.Remove(Event, Name)
+	end
+
+	TAC.Hooks[Event] = TAC.Hooks[Event] or { }
+	
+	TAC.Hooks[Event][Name] = nil
+end
+
 function TAC.Hooks.Run(Event, ...)
+	if TAC.Hooks.ULX then
+		return _G.hook.Run(Event, ...)
+	end
+	
 	TAC.Hooks[Event] = TAC.Hooks[Event] or { }
 
 	for k, Callback in pairs(TAC.Hooks[Event]) do 
@@ -485,6 +527,7 @@ else
 end
 
 TAC.Localizers.Table.hook.Add = TAC.Hooks.Add
+TAC.Localizers.Table.hook.Remove = TAC.Hooks.Remove
 
 --- Config System ---
 

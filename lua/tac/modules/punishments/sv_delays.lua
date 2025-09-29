@@ -11,7 +11,7 @@ function TAC.Punishment.Delay(Token)
 	Token.Timer = math.random(Token.DelayMinimum, Token.DelayMaximum)
 		
 	-- Get formatted.
-	local Formatted = tFormat(Token, Token.formatDelayedPunishment)
+	local Formatted = TAC.Format(Token, Token.FormatDelayedPunishment)
 		
 	-- Log.
 	Token.Player:tLog(

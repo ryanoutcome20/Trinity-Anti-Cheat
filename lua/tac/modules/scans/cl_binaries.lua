@@ -1,33 +1,5 @@
 local List = TAC.Lists.Merge("Binaries")
 
-function TAC.GetBinaryNames(Name)
-	-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/lua/includes/extensions/util.lua#L394-L418
-
-	local Names = { }
-	local Suffixes = { "osx64", "osx", "linux64", "linux", "linux32", "win64", "win32" }
-	
-	for k, Suffix in ipairs(Suffixes) do 
-		table.insert(Names, string.format(
-			"lua/bin/gmcl_%s_%s.dll", 
-			Name, 
-			Suffix
-		))
-		
-		table.insert(Names, string.format(
-			"lua/bin/gmsv_%s_%s.dll", 
-			Name, 
-			Suffix
-		))
-
-		table.insert(Names, string.format(
-			"lua/bin/gm_%s.dll", 
-			Name
-		))
-	end
-	
-	return Names
-end
-
 local function Scan()
 	local Config = TAC.Config.Binaries
 

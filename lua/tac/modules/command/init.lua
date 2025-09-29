@@ -1,3 +1,16 @@
+if true then
+	TAC.Commands = { }
+
+	if SERVER then
+		include("sv_command.lua")
+
+		return {
+			"init.lua",
+			"cl_command.lua"
+		}
+	end
+end
+
 TAC.Command = { 
 	sv_cheats = GetConVar("sv_cheats")
 }
