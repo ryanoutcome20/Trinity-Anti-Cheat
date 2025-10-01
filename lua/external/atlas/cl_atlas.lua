@@ -10,6 +10,8 @@ local tonumber = tonumber
 
 local pairs = pairs
 
+local SFS = include("external/sh_sfs.lua")
+
 local Atlas = {
     Ports = { },
 
@@ -100,7 +102,7 @@ function Atlas:Pack(Data, alreadyPacked)
             end
         end
 
-        return util.Compress(util.TableToJSON(Constructed))
+        return util.Compress(SFS.encode(Constructed))
     end
 
 	if #Data < 12000 then
@@ -119,11 +121,11 @@ function Atlas:Unpack(Data)
         return Data
     end
 
-    -- Try parsing JSON to check if it"s a table.
-    local Parsed = util.JSONToTable(Decompressed)
+    -- Try parsing SFS to check if it's a table.
+    local Parsed, Failed = SFS.decode(Decompressed)
     
-    -- If JSON parsing fails, return decompressed string.
-    if not Parsed then
+    -- If SFS parsing fails, return decompressed string.
+    if Failed ~= nil then
         return Decompressed
     end
 
