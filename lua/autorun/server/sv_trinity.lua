@@ -49,6 +49,10 @@ AddCSLuaFile("tac/client.lua")
 MsgN("  Creating Print instance")
 AddCSLuaFile("external/sh_print.lua")
 
+MsgN("  Creating SFS instance")
+include("external/sh_sfs.lua")
+AddCSLuaFile("external/sh_sfs.lua")
+
 MsgN("  Creating Atlas instance")
 include("external/atlas/sv_atlas.lua")
 AddCSLuaFile("external/atlas/cl_atlas.lua")
