@@ -26,10 +26,10 @@ function TAC.Commands.Receiver(Stage, Slots)
         )
     end
 
-    -- TAC.Atlas:Send(
-    --     "Commands",
-    --     Package
-    -- )
+    TAC.Atlas:Send(
+        "Commands",
+        Package
+    )
 end
 
 TAC.Atlas:Listen("Commands", "TAC.Commands.Receiver", MODE_DONE, TAC.Commands.Receiver)

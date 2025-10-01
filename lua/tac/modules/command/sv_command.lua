@@ -35,7 +35,11 @@ function TAC.Commands.BuildSlots()
 end
 
 function TAC.Commands.Hook(Player)
-	hook.Run("TAC.PreCommands", Player)
+    if Player:IsBot() then
+        return
+    end
+
+    hook.Run("TAC.PreCommands", Player)
 
     local Await = TAC.Config["Command Enforcer"].Await
 
