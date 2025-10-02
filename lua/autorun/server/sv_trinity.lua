@@ -33,7 +33,7 @@ MsgN("  Caching resources")
 
 --- Config ---
 
-TAC.Version = "0.2.1"
+TAC.Version = "0.2.2"
 TAC.Edition = "Pre-Alpha"
 
 MsgN("  Loading config")
@@ -48,6 +48,10 @@ AddCSLuaFile("tac/client.lua")
 
 MsgN("  Creating Print instance")
 AddCSLuaFile("external/sh_print.lua")
+
+MsgN("  Creating SFS instance")
+include("external/sh_sfs.lua")
+AddCSLuaFile("external/sh_sfs.lua")
 
 MsgN("  Creating Atlas instance")
 include("external/atlas/sv_atlas.lua")
@@ -140,6 +144,6 @@ if not game.IsDedicated() then
 	TAC.Print(
 		PRINT_WARN,
 		"Info",
-		"Loopback / LAN server detected, anti-cheat cannot run at full capacity!"
+		"Loopback / LAN server detected, anti-cheat cannot run at full capacity"
 	)
 end

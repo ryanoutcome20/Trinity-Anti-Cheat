@@ -31,7 +31,7 @@ function TAC.Execute(Token, noDelay)
 	end
 	
 	-- Log specific override stuff.
-	local Formatted = onlyLog and tFormat(Token, Token.formatLog) or tFormat(Token, Token.formatPunishment)
+	local Formatted = onlyLog and TAC.Format(Token, Token.FormatLog) or TAC.Format(Token, Token.FormatPunishment)
 	local Sound = onlyLog and TAC.Config.Alerts.Sounds.Notify or TAC.Config.Alerts.Sounds.Punishment
 
 	-- Log.
@@ -60,7 +60,7 @@ function TAC.Execute(Token, noDelay)
 	end
 
 	-- Get message.
-	local Message = tFormat(Token)
+	local Message = TAC.Format(Token)
 
 	-- Run punishment.
 	local Backend = TAC.Punishment.Backend(Token)

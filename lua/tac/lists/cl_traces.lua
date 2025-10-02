@@ -2,8 +2,6 @@
 
 return {
 	-- debug
-	{Pointer = debug.getlocal, Name = "debug.getlocal", Message = "bad argument #2 to '?' (number expected, got no value)"},
-	{Pointer = debug.getupvalue, Name = "debug.getupvalue", Message = "bad argument #2 to '?' (number expected, got no value)"},
 	{Pointer = debug.setmetatable, Name = "debug.setmetatable", Message = "bad argument #2 to '?' (nil or table expected)"},
 	{Pointer = debug.setfenv, Name = "debug.setfenv", Message = "bad argument #2 to '?' (table expected, got no value)"},
 	{Pointer = debug.getinfo, Name = "debug.getinfo", Message = "bad argument #1 to '?' (function or level expected)"},

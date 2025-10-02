@@ -29,7 +29,7 @@ function TAC.Punishment.Evaluate(ID, Player, Info, ...)
 	table.Merge(Token, Config, true)
 		
 	TAC.Tell(
-		tFormat(Token, Token.formatEvaluate),
+		TAC.Format(Token, Token.FormatEvaluate),
 		Token.Alerts.Evaluate,
 		NOTIFY_HINT,
 		TAC.Config.Alerts.Sounds.Notify,

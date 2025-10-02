@@ -25,7 +25,7 @@ end
 local BroadcastLua = BroadcastLua
 
 _G.BroadcastLua = function(Code, ...)
-	for k, Player in ipairs(player.GetHumans()) do 
+	for k, Player in player.Iterator() do
 		TAC.Detours.IncrementWhitelist(Player)
 	end
 	

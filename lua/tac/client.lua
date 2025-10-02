@@ -2,6 +2,16 @@
 --[[ Trinity Anti-Cheat ]]--
 --[[ ~~~~~~~~~~~~~~~~~~ ]]--
 
+--- Anti-Hooking ---
+
+local NOP = function() end
+
+for i = 1, 10 do
+	jit.flush()
+		jit.attach(NOP, "trace")
+	jit.flush()
+end
+
 --- Setup ---
 
 local TAC = { }
@@ -17,7 +27,6 @@ TAC.Garbage = gcinfo()
 
 TAC.Sizes = {
 	Commands = {Key = concommand.GetTable, Index = 1},
-	Hooks = {Key = hook.GetTable, Index = 1},
 	Net = {Key = net.Receivers, Index = -1}
 }
 
@@ -97,6 +106,8 @@ local notify = Get("notify")
 local concommand = Get("concommand")
 
 local pcall = Get("pcall")
+local setfenv = Get("setfenv")
+local getfenv = Get("getfenv")
 local Color = Get("Color")
 local Angle = Get("Angle")
 local Vector = Get("Vector")
@@ -176,6 +187,34 @@ function TAC.StandardAngle(Yaw)
 	end
 
 	return Yaw - 360
+end
+
+function TAC.GetBinaryNames(Name)
+	-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/lua/includes/extensions/util.lua#L394-L418
+
+	local Names = { }
+	local Suffixes = { "osx64", "osx", "linux64", "linux", "linux32", "win64", "win32" }
+	
+	for k, Suffix in ipairs(Suffixes) do 
+		table.insert(Names, string.format(
+			"lua/bin/gmcl_%s_%s.dll", 
+			Name, 
+			Suffix
+		))
+		
+		table.insert(Names, string.format(
+			"lua/bin/gmsv_%s_%s.dll", 
+			Name, 
+			Suffix
+		))
+
+		table.insert(Names, string.format(
+			"lua/bin/gm_%s.dll", 
+			Name
+		))
+	end
+	
+	return Names
 end
 
 --- Batch System ---
@@ -434,6 +473,14 @@ function TAC.Detour.Unregister(Name, Meta)
     TAC.Detour.Registry[Name .. (Meta or "")] = nil
 end
 
+function TAC.Detour.Find(Function)
+    for ID, Data in pairs(TAC.Detour.Registry) do
+        if Data.Table[Data.Key] == Function then
+            return ID, Data
+        end
+    end
+end
+
 --- Hook System ---
 
 TAC.Hooks = { 
@@ -450,7 +497,21 @@ function TAC.Hooks.Add(Event, Name, Callback)
 	TAC.Hooks[Event][Name] = Callback
 end
 
+function TAC.Hooks.Remove(Event, Name)
+	if TAC.Hooks.ULX then
+		return _G.hook.Remove(Event, Name)
+	end
+
+	TAC.Hooks[Event] = TAC.Hooks[Event] or { }
+	
+	TAC.Hooks[Event][Name] = nil
+end
+
 function TAC.Hooks.Run(Event, ...)
+	if TAC.Hooks.ULX then
+		return _G.hook.Run(Event, ...)
+	end
+	
 	TAC.Hooks[Event] = TAC.Hooks[Event] or { }
 
 	for k, Callback in pairs(TAC.Hooks[Event]) do 
@@ -480,11 +541,12 @@ else
 	TAC.Print(
 		PRINT_WARN,
 		"HOOKS",
-		"ULX system is overriding hooks, using insecure hooks!"
+		"ULX system is overriding hooks, using insecure hooks"
 	)
 end
 
 TAC.Localizers.Table.hook.Add = TAC.Hooks.Add
+TAC.Localizers.Table.hook.Remove = TAC.Hooks.Remove
 
 --- Config System ---
 
@@ -590,7 +652,7 @@ end
 TAC.Print(
 	PRINT_INFO,
 	"Info",
-	"Trinity Pre-Init Loaded!"
+	"Trinity Pre-Init Loaded"
 )
 
 --- Plugin System ---
@@ -616,6 +678,8 @@ function TAC.Run()
 	end
 
 	TAC.Plugins = { }
+
+	TAC.Hooks.Run("TAC.Initialize", TAC.Config)
 end
 
 TAC.Hooks.Add("TAC.TransferConfig", "TAC.Run", TAC.Run)
@@ -623,6 +687,15 @@ TAC.Hooks.Add("TAC.TransferConfig", "TAC.Run", TAC.Run)
 --- Plugin Receiver ---
 
 function TAC.LoadCode(Code, File)
+	if not Code then
+		return TAC.Print(
+			PRINT_ERROR,
+			"Plugins",
+			"Invalid file format provided `%s`",
+			File
+		)
+	end
+
 	Code = CompileString(Code, File or "MISSING")
 	
 	if Code then
@@ -634,6 +707,96 @@ TAC.Atlas:Listen("Plugin", "TAC.Plugins", MODE_DONE, function(Stage, File, Code)
 	TAC.LoadCode(Code, File)
 end)
 
+--- Security Helper ---
+
+function TAC.IsSecure(Function)
+	local Environment = getfenv(Function)
+
+	if Environment == TAC.Environment then
+		return true
+	end
+	
+	local ID, Entry = TAC.Detour.Find(Function)
+
+	if ID ~= nil then
+		return true
+	end
+
+	return TAC[Function] ~= nil
+end
+
+--- Local Detours ---
+
+TAC.Detour.Register("getfenv", function(Original, ...)
+	local Environment = Original(...)
+
+	if Environment == TAC.Environment then
+		return _G
+	end
+
+	return Environment
+end)
+
+TAC.Detour.Register("setfenv", function(Original, Location, ...)
+	local Environment = getfenv(Location, ...)
+
+	if Environment == TAC.Environment then
+		return Location
+	end
+
+	return Original(Location, ...)
+end)
+
+TAC.Detour.Register("debug.getfenv", function(Original, ...)
+	local Environment = Original(...)
+
+	if Environment == TAC.Environment then
+		return _G
+	end
+
+	return Environment
+end)
+
+TAC.Detour.Register("debug.setfenv", function(Original, Location, ...)
+	local Environment = debug.getfenv(Location, ...)
+
+	if Environment == TAC.Environment then
+		return Location
+	end
+
+	return Original(Location, ...)
+end)
+
+TAC.Detour.Register("debug.getlocal", function(Original, ...)
+	local Name, Value = Original(...)
+
+	if Name ~= nil then 
+		if isfunction(Value) and TAC.IsSecure(Value) then
+			return "(*temporary)", TAC.Random()
+		elseif Value == TAC.Environment then
+			return "(*temporary)", TAC.Random()
+		end
+	end
+
+	return Name, Value
+end)
+
+TAC.Detour.Register("debug.getupvalue", function(Original, Function, ...)
+	local Name, Value = Original(Function, ...)
+
+	if Name ~= nil then 
+		if isfunction(Function) and TAC.IsSecure(Function) then
+			return TAC.Random(), TAC.Random()
+		elseif isfunction(Value) and TAC.IsSecure(Value) then
+			return TAC.Random(), TAC.Random()
+		elseif Value == TAC.Environment then
+			return TAC.Random(), TAC.Random()
+		end
+	end
+
+	return Name, Value
+end)
+
 --- Debug Mode ---
 
 local Debug = true
@@ -642,7 +805,7 @@ if Debug then
 	TAC.Print(
 		PRINT_DEBUG,
 		"Debug",
-		"Trinity Debug Enabled!"
+		"Trinity Debug Enabled"
 	)
 
 	concommand.Add("tac_globalize", function()
@@ -651,7 +814,7 @@ if Debug then
 		TAC.Print(
 			PRINT_DEBUG,
 			"Debug",
-			"Object `%s` dumped to globals!",
+			"Object `%s` dumped to globals",
 			tostring(_G.TAC)
 		)
 	end)

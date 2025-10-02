@@ -16,7 +16,7 @@ concommand.Add("tac_cout", function()
 	TAC.Print(
 		PRINT_DEBUG,
 		"Debug",
-		"Dumped %i indexes from TAC!",
+		"Dumped %i indexes from TAC",
 		table.Count(TAC)
 	)
 end)
@@ -27,7 +27,7 @@ concommand.Add("tac_reload", function()
 	TAC.Print(
 		PRINT_DEBUG,
 		"Debug",
-		"Reloaded main file!"
+		"Reloaded main file"
 	)
 end)
 

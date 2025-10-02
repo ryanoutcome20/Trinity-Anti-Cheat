@@ -1,7 +1,9 @@
 local Breaker = GetRenderTarget("Breaker", 256, 256)
 
 function TAC.Breakers.ESP()
-	if not TAC.Config.Breakers.ESP.Enabled then
+	local Config = TAC.Config.ESP
+	
+	if not Config.Enabled then
 		return
 	end
 	

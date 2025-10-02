@@ -10,14 +10,14 @@ end
 function TAC.Punishment.LoadStubs(Player)
 	if Player and not Player:IsSuperAdmin() then
 		Player:tAlert(
-			"This command is restricted to Super Admin only!",
+			"This command is restricted to Super Admin only",
 			NOTIFY_ERROR
 		)
 		
 		TAC.Print(
 			PRINT_WARN,
 			"Punishment",
-			"Blocked client `%s` from reloading pStubs!", 
+			"Blocked client `%s` from reloading pStubs", 
 			Player:Name()
 		)
 		
@@ -53,11 +53,11 @@ function TAC.Punishment.Valid(Player, Config, isToken, noDelay)
 		return
 	end
 	
-	if TAC.Config.Punishment.ignoreStaff and TAC.IsStaff(Player) then
+	if TAC.Config.Punishment.IgnoreStaff and TAC.IsStaff(Player) then
 		return
 	end
 	
-	if TAC.Config.Punishment.globalFilter and not TAC.globalFilterCallback(Player, Config) then
+	if TAC.Config.Punishment.GlobalFilter and not TAC.GlobalFilterCallback(Player, Config) then
 		return
 	end
 	

@@ -73,6 +73,6 @@ function Player:tHeader()
         TAC.Fix(self:Name()),
         self:SteamID(),
         self:SteamID64(),
-        self:IPAddress()
+        TAC.IP(self)
     )
 end

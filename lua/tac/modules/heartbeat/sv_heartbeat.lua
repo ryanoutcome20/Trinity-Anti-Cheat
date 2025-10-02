@@ -9,7 +9,7 @@ function TAC.Heartbeat.Check(Player)
         return TAC.Print(
             PRINT_WARN,
             "Heartbeat",
-            "Attempted to verify type `%s` which isn't valid!",
+            "Attempted to verify type `%s` which isn't valid",
             type(Player)
         )
     end

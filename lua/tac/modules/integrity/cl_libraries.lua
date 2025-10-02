@@ -16,16 +16,7 @@ function TAC.Libraries.Run()
 		end
 	end
 	
-	-- Command list.
-	if Config.Hook then
-		local Size = TAC.Sizes.Hooks.Size or "nothing"
-
-		if Size ~= Config.Hooks then
-			return TAC.Flag("Libraries", "Bad Libraries [hook; expected: %i; got: %s]", Config.Hooks, Size)
-		end
-	end
-	
-	-- Command list.
+	-- Net list.
 	if Config.Net then		
 		local Size = TAC.Sizes.Net.Size or "nothing"
 		

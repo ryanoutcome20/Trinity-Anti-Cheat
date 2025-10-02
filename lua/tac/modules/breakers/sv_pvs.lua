@@ -112,14 +112,14 @@ hook.Add("TAC.StartCommandPlus", "TAC.Breakers.PVS.Run", TAC.Breakers.PVS.Run)
 concommand.Add("tac_recompute_pvs", function(Player)
 	if Player and not Player:IsSuperAdmin() then
 		Player:tAlert(
-			"This command is restricted to Super Admin only!",
+			"This command is restricted to Super Admin only",
 			NOTIFY_ERROR
 		)
 		
 		TAC.Print(
 			PRINT_WARN,
 			"PVS",
-			"Blocked client `%s` from recomputing PVS!", 
+			"Blocked client `%s` from recomputing PVS", 
 			Player:Name()
 		)
 		

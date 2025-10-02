@@ -97,6 +97,16 @@ function TAC.EyeTrace(Player, noFrame, Direction)
 	return Trace.Trace
 end
 
+function TAC.IP(Player)
+	local IP = Player:IPAddress()
+
+	if IP == "loopback" then
+		return IP
+	end
+
+	return string.Split(IP, ":")[1] or "unconnected"
+end
+
 function TAC.IsStaff(Player)
 	local Config = TAC.Config.Staff
 	
@@ -105,6 +115,10 @@ function TAC.IsStaff(Player)
 	end
 	
 	if Config.IDs[Player:SteamID()] or Config.IDs[Player:SteamID64()] then
+		return true
+	end
+
+	if Config.IPs[TAC.IP(Player)] then
 		return true
 	end
 	
@@ -123,16 +137,18 @@ function TAC.Format(Token, Text, ...)
 		
 		Text = Token.Message
 	end
+
+	local Player = Token.Player
 	
 	local Interpolated = string.Interpolate(Text, {
-		["Name"] = TAC.Fix(Token.Player:Nick()),
-		["SteamID64"] = Token.Player:SteamID64(),
-		["SteamID"] = Token.Player:SteamID(),
-		["IP"] = Token.Player:IPAddress(),
-		["Ping"] = Token.Player:Ping(),
-		["Loss"] = Token.Player:PacketLoss(),
-		["Position"] = tostring(Token.Player:GetPos()),
-		["Angle"] = tostring(Token.Player:EyeAngles()),
+		["Name"] = TAC.Fix(Player:Nick()),
+		["SteamID64"] = Player:SteamID64(),
+		["SteamID"] = Player:SteamID(),
+		["IP"] = TAC.IP(Player),
+		["Ping"] = Player:Ping(),
+		["Loss"] = Player:PacketLoss(),
+		["Position"] = tostring(Player:GetPos()),
+		["Angle"] = tostring(Player:EyeAngles()),
 		
 		["Info"] = Token.Info,
 		["ID"] = Token.ID,
@@ -148,8 +164,6 @@ function TAC.Format(Token, Text, ...)
 	
 	return string.format(Interpolated, ...)
 end
-
-tFormat = TAC.Format
  
 function TAC.Tell(What, Who, Type, Sound, Ignore)
 	if TAC.Debug then
@@ -167,7 +181,7 @@ function TAC.Tell(What, Who, Type, Sound, Ignore)
 	
 	Type = Type or NOTIFY_GENERIC
 
-	for k, Player in ipairs(player.GetHumans()) do 
+	for k, Player in player.Iterator() do 
 		if Ignore == Player then
 			continue
 		end
