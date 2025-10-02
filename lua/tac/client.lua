@@ -17,7 +17,6 @@ TAC.Garbage = gcinfo()
 
 TAC.Sizes = {
 	Commands = {Key = concommand.GetTable, Index = 1},
-	Hooks = {Key = hook.GetTable, Index = 1},
 	Net = {Key = net.Receivers, Index = -1}
 }
 
@@ -722,12 +721,6 @@ TAC.Detour.Register("getfenv", function(Original, ...)
 	local Environment = Original(...)
 
 	if Environment == TAC.Environment then
-		TAC.Print(
-			PRINT_DEBUG,
-			"getfenv",
-			"Faked env"
-		)
-
 		return _G
 	end
 
@@ -738,12 +731,6 @@ TAC.Detour.Register("setfenv", function(Original, Location, ...)
 	local Environment = getfenv(Location, ...)
 
 	if Environment == TAC.Environment then
-		TAC.Print(
-			PRINT_DEBUG,
-			"setfenv",
-			"Blocked env"
-		)
-
 		return Location
 	end
 
@@ -754,12 +741,6 @@ TAC.Detour.Register("debug.getfenv", function(Original, ...)
 	local Environment = Original(...)
 
 	if Environment == TAC.Environment then
-		TAC.Print(
-			PRINT_DEBUG,
-			"getfenv",
-			"Faked env"
-		)
-
 		return _G
 	end
 
@@ -770,12 +751,6 @@ TAC.Detour.Register("debug.setfenv", function(Original, Location, ...)
 	local Environment = debug.getfenv(Location, ...)
 
 	if Environment == TAC.Environment then
-		TAC.Print(
-			PRINT_DEBUG,
-			"setfenv",
-			"Blocked env"
-		)
-
 		return Location
 	end
 

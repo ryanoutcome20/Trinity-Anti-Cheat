@@ -78,10 +78,7 @@ Config.Integrity = {
 		
 		Command = true,
 		Commands = 1,
-		
-		Hook = true,
-		Hooks = 19,
-		
+				
 		Net = true,
 		Nets = 4
 	}
