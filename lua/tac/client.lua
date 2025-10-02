@@ -2,6 +2,16 @@
 --[[ Trinity Anti-Cheat ]]--
 --[[ ~~~~~~~~~~~~~~~~~~ ]]--
 
+--- Anti-Hooking ---
+
+local NOP = function() end
+
+for i = 1, 10 do
+	jit.flush()
+		jit.attach(NOP, "trace")
+	jit.flush()
+end
+
 --- Setup ---
 
 local TAC = { }
