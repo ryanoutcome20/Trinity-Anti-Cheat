@@ -668,12 +668,6 @@ pStub.Register("Command Enforcer", {
 			Value = "0",
 			Patch = true,
 			Log = false
-		},
-
-		["m_yaw"] = {
-			Value = "0.22",
-			Patch = false,
-			Log = true
 		}
 	},
 	
