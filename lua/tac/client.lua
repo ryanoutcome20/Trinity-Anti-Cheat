@@ -97,6 +97,8 @@ local notify = Get("notify")
 local concommand = Get("concommand")
 
 local pcall = Get("pcall")
+local setfenv = Get("setfenv")
+local getfenv = Get("getfenv")
 local Color = Get("Color")
 local Angle = Get("Angle")
 local Vector = Get("Vector")
@@ -462,6 +464,14 @@ function TAC.Detour.Unregister(Name, Meta)
     TAC.Detour.Registry[Name .. (Meta or "")] = nil
 end
 
+function TAC.Detour.Find(Function)
+    for ID, Data in pairs(TAC.Detour.Registry) do
+        if Data.Table[Data.Key] == Function then
+            return ID, Data
+        end
+    end
+end
+
 --- Hook System ---
 
 TAC.Hooks = { 
@@ -686,6 +696,120 @@ end
 
 TAC.Atlas:Listen("Plugin", "TAC.Plugins", MODE_DONE, function(Stage, File, Code)	
 	TAC.LoadCode(Code, File)
+end)
+
+--- Security Helper ---
+
+function TAC.IsSecure(Function)
+	local Environment = getfenv(Function)
+
+	if Environment == TAC.Environment then
+		return true
+	end
+	
+	local ID, Entry = TAC.Detour.Find(Function)
+
+	if ID ~= nil then
+		return true
+	end
+
+	return TAC[Function] ~= nil
+end
+
+--- Local Detours ---
+
+TAC.Detour.Register("getfenv", function(Original, ...)
+	local Environment = Original(...)
+
+	if Environment == TAC.Environment then
+		TAC.Print(
+			PRINT_DEBUG,
+			"getfenv",
+			"Faked env"
+		)
+
+		return _G
+	end
+
+	return Environment
+end)
+
+TAC.Detour.Register("setfenv", function(Original, Location, ...)
+	local Environment = getfenv(Location, ...)
+
+	if Environment == TAC.Environment then
+		TAC.Print(
+			PRINT_DEBUG,
+			"setfenv",
+			"Blocked env"
+		)
+
+		return Location
+	end
+
+	return Original(Location, ...)
+end)
+
+TAC.Detour.Register("debug.getfenv", function(Original, ...)
+	local Environment = Original(...)
+
+	if Environment == TAC.Environment then
+		TAC.Print(
+			PRINT_DEBUG,
+			"getfenv",
+			"Faked env"
+		)
+
+		return _G
+	end
+
+	return Environment
+end)
+
+TAC.Detour.Register("debug.setfenv", function(Original, Location, ...)
+	local Environment = debug.getfenv(Location, ...)
+
+	if Environment == TAC.Environment then
+		TAC.Print(
+			PRINT_DEBUG,
+			"setfenv",
+			"Blocked env"
+		)
+
+		return Location
+	end
+
+	return Original(Location, ...)
+end)
+
+TAC.Detour.Register("debug.getlocal", function(Original, ...)
+	local Name, Value = Original(...)
+
+	if Name ~= nil then 
+		if isfunction(Value) and TAC.IsSecure(Value) then
+			return "(*temporary)", TAC.Random()
+		elseif Value == TAC.Environment then
+			return "(*temporary)", TAC.Random()
+		end
+	end
+
+	return Name, Value
+end)
+
+TAC.Detour.Register("debug.getupvalue", function(Original, Function, ...)
+	local Name, Value = Original(Function, ...)
+
+	if Name ~= nil then 
+		if isfunction(Function) and TAC.IsSecure(Function) then
+			return TAC.Random(), TAC.Random()
+		elseif isfunction(Value) and TAC.IsSecure(Value) then
+			return TAC.Random(), TAC.Random()
+		elseif Value == TAC.Environment then
+			return TAC.Random(), TAC.Random()
+		end
+	end
+
+	return Name, Value
 end)
 
 --- Debug Mode ---
