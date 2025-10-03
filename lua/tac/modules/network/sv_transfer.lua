@@ -62,18 +62,22 @@ function TAC.Transfer.Start(Data)
 	
 	local Config = TAC.Config.Networking
 	
-	TAC.Timer(Player, Config.Delay, function(Player)
-		local ID = TAC.Transfer.ID(Player)
-		
-		timer.Create(
-			ID,
-			Config.Delay,
-			#mStub.Files * Config.Overreach,
-			function()
-				TAC.Transfer.Step(Player, ID)
-			end
-		)
-	end)
+	TAC.Timer(
+		Player, 
+		Config.Delay, 
+		function(self)
+			local ID = TAC.Transfer.ID(self)
+			
+			timer.Create(
+				ID,
+				Config.Delay,
+				#mStub.Files * Config.Overreach,
+				function()
+					TAC.Transfer.Step(self, ID)
+				end
+			)
+		end
+	)
 end
 
 gameevent.Listen("player_activate")

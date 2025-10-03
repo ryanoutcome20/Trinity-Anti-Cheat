@@ -17,9 +17,13 @@ function TAC.Punishment.Flag(Token)
 	end
 	
 	if Token.Decay ~= -1 then
-		TAC.Timer(Player, Token.Decay, function(Player)
-			Player:Set(Token.ID, math.max(Player:Grab(Token.ID, 0) - Increment, 0))
-		end)
+		TAC.Timer(
+			Player, 
+			Token.Decay, 
+			function(self)
+				self:Set(Token.ID, math.max(self:Grab(Token.ID, 0) - Increment, 0))
+			end
+		)
 	end
 	
 	if Token.AlertFlagsMinimum <= Token.FlagsCount then

@@ -46,11 +46,11 @@ function TAC.Commands.Hook(Player)
 	TAC.Timer(
 		Player, 
 		Await / 2,
-		function(Player)
-            if Player:Grab("Command Enforcer") then
+		function(self)
+            if self:Grab("Command Enforcer") then
                 return TAC.Punishment.Wrapper(
                     "Command Enforcer", 
-                    Player, 
+                    self, 
                     "Not Initialized"
                 )
             end

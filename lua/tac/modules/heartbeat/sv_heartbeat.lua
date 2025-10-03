@@ -27,7 +27,11 @@ function TAC.Heartbeat.Check(Player)
 end
 
 function TAC.Heartbeat.Initialize(Player)
-    TAC.Timer(Player, TAC.Config.Heartbeat.Await, TAC.Heartbeat.Check)
+    TAC.Timer(
+        Player, 
+        TAC.Config.Heartbeat.Await, 
+        TAC.Heartbeat.Check
+    )
 end
 
 Atlas:Listen("Heartbeat", "TAC.Heartbeat.Receive", MODE_DONE, TAC.Heartbeat.Receive)

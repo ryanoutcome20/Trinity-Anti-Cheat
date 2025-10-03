@@ -206,7 +206,7 @@ Config.Punishment = {
 
 		-- Extra
 		Verbose = false,
-		Callback = function(Player) 
+		Callback = function(self) 
 			return false
 		end
 	}),

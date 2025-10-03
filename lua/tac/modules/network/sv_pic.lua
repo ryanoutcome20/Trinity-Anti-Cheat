@@ -12,10 +12,10 @@ function TAC.Networking.PIC.Await(Player)
 	TAC.Timer(
 		Player, 
 		TAC.Config.PIC.Await, 
-		function(Player)
+		function(self)
 			TAC.Networking.PIC.Run(
-				Player,
-				Player:Grab("PIC", "nothing")
+				self,
+				self:Grab("PIC", "nothing")
 			)
 		end
 	)
