@@ -3,10 +3,14 @@
 -- breaks all synced timers.
 
 function TAC.TimeSinceCreated(Player)
+	assert(IsValid(Player) and Player:IsPlayer(), "No `Player` player provided to TAC.TimeSinceCreated!", type(Player))
+
 	return CurTime() - Player:GetCreationTime()
 end
 
 function TAC.TimeSinceSpawned(Player)
+	assert(IsValid(Player) and Player:IsPlayer(), "No `Player` player provided to TAC.TimeSinceSpawned!", type(Player))
+
 	local Time = Player:Grab("Spawned", math.huge)
 	
 	if Time == math.huge then
@@ -17,22 +21,24 @@ function TAC.TimeSinceSpawned(Player)
 end
 
 function TAC.SetSpawnTime(Player)
+	assert(IsValid(Player) and Player:IsPlayer(), "No `Player` player provided to TAC.SetSpawnTime!", type(Player))
+
 	Player:Set("Spawned", CurTime())
 end
 
 function TAC.LastTouchTime(Player)	
+	assert(IsValid(Player) and Player:IsPlayer(), "No `Player` player provided to TAC.LastTouchTime!", type(Player))
+
 	return CurTime() - Player:Grab("Last Touch Time", -1)
 end
 
 function TAC.UpdateLastTouchTime(ENT)
-	-- This isn't too bad but it still isn't great.
-	-- I'd like to have this in a global collision
-	-- hook.
+	assert(IsValid(ENT), "No `ENT` player provided to TAC.UpdateLastTouchTime!", type(ENT))
 	
-	if not IsValid(ENT) or not ENT:IsPlayer() then
+	if not ENT:IsPlayer() then
 		return
 	end
-	
+
 	ENT:AddCallback("PhysicsCollide", function(self, Data)
 		self:Set("Last Touch Time", CurTime())
 	end)
