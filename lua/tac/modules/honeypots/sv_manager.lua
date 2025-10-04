@@ -5,7 +5,7 @@ end
 function TAC.Honeypot.Receive(Stage, Player, Message)
 	local Time = CurTime()
 	
-	if Player:Grab("Honeypot Delay", 0) > Time then
+	if Player:Get("Honeypot Delay", 0) > Time then
 		return
 	end
 	

@@ -35,7 +35,8 @@ function TAC.Execute(Token, noDelay)
 	local Sound = onlyLog and TAC.Config.Alerts.Sounds.Notify or TAC.Config.Alerts.Sounds.Punishment
 
 	-- Log.
-	Player:tLog(
+	TAC.API.Log(
+		Player,
 		"PUNISHMENT", 
 		Formatted,
 		true

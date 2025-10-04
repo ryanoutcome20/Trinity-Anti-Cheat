@@ -14,7 +14,7 @@ function TAC.Heartbeat.Check(Player)
         )
     end
 
-    if not Player:Grab("Heartbeat", false) then
+    if not Player:Get("Heartbeat", false) then
         return TAC.Punishment.Wrapper(
             "Heartbeat",
             Player,

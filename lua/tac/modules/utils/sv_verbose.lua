@@ -87,7 +87,8 @@ function TAC.Verbose.Dump(Player)
 	
 	Dump = Dump .. TAC.Verbose.TableDumpFlat(Player.TAC or { })
 
-	Player:tLog(
+	TAC.API.Log(
+		Player,
 		"VERBOSE",
 		Dump,
 		"Verbose dump completed!"
@@ -96,7 +97,8 @@ end
 
 concommand.Add("tac_verbose_dump", function(Player, Command, Arguments)
 	if Player and not Player:IsSuperAdmin() then
-		Player:tAlert(
+		TAC.API.Alert(
+			Player,
 			"This command is restricted to Super Admin only",
 			NOTIFY_ERROR
 		)

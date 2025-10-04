@@ -10,8 +10,6 @@ TAC.SIGNITURE_GREEN = Color(66,255,96)
 TAC.SIGNITURE_RED = Color(225, 1, 26)
 TAC.SIGNITURE_GOLD = Color(245,194,71)
 
-local Player = FindMetaTable("Player")
-
 TAC.Print = include("external/sh_print.lua")
 
 function TAC.StandardAngle(Yaw)
@@ -74,7 +72,7 @@ end
 function TAC.EyeTrace(Player, noFrame, Direction)
 	local Time = CurTime()
 
-	local Trace = Player:Grab("Eye Trace")
+	local Trace = Player:Get("Eye Trace")
 	
 	if not noFrame and Trace and Time - Trace.Frame < 1 then
 		return Trace.Trace
@@ -190,7 +188,8 @@ function TAC.Tell(What, Who, Type, Sound, Ignore)
 			continue
 		end
 		
-		Player:tAlert(
+		TAC.API.Alert(
+			Player,
 			What,
 			Type,
 			Sound
@@ -210,41 +209,6 @@ function TAC.Timer(Player, Delay, Callback)
 			end
 		end
 	end)
-end
-
-function Player:Set(Key, Value)
-	self.TAC = self.TAC or { }
-	
-	self.TAC[Key] = Value
-	
-	return Value
-end
-
-function Player:Grab(Key, Default)
-	self.TAC = self.TAC or { }
-
-	return self.TAC[Key] or Default
-end
-
-function Player:tAlert(Message, Type, Sound)
-	if not Sound then
-		Sound = Type
-		Type = NOTIFY_GENERIC
-	end
-	
-	Atlas:Send(
-		"Alert", 
-		self, 
-		{
-			Message,
-			Type,
-			Sound
-		}
-	)
-end
-
-function Player:tPunishing()
-	return TAC.Punishment and TAC.Punishment.IsActive(self) or false
 end
 
 TAC.Enum(

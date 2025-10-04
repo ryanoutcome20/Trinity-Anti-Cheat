@@ -15,7 +15,7 @@ function TAC.Batch.Punish(Flags, cID, Player, Message, ...)
 end
 
 function TAC.Batch.StartCommandPlus(Player, cNew, cOld)
-	local Cache = Player:Grab("Batch Storage", { })
+	local Cache = Player:Get("Batch Storage", { })
 	
 	table.insert(Cache, {
 		cNew = cNew,

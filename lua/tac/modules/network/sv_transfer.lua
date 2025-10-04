@@ -22,7 +22,7 @@ function TAC.Transfer.Step(Player, ID)
 		return timer.Remove(ID)
 	end
 
-	local Index = Player:Grab("Transfer Step", 1)
+	local Index = Player:Get("Transfer Step", 1)
 	
 	local File = TAC.Transfer.Get(Index)
 	

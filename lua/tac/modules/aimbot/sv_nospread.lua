@@ -51,7 +51,7 @@ function TAC.Nospread.EntityFireBullets(Player, Pre)
 		return
 	end
 
-	local Samples = Player:Grab("Nospread Samples", { })
+	local Samples = Player:Get("Nospread Samples", { })
 		
 	table.insert(Samples, 1, {
 		Pre = Pre,
@@ -66,7 +66,7 @@ function TAC.Nospread.PostEntityFireBullets(Player, Post)
 		return
 	end
 	
-	local Samples = Player:Grab("Nospread Samples", { })
+	local Samples = Player:Get("Nospread Samples", { })
 	
 	local Sample = Samples[1]
 	

@@ -28,7 +28,7 @@ function TAC.Accuracy.Compute(Player, Data)
 		return
 	end
 	
-	local cOld = Player:Grab("SCP")
+	local cOld = Player:Get("SCP")
 	
 	if not cOld then
 		return
@@ -36,7 +36,7 @@ function TAC.Accuracy.Compute(Player, Data)
 	
 	local Time = CurTime()
 	
-	local Info = Player:Grab("Accuracy Info", {
+	local Info = Player:Get("Accuracy Info", {
 		Last = Time,
 		Shots = 0,
 		Hits = 0

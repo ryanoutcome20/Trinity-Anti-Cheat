@@ -9,7 +9,7 @@ function TAC.Punishment.Flag(Token)
 	local Increment = Token.Increment or 1
 	local Player = Token.Player
 	
-	Token.FlagsCount = Player:Grab(Token.ID, 0) + Increment
+	Token.FlagsCount = Player:Get(Token.ID, 0) + Increment
 	
 	if Player:Set(Token.ID, Token.FlagsCount) >= Token.Maximum then
 		Player:Set(Token.ID, 0)
@@ -21,7 +21,7 @@ function TAC.Punishment.Flag(Token)
 			Player, 
 			Token.Decay, 
 			function(self)
-				self:Set(Token.ID, math.max(self:Grab(Token.ID, 0) - Increment, 0))
+				self:Set(Token.ID, math.max(self:Get(Token.ID, 0) - Increment, 0))
 			end
 		)
 	end

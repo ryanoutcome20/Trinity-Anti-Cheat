@@ -11,7 +11,7 @@ end
 function TAC.TimeSinceSpawned(Player)
 	assert(IsValid(Player) and Player:IsPlayer(), "No `Player` player provided to TAC.TimeSinceSpawned!", type(Player))
 
-	local Time = Player:Grab("Spawned", math.huge)
+	local Time = Player:Get("Spawned", math.huge)
 	
 	if Time == math.huge then
 		return Time
@@ -29,7 +29,7 @@ end
 function TAC.LastTouchTime(Player)	
 	assert(IsValid(Player) and Player:IsPlayer(), "No `Player` player provided to TAC.LastTouchTime!", type(Player))
 
-	return CurTime() - Player:Grab("Last Touch Time", -1)
+	return CurTime() - Player:Get("Last Touch Time", -1)
 end
 
 function TAC.UpdateLastTouchTime(ENT)

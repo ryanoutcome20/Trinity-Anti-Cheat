@@ -25,6 +25,9 @@ include("tac/stubs/module_stubs.lua")
 MsgN("  Checking debug file")
 include("tac/debug.lua")
 
+MsgN("  Loading API")
+include("tac/api.lua")
+
 MsgN("  Loading base")
 include("tac/base.lua")
 

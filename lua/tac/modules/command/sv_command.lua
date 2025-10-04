@@ -47,7 +47,7 @@ function TAC.Commands.Hook(Player)
 		Player, 
 		Await / 2,
 		function(self)
-            if self:Grab("Command Enforcer") then
+            if self:Get("Command Enforcer") then
                 return TAC.Punishment.Wrapper(
                     "Command Enforcer", 
                     self, 
@@ -80,7 +80,7 @@ function TAC.Commands.Setup(Player)
 end
 
 function TAC.Commands.Receiver(Stage, Player, Slots)
-    local Cache = Player:Grab("Command Enforcer")
+    local Cache = Player:Get("Command Enforcer")
 
     if not Cache then
         return
@@ -91,7 +91,8 @@ function TAC.Commands.Receiver(Stage, Player, Slots)
         
         if not Cached or Input ~= Cached.Value then
             if Cached.Log then
-                Player:tLog(
+                TAC.API.Log(
+                    Player,
                     "Commands", 
                     string.format(
                         "Got incorrect command match [got: %s; expected: %s; on: %s]",

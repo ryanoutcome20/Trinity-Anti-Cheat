@@ -7,7 +7,7 @@ function TAC.Detours.Whitelisted(Player, Source, What)
 		return true
 	end
 	
-	local Amount = Player:Grab("Whitelist Counter", 0)
+	local Amount = Player:Get("Whitelist Counter", 0)
 	
 	if Amount == 0 then
 		return false
@@ -19,7 +19,7 @@ function TAC.Detours.Whitelisted(Player, Source, What)
 end
 
 function TAC.Detours.IncrementWhitelist(Player)
-	Player:Set("Whitelist Counter", Player:Grab("Whitelist Counter", 0) + 1)
+	Player:Set("Whitelist Counter", Player:Get("Whitelist Counter", 0) + 1)
 end
 
 local BroadcastLua = BroadcastLua

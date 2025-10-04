@@ -14,7 +14,8 @@ hook.Add("TAC.TransferStopped", "TAC.Networking.SendConfig", TAC.Networking.Send
 
 concommand.Add("tac_reload_config", function(Player)
 	if Player and not Player:IsSuperAdmin() then
-		Player:tAlert(
+		TAC.API.Alert(
+			Player,
 			"This command is restricted to Super Admin only",
 			NOTIFY_ERROR
 		)

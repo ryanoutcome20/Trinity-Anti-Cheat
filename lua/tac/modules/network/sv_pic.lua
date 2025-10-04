@@ -15,7 +15,7 @@ function TAC.Networking.PIC.Await(Player)
 		function(self)
 			TAC.Networking.PIC.Run(
 				self,
-				self:Grab("PIC", "nothing")
+				self:Get("PIC", "nothing")
 			)
 		end
 	)
