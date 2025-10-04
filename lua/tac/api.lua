@@ -7,8 +7,8 @@ local Meta = FindMetaTable("Player")
 MsgN("  Initializing logging API")
 
 function TAC.API.Log(Player, Type, Text, Override)
-	assert(isstring(Type), "No `Type` string provided to Player tLog!", type(Type))
-	assert(isstring(Text), "No `Text` string provided to Player tLog!", type(Text))
+	assert(isstring(Type), "No `Type` string provided to TAC.API.Log!", type(Type))
+	assert(isstring(Text), "No `Text` string provided to TAC.API.Log!", type(Text))
 
     Type = string.upper(Type)
 
@@ -49,8 +49,8 @@ function TAC.API.Log(Player, Type, Text, Override)
 end
 
 function TAC.API.WritePlayerDirectory(Player, Directory, Text, useHeader, deleteData)
-	assert(isstring(Directory), "No `Directory` string provided to Player tWrite!", type(Directory))
-	assert(isstring(Text), "No `Text` string provided to Player tWrite!", type(Text))
+	assert(isstring(Directory), "No `Directory` string provided to TAC.API.WritePlayerDirectory!", type(Directory))
+	assert(isstring(Text), "No `Text` string provided to TAC.API.WritePlayerDirectory!", type(Text))
 
     Directory = TAC.API.GetPlayerDirectory(Player, Directory)
 
@@ -112,10 +112,22 @@ Meta.Set = TAC.API.Set
 MsgN("  Initializing alerts API")
 
 function TAC.API.Alert(Player, Message, Type, Sound)
+	assert(isstring(Message), "No `Message` string provided to TAC.API.Alert!", type(Message))
+
+	if not IsValid(Player) or not Player:IsPlayer() then
+		return
+	end
+
 	if not Sound then
-		Sound = Type
+		-- https://github.com/Facepunch/garrysmod/blob/a55a2c1b19c442eb4b5e9cebc260ed3b6d4598ff/garrysmod/gamemodes/sandbox/gamemode/cl_hints.lua#L34
+		Sound = "ambient/water/drip" .. math.random( 1, 4 ) .. ".wav"
+	end
+
+	if not Type then
 		Type = NOTIFY_GENERIC
 	end
+
+	MsgN("SENT:")
 	
 	Atlas:Send(
 		"Alert",
