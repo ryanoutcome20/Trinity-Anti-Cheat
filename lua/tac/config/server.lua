@@ -725,7 +725,8 @@ Config.PVS = {
 	
 	squareSize = 1,
 	squaredSize = 128,
-	intervalScale = 1
+	intervalScale = 1,
+	Step = 8
 }
 
 --- Spread Desyncer (Nospread Breaker) ---

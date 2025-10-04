@@ -1,4 +1,5 @@
 TAC.Breakers.PVS = {
+	Counter = 0,
 	Interval = engine.TickInterval()
 }
 
@@ -76,38 +77,46 @@ function TAC.Breakers.PVS.Predict(Player)
     return Data
 end
 
-function TAC.Breakers.PVS.Run(Player)
+function TAC.Breakers.PVS.Run()
 	local Config = TAC.Config.PVS
 	
 	if not Config.Enabled then
 		return
 	end
-	
-	local Positions = TAC.Breakers.PVS.Predict(Player)
 
-	local PVS = ents.FindInPVS(Player)
+	TAC.Breakers.PVS.Counter = (TAC.Breakers.PVS.Counter or 0) + 1 
 
-	for i = 1, #PVS do 
-		local Target = PVS[i]
-	
-		if not Target:IsPlayer() or Target == Player then
-			continue
-		end
+	if TAC.Breakers.PVS.Counter % Config.Step ~= 0 then
+		return
+	end
+
+	for k, Player in player.Iterator() do
+		local Positions = TAC.Breakers.PVS.Predict(Player)
+
+		local PVS = ents.FindInPVS(Player)
+
+		for i = 1, #PVS do 
+			local Target = PVS[i]
 		
-		local Validated = false
-		
-		for k = 1, #Positions do
-			if TAC.Breakers.PVS.Check(Player, Positions[k], Target) then
-				Validated = true
-				break
+			if not Target:IsPlayer() or Target == Player then
+				continue
 			end
+			
+			local Validated = false
+			
+			for k = 1, #Positions do
+				if TAC.Breakers.PVS.Check(Player, Positions[k], Target) then
+					Validated = true
+					break
+				end
+			end
+			
+			TAC.Breakers.PVS.Set(Player, Target, not Validated)
 		end
-		
-		TAC.Breakers.PVS.Set(Player, Target, not Validated)
 	end
 end
 
-hook.Add("TAC.StartCommandPlus", "TAC.Breakers.PVS.Run", TAC.Breakers.PVS.Run)
+hook.Add("Tick", "TAC.Breakers.PVS.Run", TAC.Breakers.PVS.Run)
 
 concommand.Add("tac_recompute_pvs", function(Player)
 	if Player and not Player:IsSuperAdmin() then
