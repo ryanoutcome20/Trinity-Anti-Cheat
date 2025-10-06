@@ -34,36 +34,6 @@ function TAC.Commands.BuildSlots()
     return Slots, Built
 end
 
-function TAC.Commands.Hook(Player)
-    if Player:IsBot() then
-        return
-    end
-
-    hook.Run("TAC.PreCommands", Player)
-
-    local Await = TAC.Config["Command Enforcer"].Await
-
-	TAC.Timer(
-		Player, 
-		Await / 2,
-		function(self)
-            if self:Get("Command Enforcer") then
-                return TAC.Punishment.Wrapper(
-                    "Command Enforcer", 
-                    self, 
-                    "Not Initialized"
-                )
-            end
-        end
-	)
-
-    TAC.Timer(
-		Player, 
-		Await, 
-		TAC.Commands.Hook
-	)
-end
-
 function TAC.Commands.Setup(Player)
     local Slots, Built = TAC.Commands.BuildSlots()
 
@@ -102,11 +72,14 @@ function TAC.Commands.Receiver(Stage, Player, Slots)
                     )
                 )
             else
-                MsgN("! Banned")
-                MsgN(Input)
-                MsgN(Cache[Name].Value)
-
-                PrintTable(Cache[Name])
+                TAC.Punishment.Wrapper(
+                    "Command Enforcer",
+                    Player,
+                    "Command Mismatch [values: %s ~= %s; name: %s]",
+                    Input,
+                    Cache[Name].Value,
+                    Name
+                )	
             end
         end
     end
@@ -119,7 +92,37 @@ function TAC.Commands.Receiver(Stage, Player, Slots)
     hook.Run("TAC.PostCommands", Player, Slots, Cache)
 end
 
-hook.Add("TAC.PreCommands", "TAC.Commands.Setup", TAC.Commands.Setup)
-hook.Add("PlayerInitialSpawn", "TAC.Commands.Hook", TAC.Commands.Hook)
+function TAC.Commands.Hook(Player)
+	if not IsValid(Player) or Player:IsBot() then
+		return
+	end
+
+    hook.Run("TAC.PreCommands", Player)
+
+    local Await = TAC.Config["Command Enforcer"].Await
+
+	TAC.Timer(
+		Player, 
+		Await / 2,
+		function(self)
+            if self:Get("Command Enforcer") then
+                return TAC.Punishment.Wrapper(
+                    "Command Enforcer", 
+                    self, 
+                    "Not Initialized"
+                )
+            end
+        end
+	)
+
+    TAC.Timer(
+		Player, 
+		Await, 
+		TAC.Commands.Hook
+	)
+end
 
 Atlas:Listen("Commands", "TAC.Commands.Receiver", MODE_DONE, TAC.Commands.Receiver)
+
+hook.Add("TAC.PreCommands", "TAC.Commands.Setup", TAC.Commands.Setup)
+hook.Add("TAC.TransferConfig", "TAC.Commands.Hook", TAC.Commands.Hook)

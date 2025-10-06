@@ -54,7 +54,7 @@ end
 function TAC.Transfer.Start(Data)
 	local Player = Player(Data.userid)
 	
-	if not Player or Player:IsBot() then
+	if not IsValid(Player) or Player:IsBot() then
 		return
 	end
 	
