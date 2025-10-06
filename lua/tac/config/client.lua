@@ -66,22 +66,35 @@ Config.InputGuard = {
 Config.MenuMovement = {
 	Enabled = true
 }
+ 
+--- Integrity ---
 
---- Pre-Init ---
+Config.Tracer = true
 
-Config.Integrity = {
-	Tracer = true,
-	PIC = true,
-	Stack = true,
-	Libraries = {
-		Enabled = true,
-		
-		Command = true,
-		Commands = 1,
-				
-		Net = true,
-		Nets = 4
-	}
+Config.PIC = true
+
+Config.Stack = true
+
+Config.Libraries = {
+	Enabled = true,
+	
+	Command = true,
+	Commands = 1,
+			
+	Net = true,
+	Nets = 4
+}
+
+Config.JITHooks = {
+	Enabled = true,
+
+	Lines = true,
+
+	Garbage = true,
+	Delta = 100,
+	Fill = 100,
+
+	Step = 0.5
 }
 
 --- Static Cheats / Scripts ---

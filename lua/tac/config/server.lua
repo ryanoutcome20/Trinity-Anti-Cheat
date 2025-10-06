@@ -630,7 +630,7 @@ pStub.Register("Accuracy", {
 	
 	Method = PUNISHMENT_LOG,
 
-	Distance = 400,
+	Distance = -1,
 	Window = 10,
 	ShotWait = 0.1,
 	MinimumAccuracy = 0.5
@@ -901,6 +901,21 @@ pStub.Register("Error Tracer", {
 	Client = true,
 	
 	Message = "Error: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
+--- JIT Hooks ---
+
+pStub.Register("JIT Hooks", {
+	Enabled = true,
+	Name = "JIT Hooks",
+	Description = "Occurs when a player detours a function or various internal just-in-time functions.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "JIT: {Contact}",
 	
 	Method = PUNISHMENT_LOG
 })

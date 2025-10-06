@@ -14,9 +14,11 @@ local function Scan()
 			if file.Exists(Name, "GAME") then
 				TAC.Flag("Binaries", "Bad Module [exists; name: %s]", Module)
 				Flag = true
+				break
 			elseif file.Read(Name, "GAME") ~= nil then
 				TAC.Flag("Binaries", "Bad Module [valid; name: %s]", Module)
 				Flag = true
+				break
 			end
 		end
 		

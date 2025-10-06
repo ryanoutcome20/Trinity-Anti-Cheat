@@ -325,6 +325,12 @@ TAC.Lists = {
 	Cache = { }
 }
 
+function TAC.Lists.GetStringCase(Name)
+	Name = string.Replace(Name, " ", "_")
+
+	return string.lower(Name)
+end
+
 function TAC.Lists.Merge(Name, Shared)
 	local Prefix = Shared and "sh_" or "cl_"
 
@@ -332,7 +338,7 @@ function TAC.Lists.Merge(Name, Shared)
 		return TAC.Lists.Cache[Name]
 	end
 
-	TAC.Lists.Cache[Name] = include("tac/lists/" .. Prefix .. string.lower(Name) .. ".lua")
+	TAC.Lists.Cache[Name] = include("tac/lists/" .. Prefix .. TAC.Lists.GetStringCase(Name) .. ".lua")
 	
 	return TAC.Lists.Cache[Name]
 end
@@ -796,6 +802,40 @@ TAC.Detour.Register("debug.getupvalue", function(Original, Function, ...)
 
 	return Name, Value
 end)
+
+local function list_c_functions(tbl, seen, prefix)
+    seen = seen or {}
+    prefix = prefix or "_G"
+    local results = {}
+
+    if seen[tbl] then
+        return results
+    end
+    seen[tbl] = true
+
+    for k, v in pairs(tbl) do
+        local path = prefix .. "." .. tostring(k)
+        local t = type(v)
+        if t == "function" then
+            local info = debug.getinfo(v)
+            if info.what == "C" then
+                table.insert(results, path)
+            end
+        elseif t == "table" then
+            local subresults = list_c_functions(v, seen, path)
+            for _, name in ipairs(subresults) do
+                table.insert(results, name)
+            end
+        end
+    end
+    return results
+end
+
+-- Example usage:
+local cfuncs = list_c_functions(_G)
+for _, name in SortedPairsByValue(cfuncs) do
+    print(string.sub(name, 4, #name))
+end
 
 --- Debug Mode ---
 

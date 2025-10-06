@@ -127,8 +127,6 @@ function TAC.API.Alert(Player, Message, Type, Sound)
 		Type = NOTIFY_GENERIC
 	end
 
-	MsgN("SENT:")
-	
 	Atlas:Send(
 		"Alert",
 		Player,

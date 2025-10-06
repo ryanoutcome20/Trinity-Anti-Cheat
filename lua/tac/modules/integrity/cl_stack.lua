@@ -52,7 +52,7 @@ function TAC.Stack.Caller()
 	timer.Simple(5, TAC.Stack.Caller)
 end
 
-if TAC.Config.Integrity.Stack then
+if TAC.Config.Stack then
 	timer.Simple(5, TAC.Stack.Caller)
 end
 
