@@ -6,22 +6,26 @@ function TAC.Punishment.Flag(Token)
 		return true
 	end
 	
-	local Increment = Token.Increment or 1
-	local Player = Token.Player
+	Token.Increment = Token.Increment or 1
+	Token.FlagsCount = Token.Player:Get(Token.ID, 0) + Token.Increment
 	
-	Token.FlagsCount = Player:Get(Token.ID, 0) + Increment
-	
-	if Player:Set(Token.ID, Token.FlagsCount) >= Token.Maximum then
-		Player:Set(Token.ID, 0)
+	if Token.Player:Set(Token.ID, Token.FlagsCount) >= Token.Maximum then
+		TAC.Punishment.ResetFlags(Token.Player, Token.ID)
 		return true
 	end
 	
 	if Token.Decay ~= -1 then
 		TAC.Timer(
-			Player, 
+			Token.Player, 
 			Token.Decay, 
 			function(self)
-				self:Set(Token.ID, math.max(self:Get(Token.ID, 0) - Increment, 0))
+				self:Set(
+					Token.ID, 
+					math.max(
+						self:Get(Token.ID, 0) - Token.Increment, 
+						0
+					)
+				)
 			end
 		)
 	end
@@ -32,7 +36,7 @@ function TAC.Punishment.Flag(Token)
 			Token.Alerts.Flags,
 			NOTIFY_GENERIC,
 			TAC.Config.Alerts.Sounds.Important,
-			Player
+			Token.Player
 		)
 	end
 	

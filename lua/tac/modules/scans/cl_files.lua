@@ -33,4 +33,4 @@ local function Scan()
 	end
 end
 
-hook.Add("TAC.Initialize", "TAC.Files", Detour)
+hook.Add("TAC.Initialize", "TAC.Files", Scan)

@@ -1,6 +1,6 @@
 local Listeners = TAC.Lists.Merge("Listener")
 
-hook.Add("TAC.Initialize", "TAC.SetupListeners", function()
+local function Scan()
     local Config = TAC.Config.Listeners
 
     if not Config.Enabled then
@@ -16,4 +16,6 @@ hook.Add("TAC.Initialize", "TAC.SetupListeners", function()
             hook.Remove(Name, "TAC.Listener." .. Name)
         end)
     end
-end)
+end
+
+hook.Add("TAC.Initialize", "TAC.SetupListeners", Scan)
