@@ -294,8 +294,6 @@ function TAC.FlagEx(Buffered, cID, Message, ...)
 		)
 	}
 
-	MsgN(Data.Message)
-
 	if Buffered then
 		TAC.Batch.Add(
 			"Flag", 
@@ -729,40 +727,6 @@ TAC.Detour.Register("debug.getupvalue", function(Original, Function, ...)
 
 	return Name, Value
 end)
-
-local function list_c_functions(tbl, seen, prefix)
-    seen = seen or {}
-    prefix = prefix or "_G"
-    local results = {}
-
-    if seen[tbl] then
-        return results
-    end
-    seen[tbl] = true
-
-    for k, v in pairs(tbl) do
-        local path = prefix .. "." .. tostring(k)
-        local t = type(v)
-        if t == "function" then
-            local info = debug.getinfo(v)
-            if info.what == "C" then
-                table.insert(results, path)
-            end
-        elseif t == "table" then
-            local subresults = list_c_functions(v, seen, path)
-            for _, name in ipairs(subresults) do
-                table.insert(results, name)
-            end
-        end
-    end
-    return results
-end
-
--- Example usage:
-local cfuncs = list_c_functions(_G)
-for _, name in SortedPairsByValue(cfuncs) do
-    print(string.sub(name, 4, #name))
-end
 
 --- Debug Mode ---
 
