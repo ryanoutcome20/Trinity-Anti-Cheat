@@ -69,7 +69,7 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 		return
 	end
 	
-	local cOld = Player:Grab("SCP")
+	local cOld = Player:Get("SCP")
 	local cNew = TAC.SCP.CopyMeta(Player, CUserCMD)
 		
 	if not cOld then

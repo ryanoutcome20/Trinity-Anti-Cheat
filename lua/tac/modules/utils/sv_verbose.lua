@@ -15,7 +15,6 @@ function TAC.Verbose.TableDumpFlat(Table)
         local Frame = Stack[#Stack]
         local Table, Indent = Frame.Table, Frame.Indent
 
-        -- initialize key list if not already
         if not Frame.Keys then
             Frame.Keys = { }
 			
@@ -56,11 +55,13 @@ function TAC.Verbose.TableDumpFlat(Table)
 end
 
 function TAC.Verbose.Dump(Player)
+	assert(IsValid(Player) and Player:IsPlayer(), "No `Player` player provided to TAC.Verbose.Dump!", type(Player))
+
 	local Position = Player:GetPos()
 	local Velocity = Player:GetVelocity()
 	
 	local Angle = Player:EyeAngles()
-	local CAngle = Player:GetAimVector():AngleEx(vector_origin)
+	local cAngle = Player:GetAimVector():AngleEx(vector_origin)
 	
 	local SWEP = Player:GetActiveWeapon()
 
@@ -76,7 +77,7 @@ function TAC.Verbose.Dump(Player)
 		Position.x, Position.y, Position.z,
 		Velocity.x, Velocity.y, Velocity.z,
 		Angle.x, Angle.y, Angle.z,
-		CAngle.x, CAngle.y, CAngle.z,
+		cAngle.x, cAngle.y, cAngle.z,
 		Player:GetMoveType(),
 		Player:InVehicle() and "yes" or "no",
 		SWEP
@@ -84,12 +85,43 @@ function TAC.Verbose.Dump(Player)
 	
 	Dump = Dump .. "\n\n---\n\n"
 	
-	
 	Dump = Dump .. TAC.Verbose.TableDumpFlat(Player.TAC or { })
 
-	Player:tLog(
+	TAC.API.Log(
+		Player,
 		"VERBOSE",
 		Dump,
 		"Verbose dump completed!"
 	)
 end
+
+concommand.Add("tac_verbose_dump", function(Player, Command, Arguments)
+	if Player and not Player:IsSuperAdmin() then
+		TAC.API.Alert(
+			Player,
+			"This command is restricted to Super Admin only",
+			NOTIFY_ERROR
+		)
+		
+		TAC.Print(
+			PRINT_WARN,
+			"PVS",
+			"Blocked client `%s` from recomputing PVS", 
+			Player:Name()
+		)
+		
+		return
+	end
+
+	local Name = Arguments[1]
+
+	if not Name then
+		return
+	end
+	
+	for k, Target in player.Iterator() do 
+		if Target:Name() == Name then
+			TAC.Verbose.Dump(Target)
+		end
+	end
+end)

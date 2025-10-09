@@ -8,7 +8,7 @@ function TAC.Extra.Keypresses(Player, Button)
 	local Key = Config.Keys[Button]
 	
 	if Key then
-		local Presses = Player:Grab("Keypresses", 0)
+		local Presses = Player:Get("Keypresses", 0)
 
 		if Config.MaximumLogs == -1 or Presses < Config.MaximumLogs then
 			TAC.Punishment.Wrapper("Suspicious Keypresses", Player, "Suspicious Keypresses [key: %s]", Key)

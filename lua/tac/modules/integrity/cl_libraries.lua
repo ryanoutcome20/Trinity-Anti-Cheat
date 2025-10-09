@@ -1,7 +1,7 @@
 TAC.Libraries = { }
 
 function TAC.Libraries.Run()
-	local Config = TAC.Config.Integrity.Libraries
+	local Config = TAC.Config.Libraries
 	
 	if not Config.Enabled then
 		return

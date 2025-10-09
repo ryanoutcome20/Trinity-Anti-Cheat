@@ -1,5 +1,5 @@
 function TAC.PIC.Run()
-	if not TAC.Config.Integrity.PIC then
+	if not TAC.Config.PIC then
 		return
 	end
 

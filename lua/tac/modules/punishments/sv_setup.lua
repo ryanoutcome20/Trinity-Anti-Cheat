@@ -9,7 +9,8 @@ end
 
 function TAC.Punishment.LoadStubs(Player)
 	if Player and not Player:IsSuperAdmin() then
-		Player:tAlert(
+		TAC.API.Alert(
+			Player,
 			"This command is restricted to Super Admin only",
 			NOTIFY_ERROR
 		)
@@ -49,7 +50,7 @@ function TAC.Punishment.Valid(Player, Config, isToken, noDelay)
 	end
 	
 	-- Global Checks.
-	if not noDelay and Player:tPunishing() then
+	if not noDelay and TAC.Punishment.IsActive(Player) then
 		return
 	end
 	

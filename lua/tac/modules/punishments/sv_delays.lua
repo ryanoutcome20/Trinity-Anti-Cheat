@@ -14,7 +14,8 @@ function TAC.Punishment.Delay(Token)
 	local Formatted = TAC.Format(Token, Token.FormatDelayedPunishment)
 		
 	-- Log.
-	Token.Player:tLog(
+	TAC.API.Log(
+		Token.Player,
 		"DELAY", 
 		Formatted
 	)

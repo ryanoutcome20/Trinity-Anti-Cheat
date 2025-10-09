@@ -6,6 +6,8 @@ local notification = _G.notification
 TAC.Atlas:Listen("Alert", "TAC.Alert", MODE_DONE, function(Mode, Data)	
 	local Message, Type, Sound = unpack(Data)
 	
+	assert(isstring(Message), "No `Message` string provided to TAC.Alert!", type(Message))
+
 	if tac_notify_popups:GetBool() then
 		notification.AddLegacy("[TAC]: " .. Message, Type, 8)
 		surface.PlaySound(Sound)

@@ -1,9 +1,8 @@
 local Player = FindMetaTable("Player")
 
 function Player:tLog(Type, Text, Override)
-	if not Type or not Text then 
-		return
-	end
+	assert(isstring(Type), "No `Type` string provided to Player tLog!", type(Type))
+	assert(isstring(Text), "No `Text` string provided to Player tLog!", type(Text))
 
     Type = string.upper(Type)
 
@@ -43,6 +42,9 @@ function Player:tLog(Type, Text, Override)
 end
 
 function Player:tWrite(Directory, Text, useHeader, deleteData)
+	assert(isstring(Directory), "No `Directory` string provided to Player tWrite!", type(Directory))
+	assert(isstring(Text), "No `Text` string provided to Player tWrite!", type(Text))
+
     Directory = self:tDir(Directory)
 
     file.CreateDir(string.GetPathFromFilename(Directory))
@@ -59,7 +61,7 @@ function Player:tDir(Directory)
         "%s/%s/%s", 
         TAC.Config.Logging.Directory,
         self:SteamID64(),
-        Directory
+        Directory or "error.txt"
     )
 end
 

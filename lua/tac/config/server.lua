@@ -206,7 +206,7 @@ Config.Punishment = {
 
 		-- Extra
 		Verbose = false,
-		Callback = function(Player) 
+		Callback = function(self) 
 			return false
 		end
 	}),
@@ -630,7 +630,7 @@ pStub.Register("Accuracy", {
 	
 	Method = PUNISHMENT_LOG,
 
-	Distance = 400,
+	Distance = -1,
 	Window = 10,
 	ShotWait = 0.1,
 	MinimumAccuracy = 0.5
@@ -668,10 +668,16 @@ pStub.Register("Command Enforcer", {
 			Value = "0",
 			Patch = true,
 			Log = false
+		},
+
+		["sv_allowcslua"] = {
+			Value = "0",
+			Patch = true,
+			Log = false
 		}
 	},
 	
-	Await = 5,
+	Await = 25,
 	
 	Flags = false,
 	Maximum = -1,
@@ -725,7 +731,8 @@ Config.PVS = {
 	
 	squareSize = 1,
 	squaredSize = 128,
-	intervalScale = 1
+	intervalScale = 1,
+	Step = 8
 }
 
 --- Spread Desyncer (Nospread Breaker) ---
@@ -814,34 +821,6 @@ pStub.Register("Input Guard Movement", {
 	Decay = 3
 })
 
---- Pre-Init Checksum ---
-
---[[
-	This will basically check all functions and variables
-	in pre-init to verify the integrity of the environment.
-	
-	Check your console on the clientside to get the PIC 
-	checksum. Be sure to not have any external cheats or
-	pre-autorun scripts running when you do this!
-	
-	The checksum won't print if you have silent clientside
-	mode enabled.
---]]
-
-pStub.Register("PIC", {
-	Enabled = true,
-	Name = "PIC",
-	Description = "Checks the players pre-init variables and generates a checksum to verify integrity.",
-	Category = "Integrity",
-	
-	Message = "Bad PIC Checksum: {Contact}",
-	
-	PIC = "387594818",
-	Await = 24,
-
-	Method = PUNISHMENT_LOG
-})
-
 --- Stack ---
 
 --[[
@@ -900,6 +879,21 @@ pStub.Register("Error Tracer", {
 	Client = true,
 	
 	Message = "Error: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
+--- JIT Hooks ---
+
+pStub.Register("JIT Hooks", {
+	Enabled = true,
+	Name = "JIT Hooks",
+	Description = "Occurs when a player detours a function or various internal just-in-time functions.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "JIT: {Contact}",
 	
 	Method = PUNISHMENT_LOG
 })

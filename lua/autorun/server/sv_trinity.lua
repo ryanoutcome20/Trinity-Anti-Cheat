@@ -25,6 +25,9 @@ include("tac/stubs/module_stubs.lua")
 MsgN("  Checking debug file")
 include("tac/debug.lua")
 
+MsgN("  Loading API")
+include("tac/api.lua")
+
 MsgN("  Loading base")
 include("tac/base.lua")
 
@@ -33,7 +36,7 @@ MsgN("  Caching resources")
 
 --- Config ---
 
-TAC.Version = "0.2.2"
+TAC.Version = "0.2.3"
 TAC.Edition = "Pre-Alpha"
 
 MsgN("  Loading config")

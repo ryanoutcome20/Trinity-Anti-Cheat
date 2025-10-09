@@ -2,8 +2,8 @@ TAC.Accuracy = { }
 
 function TAC.Accuracy.Process(Player, Hits, Shots, Target)
 	local Percentage = Hits / Shots
-	
-	if Percentage < 0 then
+
+	if Percentage < Target then
 		return
 	end
 	
@@ -28,7 +28,7 @@ function TAC.Accuracy.Compute(Player, Data)
 		return
 	end
 	
-	local cOld = Player:Grab("SCP")
+	local cOld = Player:Get("SCP")
 	
 	if not cOld then
 		return
@@ -36,7 +36,7 @@ function TAC.Accuracy.Compute(Player, Data)
 	
 	local Time = CurTime()
 	
-	local Info = Player:Grab("Accuracy Info", {
+	local Info = Player:Get("Accuracy Info", {
 		Last = Time,
 		Shots = 0,
 		Hits = 0
@@ -49,11 +49,7 @@ function TAC.Accuracy.Compute(Player, Data)
 	local Trace = Data.Trace
 
 	if IsValid(Trace.Entity) and Trace.Entity:IsPlayer() then
-		if Trace.Entity:GetVelocity() == vector_origin then
-			return
-		end
-
-		if cOld.Pos:Distance(Trace.Entity:GetPos()) > Config.Distance then
+		if Config.Distance == -1 and cOld.Pos:Distance(Trace.Entity:GetPos()) > Config.Distance then
 			Info.Hits = Info.Hits + 1
 		end
 	end
