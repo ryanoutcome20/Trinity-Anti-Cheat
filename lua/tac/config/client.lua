@@ -73,6 +73,8 @@ Config.Tracer = true
 
 Config.Stack = true
 
+Config.DebugSelf = true
+
 Config.Libraries = {
 	Enabled = true,
 	

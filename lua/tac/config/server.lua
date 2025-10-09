@@ -883,6 +883,21 @@ pStub.Register("Error Tracer", {
 	Method = PUNISHMENT_LOG
 })
 
+--- Debug Self ---
+
+pStub.Register("Debug Self", {
+	Enabled = true,
+	Name = "Debug Self",
+	Description = "Occurs when a player uses a pre-autorun script. Uses a logical flaw in most security scripts to detect them.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "Debug Self: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
 --- JIT Hooks ---
 
 pStub.Register("JIT Hooks", {
