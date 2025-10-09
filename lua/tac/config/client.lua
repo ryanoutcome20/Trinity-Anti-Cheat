@@ -71,8 +71,6 @@ Config.MenuMovement = {
 
 Config.Tracer = true
 
-Config.PIC = true
-
 Config.Stack = true
 
 Config.Libraries = {

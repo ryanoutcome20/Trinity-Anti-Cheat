@@ -821,34 +821,6 @@ pStub.Register("Input Guard Movement", {
 	Decay = 3
 })
 
---- Pre-Init Checksum ---
-
---[[
-	This will basically check all functions and variables
-	in pre-init to verify the integrity of the environment.
-	
-	Check your console on the clientside to get the PIC 
-	checksum. Be sure to not have any external cheats or
-	pre-autorun scripts running when you do this!
-	
-	The checksum won't print if you have silent clientside
-	mode enabled.
---]]
-
-pStub.Register("PIC", {
-	Enabled = true,
-	Name = "PIC",
-	Description = "Checks the players pre-init variables and generates a checksum to verify integrity.",
-	Category = "Integrity",
-	
-	Message = "Bad PIC Checksum: {Contact}",
-	
-	PIC = "387594818",
-	Await = 24,
-
-	Method = PUNISHMENT_LOG
-})
-
 --- Stack ---
 
 --[[

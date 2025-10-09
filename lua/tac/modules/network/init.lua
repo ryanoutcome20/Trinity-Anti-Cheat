@@ -1,6 +1,5 @@
 TAC.Networking = { }
 
-include("sv_pic.lua")
 include("sv_transfer.lua")
 include("sv_config_stream.lua")
 
