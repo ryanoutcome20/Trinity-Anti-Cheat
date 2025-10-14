@@ -21,7 +21,7 @@ function TAC.Detours.Whitelist.Whitelisted(Function, Info)
 
 	if tobool(Info.isfunc) and Info.what ~= "main" then
 		if Info.namewhat == "global" and not _G[Info.name] then
-			-- Raise an audit event?
+			-- TODO: Raise an audit event?
 			-- setfenv
 		end
 		
