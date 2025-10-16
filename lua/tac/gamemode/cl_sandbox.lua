@@ -22,7 +22,7 @@ setmetatable(_G.DarkRP, {
 	end
 })
 
-function ENTITY:getDarkRPVar(Key, ...)
+function ENTITY:getDarkRPVar(...)
 	local Caller = debug.getinfo(2)
 
 	if Caller.what == "C" then
@@ -36,7 +36,7 @@ PLAYER.getDarkRPVar = ENTITY.getDarkRPVar
 
 --- TTT Honeypot ---
 
-function ENTITY:IsDetective(Key, ...)
+function ENTITY:IsDetective(...)
 	local Caller = debug.getinfo(2)
 
 	if Caller.what == "C" then
@@ -48,7 +48,7 @@ end
 
 PLAYER.IsDetective = ENTITY.IsDetective
 
-function ENTITY:IsTraitor(Key, ...)
+function ENTITY:IsTraitor(...)
 	local Caller = debug.getinfo(2)
 
 	if Caller.what == "C" then
