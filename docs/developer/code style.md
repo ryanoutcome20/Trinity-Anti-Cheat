@@ -56,7 +56,7 @@ Try to limit your tables to using index-based tables instead of string-key-based
 
 Do not use numeric loops unless you need special conditions (looping backwards for `table.remove`).
 
-Only use string-key-based tables if you need to index into them or when designing it around `pair` loops is much too complex.
+Only use string-key-based tables if you need to index into them or designing it around `pair` loops is much too complex.
 
 ```lua
 local Names = {
@@ -175,7 +175,7 @@ end
 
 # Player Name
 
-If dealing with a player always use the variable name `Player`. If you cannot use `Player` then use `Target`. If dealing with more than one player then use the variable name specific to that use case. If inside of a sub-function such as `TAC.Timer` then use `self` for the Player. Examples include:
+If dealing with a player always use the variable name `Player`. If you cannot use `Player` then use `Target`. If dealing with more than one player then use the variable name specific to that use case. Examples include:
 
 ```lua
 hook.Add("PlayerDeath", "Example", function(Victim, Inflictor, Attacker)
@@ -195,14 +195,3 @@ hook.Add("StartCommand", "Example", function(Player, CUserCMD)
 	-- Code.
 end)
 ```
-
-```lua
-local function StartTimer(Player)
-	TAC.Timer(
-		Player,
-		5,
-		function(self)
-			-- Code.
-		end
-	)
-end
