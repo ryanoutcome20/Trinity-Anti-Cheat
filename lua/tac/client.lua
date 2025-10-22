@@ -553,6 +553,7 @@ end
 
 TAC.Localizers.Table.hook.Add = TAC.Hooks.Add
 TAC.Localizers.Table.hook.Remove = TAC.Hooks.Remove
+TAC.Localizers.Table.hook.Run = TAC.Hooks.Run
 
 --- Config System ---
 
