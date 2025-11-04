@@ -26,16 +26,24 @@ function TAC.Audits.Log(Player, Message)
 end
 
 function TAC.Audits.Receive(Stage, Player, Message, Source)
-	local Time = CurTime()
-	
-    local Last = Player:Get("Last Audit", 0) + 5.0
-
-	if Last > Time then
+	if not TAC.Config.Audits.Enabled then
 		return
 	end
-	
-	Player:Set("Last Audit", Time)
 
+	local Timeout = TAC.Config.Audits.Timeout
+
+	if Timeout ~= -1 then
+		local Time = CurTime()
+		
+		local Last = Player:Get("Last Audit", 0) + Timeout
+
+		if Last > Time then
+			return
+		end
+		
+		Player:Set("Last Audit", Time)
+	end
+	
     local Formatted = string.format(
         "%s [%s] Raised audit: %s [%s]",
         TAC.Fix(Player:Nick()),

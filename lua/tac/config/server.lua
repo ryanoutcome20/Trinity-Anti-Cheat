@@ -72,6 +72,20 @@ Config.Staff = {
 	}
 }
 
+--- Audits ---
+
+--[[
+	Handles giving server administrators a pointer to look into a player due
+	to specific check failures or clientside issues (often bypasses or attempts).
+
+	Set timeout to -1 to disable it completely (not recommended).
+--]]
+
+Config.Audits = {
+	Enabled = true,
+	Timeout = 5
+}
+
 --- StartCommandPlus ---
 
 --[[
