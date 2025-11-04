@@ -37,7 +37,7 @@ function TAC.Audits.Receive(Stage, Player, Message, Source)
 	Player:Set("Last Audit", Time)
 
     local Formatted = string.format(
-        "%s [%s] Raised audit: `%s` [%s]",
+        "%s [%s] Raised audit: %s [%s]",
         TAC.Fix(Player:Nick()),
         Player:SteamID64(),
         TAC.Fix(Message),

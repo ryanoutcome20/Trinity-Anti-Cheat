@@ -363,6 +363,26 @@ function TAC.Match(String)
 	return false
 end
 
+--- Audits ----
+
+local Keys = { }
+
+function TAC.Audit(Message, Source, Key)
+	if Key ~= nil then
+		if Keys[Key] then
+			return
+		end
+
+		Keys[Key] = true
+	end
+
+	TAC.Atlas:Send(
+		"Audit",
+		Message,
+		Source
+	)
+end
+
 --- Function Buffers ---
 
 function TAC.GenerateBuffer(Function, noFormat)

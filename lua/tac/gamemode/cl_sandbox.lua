@@ -26,7 +26,10 @@ function ENTITY:getDarkRPVar(...)
 	local Caller = debug.getinfo(2)
 
 	if Caller.what == "C" then
-		-- TODO: Raise an audit event?
+		TAC.Audit(
+			"DarkRP getDarkRPVar called from C/C++ source?", 
+			"DarkRP"
+		)
 	end
 
 	TAC.CaptureStack("getDarkRPVar")
@@ -40,7 +43,10 @@ function ENTITY:IsDetective(...)
 	local Caller = debug.getinfo(2)
 
 	if Caller.what == "C" then
-		-- TODO: Raise an audit event?
+		TAC.Audit(
+			"TTT IsDetective called from C/C++ source?", 
+			"TTT"
+		)
 	end
 
 	TAC.CaptureStack("IsDetective")
@@ -52,7 +58,10 @@ function ENTITY:IsTraitor(...)
 	local Caller = debug.getinfo(2)
 
 	if Caller.what == "C" then
-		-- TODO: Raise an audit event?
+		TAC.Audit(
+			"TTT IsTraitor called from C/C++ source?", 
+			"TTT"
+		)
 	end
 
 	TAC.CaptureStack("IsTraitor")
