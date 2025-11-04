@@ -70,8 +70,10 @@ Wrap("getmetatable")
 Wrap("setmetatable")
 Wrap("FindMetaTable")
 Wrap("print")
+Wrap("Msg")
 Wrap("MsgN")
 Wrap("MsgC")
+Wrap("MsgAll")
 
 --- Classes ---
 
