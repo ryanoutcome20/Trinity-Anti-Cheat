@@ -70,7 +70,7 @@ function TAC.Transfer.Start(Data)
 			
 			timer.Create(
 				ID,
-				Config.Delay,
+				Config.Step,
 				#mStub.Files * Config.Overreach,
 				function()
 					TAC.Transfer.Step(self, ID)
