@@ -230,8 +230,8 @@ Config.Punishment = {
 
 Config.Networking = {
 	Overreach = 2,
-	Delay = 0.1,
-	Step = 0.15
+	Delay = 0.25,
+	Step = 1
 }
 
 pStub.Register("Networking Batch", {
@@ -691,7 +691,7 @@ pStub.Register("Command Enforcer", {
 		}
 	},
 	
-	Await = 25,
+	Await = 45,
 	
 	Flags = false,
 	Maximum = -1,
@@ -1050,7 +1050,7 @@ pStub.Register("Heartbeat", {
 	
 	Message = "Failed to load! Rejoin!",
 	
-	Await = 10,
+	Await = 30,
 
 	Method = PUNISHMENT_KICK
 })
