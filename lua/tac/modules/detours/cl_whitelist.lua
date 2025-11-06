@@ -21,15 +21,18 @@ function TAC.Detours.Whitelist.Whitelisted(Function, Info)
 
 	if tobool(Info.isfunc) and Info.what ~= "main" then
 		if Info.namewhat == "global" and not _G[Info.name] then
-			-- Raise an audit event?
-			-- setfenv
+			TAC.Audit(
+				"Whitelist encountered secure shell environment, possible bypass attempt?", 
+				"Detours",
+				"Shell Environment"
+			)
 		end
 		
 		return true
 	end
 	
-	local Hash = Whitelist.Hash(Function)
-	
+	local Hash = Whitelist.Hash(Function, Info.short_src)
+
 	if Hash and Whitelist.Hashes[Hash] then
 		Whitelist.Counter = math.max(Whitelist.Counter - 1, 0)
 		return true
@@ -51,8 +54,8 @@ function TAC.Detours.Whitelist.Hash(Function, Identifier)
 		return TAC.Detours.Whitelist.Dumps[Function]
 	end
 
-	local Valid, Dump = pcall(string.dump, Function)
-	
+	local Valid, Dump = pcall(string.dump, Function, true)
+
 	if not Valid then
 		return 
 	end

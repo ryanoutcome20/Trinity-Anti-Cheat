@@ -72,6 +72,20 @@ Config.Staff = {
 	}
 }
 
+--- Audits ---
+
+--[[
+	Handles giving server administrators a pointer to look into a player due
+	to specific check failures or clientside issues (often bypasses or attempts).
+
+	Set timeout to -1 to disable it completely (not recommended).
+--]]
+
+Config.Audits = {
+	Enabled = true,
+	Timeout = 5
+}
+
 --- StartCommandPlus ---
 
 --[[
@@ -216,8 +230,8 @@ Config.Punishment = {
 
 Config.Networking = {
 	Overreach = 2,
-	Delay = 0.1,
-	Step = 0.15
+	Delay = 0.25,
+	Step = 1
 }
 
 pStub.Register("Networking Batch", {
@@ -677,7 +691,7 @@ pStub.Register("Command Enforcer", {
 		}
 	},
 	
-	Await = 25,
+	Await = 45,
 	
 	Flags = false,
 	Maximum = -1,
@@ -883,6 +897,21 @@ pStub.Register("Error Tracer", {
 	Method = PUNISHMENT_LOG
 })
 
+--- Debug Self ---
+
+pStub.Register("Debug Self", {
+	Enabled = true,
+	Name = "Debug Self",
+	Description = "Occurs when a player uses a pre-autorun script. Uses a logical flaw in most security scripts to detect them.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "Debug Self: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
 --- JIT Hooks ---
 
 pStub.Register("JIT Hooks", {
@@ -1021,7 +1050,7 @@ pStub.Register("Heartbeat", {
 	
 	Message = "Failed to load! Rejoin!",
 	
-	Await = 10,
+	Await = 30,
 
 	Method = PUNISHMENT_KICK
 })
