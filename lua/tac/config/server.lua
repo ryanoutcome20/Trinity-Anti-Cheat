@@ -888,6 +888,21 @@ pStub.Register("Static Script", {
 	Method = PUNISHMENT_LOG
 })
 
+--- Anti-Screengrab ---
+
+pStub.Register("Anti-Screengrab", {
+	Enabled = true,
+	Name = "Anti-Screengrab",
+	Description = "Occurs when a player blocks screengrab addons.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "Screengrab Bypass: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
 --- Error Tracer ---
 
 pStub.Register("Error Tracer", {
