@@ -858,11 +858,17 @@ pStub.Register("Stack", {
 
 --- Honeypot ---
 
+--[[
+	Wait handles the delay between times the client can request a punishment.
+--]]
+
 pStub.Register("Honeypot", {
 	Enabled = true,
 	Name = "Honeypot",
 	Description = "Emulates popular anti-cheat plugins to detect players attempting bruteforce bypasses.",
 	Category = "Integrity",
+
+	Wait = 0.25,
 	
 	Method = PUNISHMENT_LOG
 })
