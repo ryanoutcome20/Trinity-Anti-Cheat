@@ -8,8 +8,6 @@ function TAC.Honeypot.Receive(Stage, Player, Message)
 	if Player:Get("Honeypot Delay", 0) > Time then
 		return
 	end
-
-	MsgN(TAC.Config.Honeypot.Wait)
 	
 	Player:Set("Honeypot Delay", Time + TAC.Config.Honeypot.Wait)
 
