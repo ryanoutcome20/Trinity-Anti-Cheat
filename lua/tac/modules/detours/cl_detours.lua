@@ -64,8 +64,6 @@ end)
 --- Globals ---
 
 Wrap("Color")
-Wrap("Angle")
-Wrap("Vector")
 Wrap("getmetatable")
 Wrap("setmetatable")
 Wrap("FindMetaTable")
