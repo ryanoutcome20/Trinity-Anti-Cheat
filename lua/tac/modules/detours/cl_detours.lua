@@ -63,7 +63,6 @@ end)
 
 --- Globals ---
 
-Wrap("Color")
 Wrap("getmetatable")
 Wrap("setmetatable")
 Wrap("FindMetaTable")
