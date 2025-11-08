@@ -63,6 +63,8 @@ end)
 
 --- Globals ---
 
+Wrap("getfenv")
+Wrap("setfenv")
 Wrap("getmetatable")
 Wrap("setmetatable")
 Wrap("FindMetaTable")
