@@ -63,6 +63,8 @@ end)
 
 --- Globals ---
 
+Wrap("gcinfo")
+Wrap("collectgarbage")
 Wrap("getfenv")
 Wrap("setfenv")
 Wrap("getmetatable")
