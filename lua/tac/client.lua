@@ -4,11 +4,11 @@
 
 --- Anti-Hooking ---
 
-local NOP = function() end
+local Blank = function() end
 
 for i = 1, 10 do
 	jit.flush()
-		jit.attach(NOP, "trace")
+		jit.attach(Blank, "trace")
 	jit.flush()
 end
 
