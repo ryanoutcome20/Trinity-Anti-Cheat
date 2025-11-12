@@ -4,7 +4,7 @@ local Detour = TAC.Detour.Register
 
 local Wrap = function(ID, Meta)
 	Detour(ID, function(Original, ...)
-		TAC.CaptureStack(ID)
+		TAC.Captures.Stack(ID)
 		return Original(...)
 	end, Meta)
 end
@@ -12,7 +12,7 @@ end
 --- Whitelist ---
 
 Detour("RunString", function(Original, Code, Identifier, ...)
-	TAC.CaptureStack("RunString")
+	TAC.Captures.Stack("RunString")
 	
 	if Identifier then
 		TAC.Detours.Whitelist.Identifiers[Identifier] = true
@@ -28,7 +28,7 @@ Detour("RunString", function(Original, Code, Identifier, ...)
 end)
 
 Detour("RunStringEx", function(Original, Code, Identifier, ...)
-	TAC.CaptureStack("RunStringEx")
+	TAC.Captures.Stack("RunStringEx")
 	
 	if Identifier then
 		TAC.Detours.Whitelist.Identifiers[Identifier] = true
@@ -44,7 +44,7 @@ Detour("RunStringEx", function(Original, Code, Identifier, ...)
 end)
 
 Detour("CompileString", function(Original, Code, Identifier, ...)
-	TAC.CaptureStack("CompileString")
+	TAC.Captures.Stack("CompileString")
 	
 	if Identifier then
 		TAC.Detours.Whitelist.Identifiers[Identifier] = true
@@ -75,6 +75,8 @@ Wrap("Msg")
 Wrap("MsgN")
 Wrap("MsgC")
 Wrap("MsgAll")
+Wrap("RunConsoleCommand")
+Wrap("GetConVar_Internal")
 
 --- Classes ---
 
@@ -124,3 +126,11 @@ Wrap("concommand.Remove")
 Wrap("input.SetCursorPos")
 
 Wrap("net.SendToServer")
+
+Wrap("player.GetAll")
+Wrap("player.GetHumans")
+
+Wrap("gui.EnableScreenClicker")
+
+Wrap("input.IsMouseDown")
+Wrap("input.IsKeyDown")

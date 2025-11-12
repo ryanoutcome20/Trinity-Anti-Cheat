@@ -38,6 +38,3 @@ function TAC.Captures.Stack(Message)
 		TAC.Captures.Ran[Hash] = true
 	end
 end
-
-TAC.Capture = TAC.Captures.Direct
-TAC.CaptureStack = TAC.Captures.Stack

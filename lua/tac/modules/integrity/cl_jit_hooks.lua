@@ -1,10 +1,10 @@
-TAC.Garbage = { }
+TAC.JITHooks = { }
 
 local Config = TAC.Config.JITHooks
 
 local List = TAC.Lists.Merge("JIT Hooks")
 
-function TAC.Garbage.Scan(Function, ...)
+function TAC.JITHooks.Scan(Function, ...)
     local Lines = 0
 
     collectgarbage()
@@ -30,7 +30,7 @@ function TAC.Garbage.Scan(Function, ...)
     }
 end
 
-function TAC.Garbage.Run(Function)
+function TAC.JITHooks.Run(Function)
     if debug.getinfo(Function, "S").what ~= "C" then 
         return false
     end
@@ -38,13 +38,13 @@ function TAC.Garbage.Run(Function)
     jit.flush()
     collectgarbage()
 
-    local Initial = TAC.Garbage.Scan(Function, nil)
+    local Initial = TAC.JITHooks.Scan(Function, nil)
 
     if Config.Garbage and Initial.Garbage > Config.Delta then
         TAC.Flag("JIT Hooks", "Just-In-Time Garbage Size [delta: %i]", Initial.Garbage)
         return true
     elseif Config.Lines then
-        local Secondary = TAC.Garbage.Scan(Function, nil)
+        local Secondary = TAC.JITHooks.Scan(Function, nil)
         
         if Initial.Lines ~= Secondary.Lines then
             TAC.Flag("JIT Hooks", "Just-In-Time Lines [first: %i; second: %i]", Initial.Lines, Secondary.Lines)
@@ -55,7 +55,7 @@ function TAC.Garbage.Run(Function)
     return false
 end
 
-function TAC.Garbage.Step(Index)
+function TAC.JITHooks.Step(Index)
     Index = Index or 1
 
     local Function = List[Index]
@@ -64,15 +64,15 @@ function TAC.Garbage.Step(Index)
         return
     end
 
-    local Break = TAC.Garbage.Run(Function)
+    local Break = TAC.JITHooks.Run(Function)
 
     if Break then
         return
     end
 
     timer.Simple(Config.Step, function()
-        TAC.Garbage.Step(Index + 1)
+        TAC.JITHooks.Step(Index + 1)
     end)
 end
 
-timer.Simple(Config.Step, TAC.Garbage.Step)
+timer.Simple(Config.Step, TAC.JITHooks.Step)
