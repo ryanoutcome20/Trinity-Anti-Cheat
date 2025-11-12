@@ -56,6 +56,10 @@ function TAC.Commands.Receiver(Stage, Player, Slots)
         return
     end
 
+    if not istable(Slots) then
+        return
+    end
+
     for Name, Input in pairs(Slots) do
         local Cached = Cache[Name]
         

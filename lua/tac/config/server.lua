@@ -691,7 +691,7 @@ pStub.Register("Command Enforcer", {
 		}
 	},
 	
-	Await = 45,
+	Await = 25,
 	
 	Flags = false,
 	Maximum = -1,
