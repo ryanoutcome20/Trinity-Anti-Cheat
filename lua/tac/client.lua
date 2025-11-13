@@ -8,7 +8,10 @@ local Blank = function() end
 
 for i = 1, 10 do
 	jit.flush()
-		jit.attach(Blank, "trace")
+
+	-- Garry'd
+	-- jit.attach(Blank, "trace")
+
 	jit.flush()
 end
 
