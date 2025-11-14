@@ -26,8 +26,6 @@ TAC.Loaded = 0
 
 --- Plugin Setup ---
 
-TAC.Garbage = gcinfo()
-
 TAC.Sizes = {
 	Commands = {Key = concommand.GetTable, Index = 1},
 	Net = {Key = net.Receivers, Index = -1}
