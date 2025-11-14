@@ -933,11 +933,11 @@ pStub.Register("Debug Self", {
 	Method = PUNISHMENT_LOG
 })
 
---- JIT Hooks ---
+--- Debug Hooks ---
 
-pStub.Register("JIT Hooks", {
+pStub.Register("Debug Hooks", {
 	Enabled = true,
-	Name = "JIT Hooks",
+	Name = "Debug Hooks",
 	Description = "Occurs when a player detours a function or various internal just-in-time functions.",
 	Category = "Integrity",
 	

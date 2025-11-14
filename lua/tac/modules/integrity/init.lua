@@ -4,6 +4,6 @@ if SERVER then
 		"cl_stack.lua",
 		"cl_libraries.lua",
 		"cl_debug_self.lua",
-		"cl_jit_hooks.lua"
+		"cl_debug_hooks.lua"
 	}
 end

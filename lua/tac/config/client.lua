@@ -85,7 +85,7 @@ Config.Libraries = {
 	Nets = 4
 }
 
-Config.JITHooks = {
+Config.DebugHooks = {
 	Enabled = true,
 
 	Lines = true,
