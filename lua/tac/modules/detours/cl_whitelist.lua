@@ -22,9 +22,9 @@ function TAC.Detours.Whitelist.Whitelisted(Function, Info)
 	if tobool(Info.isfunc) and Info.what ~= "main" then
 		if Info.namewhat == "global" and not _G[Info.name] then
 			TAC.Audit(
-				"Whitelist encountered secure shell environment, possible bypass attempt?", 
+				"Whitelist encountered secure sub environment, possible bypass attempt?", 
 				"Detours",
-				"Shell Environment"
+				"Sub Environment"
 			)
 		end
 		
