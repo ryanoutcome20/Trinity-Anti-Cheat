@@ -7,12 +7,21 @@ local function Scan()
     local Next = debug.getinfo(debug.getinfo)
 
     if Data.func ~= Next.func then
-        return TAC.Flag(
-            "Debug Self", 
-            "Incorrect function addresses [%s -> %s]",
-            tostring(Data.func),
-            tostring(Next.func)
-        )
+        local DataPointer, NextPointer = tostring(Data), tostring(Next) 
+
+        if DataPointer == NextPointer then
+            return TAC.Flag(
+                "Debug Self", 
+                "Incorrect function addresses [detoured tostring]"
+            )
+        else
+            return TAC.Flag(
+                "Debug Self", 
+                "Incorrect function addresses [%s -> %s]",
+                tostring(Data.func),
+                tostring(Next.func)
+            )
+        end
     elseif Data.source ~= Next.source then
         return TAC.Flag(
             "Debug Self", 
