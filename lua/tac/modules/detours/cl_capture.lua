@@ -20,13 +20,13 @@ function TAC.Captures.Direct(Function, Message)
 end
 
 function TAC.Captures.Stack(Message)
-	for i = 2, 8 do 
+	for i = 3, 8 do 
 		local Info = debug.getinfo(i, "f")
-		
+	
 		if not Info then
 			break
 		end
-	
+		
 		local Hash = tostring(Info.func)
 		
 		if TAC.Captures.Ran[Hash] then
