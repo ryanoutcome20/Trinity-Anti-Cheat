@@ -176,8 +176,8 @@ function Atlas:Read()
 
     Data.Chunk = net.ReadData(net.ReadUInt(16))
     
-    Data.Index = net.ReadUInt(12)
-    Data.Size  = net.ReadUInt(12)
+    Data.Index = net.ReadUInt(8)
+    Data.Size  = net.ReadUInt(8)
     Data.Final = net.ReadBool()
 
     Data.Checksum = net.ReadString()
@@ -190,8 +190,8 @@ function Atlas:Write(Chunk, Size, Checksum, Index, Port)
     net.WriteUInt(#Chunk, 16)
     net.WriteData(Chunk, #Chunk)
     
-    net.WriteUInt(Index, 12)
-    net.WriteUInt(Size, 12)
+    net.WriteUInt(Index, 8)
+    net.WriteUInt(Size, 8)
 
     net.WriteBool(Size == Index)
 
@@ -242,11 +242,19 @@ function Atlas:Receive()
         return
     end
 
-    local Index = (self.Cache[Data.Port] or "") .. Data.Chunk
+    local Index = self.Cache[Data.Port] or {
+        Slot = 0
+    }
+
+    Index.Slot = Index.Slot + 1
+
+    Index[Index.Slot] = Data.Chunk
 
     self:Process(Callbacks, MODE_PARSING, Data, Index)
 
     if Data.Final then 
+        Index = table.concat(Index, "", 1, Index.Slot)
+
         if Data.Checksum == util.SHA256(Index) then 
             local Arguments = self:Unpack(Index)
 
@@ -255,7 +263,9 @@ function Atlas:Receive()
             self:Process(Callbacks, MODE_FAILED, Index)
         end
 
-        Index = ""
+        Index = {
+            Slot = 0
+        }
     end
 
     self.Cache[Data.Port] = Index
