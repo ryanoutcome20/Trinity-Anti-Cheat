@@ -4,7 +4,7 @@ function TAC.Aimbot.Snap(Player, Cache)
 	if not Config.Enabled then
 		return
 	end
-		
+	
 	if TAC.TimeSinceSpawned(Player) <= Config.TimeSinceSpawned then
 		return
 	end

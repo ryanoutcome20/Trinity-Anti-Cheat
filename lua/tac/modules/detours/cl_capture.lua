@@ -3,8 +3,9 @@ TAC.Captures = {
 	Ran = { }
 }
 
-local debug_getinfo = debug.getinfo
 local tostring = tostring
+
+local debug_getinfo = debug.getinfo
 
 function TAC.Captures.Direct(Function, Message)
 	TAC.Captures.Data = TAC.GenerateBuffer(Function, true)
