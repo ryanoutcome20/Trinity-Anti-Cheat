@@ -21,7 +21,7 @@ local net_WriteData = net.WriteData
 local net_WriteBool = net.WriteBool
 local net_WriteString = net.WriteString
 
-local util_SHA256 = util.SHA256
+local util_CRC = util.CRC
 local util_Compress = util.Compress
 local util_Decompress = util.Decompress
 local util_AddNetworkString = util.AddNetworkString
@@ -221,7 +221,7 @@ function Atlas:Send(Port, Target, ...)
     local Data         = self:Pack({ ... })
     local Split, Count = self:Split(Data)
 
-    local Checksum = util_SHA256(Data)
+    local Checksum = util_CRC(Data)
     local Size     = Count
 
     for i = 1, Size do 
@@ -237,7 +237,7 @@ function Atlas:Broadcast(Port, ...)
     local Data  = self:Pack({ ... })
     local Split, Count = self:Split(Data)
 
-    local Checksum = util_SHA256(Data)
+    local Checksum = util_CRC(Data)
     local Size     = Count
 
     for i = 1, Size do 
@@ -291,7 +291,7 @@ function Atlas:Receive(ENT)
     if Data.Final then
         Index = table_concat(Index, "", 1, Index.Slot)
         
-        if Data.Checksum == util_SHA256(Index) then 
+        if Data.Checksum == util_CRC(Index) then 
             local Arguments = self:Unpack(Index)
 
             self:Process(Callbacks, MODE_DONE, ENT, unpack(Arguments))
