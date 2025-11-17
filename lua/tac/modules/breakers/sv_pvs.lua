@@ -3,6 +3,12 @@ TAC.Breakers.PVS = {
 	Interval = engine.TickInterval()
 }
 
+local Vector = Vector
+
+local util_TraceLine = util.TraceLine
+local player_Iterator = player.Iterator
+local ents_FindInPVS = ents.FindInPVS
+
 function TAC.Breakers.PVS.BuildOffset()
 	TAC.Breakers.PVS.Offsets = { }
 
@@ -31,7 +37,7 @@ function TAC.Breakers.PVS.Set(Player, ENT, Status)
 end
 
 function TAC.Breakers.PVS.Check(Player, Position, Target)
-	local Trace = util.TraceLine({
+	local Trace = util_TraceLine({
 		start = Position,
 		endpos = Target:EyePos(),
 		mask = MASK_VISIBLE,
@@ -90,10 +96,10 @@ function TAC.Breakers.PVS.Run()
 		return
 	end
 
-	for k, Player in player.Iterator() do
+	for k, Player in player_Iterator() do
 		local Positions = TAC.Breakers.PVS.Predict(Player)
 
-		local PVS = ents.FindInPVS(Player)
+		local PVS = ents_FindInPVS(Player)
 
 		for i = 1, #PVS do 
 			local Target = PVS[i]

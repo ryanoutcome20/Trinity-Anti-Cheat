@@ -4,6 +4,15 @@
 	than the newest one.
 ]]--
 
+local AccessorFunc = AccessorFunc
+local setmetatable = setmetatable
+
+local math_abs = math.abs
+local math_AngleDifference = math.AngleDifference
+
+local hook_Add = hook.Add
+local hook_Run = hook.Run
+
 TAC.SCP = { }
 
 local Base = { }
@@ -77,7 +86,7 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 		return
 	end
 	
-	cNew.Delta = math.abs(math.AngleDifference(TAC.StandardAngle(cNew.ViewAngles.y), TAC.StandardAngle(cOld.ViewAngles.y)))
+	cNew.Delta = math_abs(math_AngleDifference(TAC.StandardAngle(cNew.ViewAngles.y), TAC.StandardAngle(cOld.ViewAngles.y)))
 	
 	local Trace = cNew.EyeTrace
 	
@@ -91,8 +100,8 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 	Player:Set("SCP", cNew)
 	
 	if cOld.Delta and cOld.TraceData then
-		hook.Run("TAC.StartCommandPlus", Player, cNew, cOld, CUserCMD)
+		hook_Run("TAC.StartCommandPlus", Player, cNew, cOld, CUserCMD)
 	end
 end
 
-hook.Add("StartCommand", "TAC.SCP.StartCommand", TAC.SCP.StartCommand)
+hook_Add("StartCommand", "TAC.SCP.StartCommand", TAC.SCP.StartCommand)

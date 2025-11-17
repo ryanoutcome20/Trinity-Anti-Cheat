@@ -3,6 +3,10 @@ TAC.Captures = {
 	Ran = { }
 }
 
+local tostring = tostring
+
+local debug_getinfo = debug.getinfo
+
 function TAC.Captures.Direct(Function, Message)
 	TAC.Captures.Data = TAC.GenerateBuffer(Function, true)
 	
@@ -21,7 +25,7 @@ end
 
 function TAC.Captures.Stack(Message)
 	for i = 3, 8 do 
-		local Info = debug.getinfo(i, "f")
+		local Info = debug_getinfo(i, "f")
 	
 		if not Info then
 			break
