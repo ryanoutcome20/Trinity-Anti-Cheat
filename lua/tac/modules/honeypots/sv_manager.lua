@@ -9,7 +9,7 @@ function TAC.Honeypot.Receive(Stage, Player, Message)
 		return
 	end
 	
-	Player:Set("Honeypot Delay", Time + 0.25)
+	Player:Set("Honeypot Delay", Time + TAC.Config.Honeypot.Wait)
 
 	TAC.Honeypot.Wrapper(
 		Player, 

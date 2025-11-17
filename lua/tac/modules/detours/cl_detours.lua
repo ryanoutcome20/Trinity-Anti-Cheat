@@ -4,7 +4,8 @@ local Detour = TAC.Detour.Register
 
 local Wrap = function(ID, Meta)
 	Detour(ID, function(Original, ...)
-		TAC.CaptureStack(ID)
+		TAC.Captures.Stack(ID)
+
 		return Original(...)
 	end, Meta)
 end
@@ -12,7 +13,7 @@ end
 --- Whitelist ---
 
 Detour("RunString", function(Original, Code, Identifier, ...)
-	TAC.CaptureStack("RunString")
+	TAC.Captures.Stack("RunString")
 	
 	if Identifier then
 		TAC.Detours.Whitelist.Identifiers[Identifier] = true
@@ -28,7 +29,7 @@ Detour("RunString", function(Original, Code, Identifier, ...)
 end)
 
 Detour("RunStringEx", function(Original, Code, Identifier, ...)
-	TAC.CaptureStack("RunStringEx")
+	TAC.Captures.Stack("RunStringEx")
 	
 	if Identifier then
 		TAC.Detours.Whitelist.Identifiers[Identifier] = true
@@ -44,7 +45,7 @@ Detour("RunStringEx", function(Original, Code, Identifier, ...)
 end)
 
 Detour("CompileString", function(Original, Code, Identifier, ...)
-	TAC.CaptureStack("CompileString")
+	TAC.Captures.Stack("CompileString")
 	
 	if Identifier then
 		TAC.Detours.Whitelist.Identifiers[Identifier] = true
@@ -63,17 +64,18 @@ end)
 
 --- Globals ---
 
-Wrap("Color")
-Wrap("Angle")
-Wrap("Vector")
-Wrap("getmetatable")
-Wrap("setmetatable")
+Wrap("gcinfo")
+Wrap("collectgarbage")
+Wrap("getfenv")
+Wrap("setfenv")
 Wrap("FindMetaTable")
 Wrap("print")
 Wrap("Msg")
 Wrap("MsgN")
 Wrap("MsgC")
 Wrap("MsgAll")
+Wrap("RunConsoleCommand")
+Wrap("GetConVar_Internal")
 
 --- Classes ---
 
@@ -84,9 +86,6 @@ Wrap("SetMouseX", "CUserCmd")
 Wrap("SetMouseY", "CUserCmd")
 Wrap("SetSideMove", "CUserCmd")
 Wrap("SetForwardMove", "CUserCmd")
-
-Wrap("RotateAroundAxis", "Angle")
-Wrap("Normalize", "Angle")
 
 Wrap("Forward", "Vector")
 Wrap("Angle", "Vector")
@@ -108,8 +107,6 @@ Wrap("timer.Simple")
 Wrap("timer.Create")
 
 Wrap("util.IsBinaryModuleInstalled")
-Wrap("util.TraceLine")
-Wrap("util.TraceHull")
 
 Wrap("math.random")
 Wrap("math.randomseed")
@@ -123,3 +120,8 @@ Wrap("concommand.Remove")
 Wrap("input.SetCursorPos")
 
 Wrap("net.SendToServer")
+
+Wrap("player.GetAll")
+Wrap("player.GetHumans")
+
+Wrap("gui.EnableScreenClicker")

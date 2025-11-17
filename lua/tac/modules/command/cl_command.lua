@@ -22,7 +22,7 @@ function TAC.Commands.Receiver(Stage, Slots)
             PRINT_ERROR,
             "Commands",
             "Failed to get packages for %s slots",
-            istable(Package) and #Package or "invalid"
+            istable(Package) and table.Count(Package) or "invalid"
         )
     end
 

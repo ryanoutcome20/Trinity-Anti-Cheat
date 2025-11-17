@@ -691,7 +691,7 @@ pStub.Register("Command Enforcer", {
 		}
 	},
 	
-	Await = 45,
+	Await = 25,
 	
 	Flags = false,
 	Maximum = -1,
@@ -858,11 +858,17 @@ pStub.Register("Stack", {
 
 --- Honeypot ---
 
+--[[
+	Wait handles the delay between times the client can request a punishment.
+--]]
+
 pStub.Register("Honeypot", {
 	Enabled = true,
 	Name = "Honeypot",
 	Description = "Emulates popular anti-cheat plugins to detect players attempting bruteforce bypasses.",
 	Category = "Integrity",
+
+	Wait = 0.25,
 	
 	Method = PUNISHMENT_LOG
 })
@@ -878,6 +884,21 @@ pStub.Register("Static Script", {
 	Client = true,
 	
 	Message = "Likely Cheater: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
+--- Anti-Screengrab ---
+
+pStub.Register("Anti-Screengrab", {
+	Enabled = true,
+	Name = "Anti-Screengrab",
+	Description = "Occurs when a player blocks screengrab addons.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "Screengrab Bypass: {Contact}",
 	
 	Method = PUNISHMENT_LOG
 })
@@ -912,11 +933,11 @@ pStub.Register("Debug Self", {
 	Method = PUNISHMENT_LOG
 })
 
---- JIT Hooks ---
+--- Debug Hooks ---
 
-pStub.Register("JIT Hooks", {
+pStub.Register("Debug Hooks", {
 	Enabled = true,
-	Name = "JIT Hooks",
+	Name = "Debug Hooks",
 	Description = "Occurs when a player detours a function or various internal just-in-time functions.",
 	Category = "Integrity",
 	

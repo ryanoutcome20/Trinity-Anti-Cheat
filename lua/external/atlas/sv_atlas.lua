@@ -1,13 +1,40 @@
 -- Fork of:
 -- https://github.com/ryanoutcome20/Atlas/tree/main
 
+local tostring = tostring
+local tonumber = tonumber
+local tobool = tobool
+local pairs = pairs
+
+local net_Start = net.Start
+local net_Send = net.Send
+local net_Broadcast = net.Broadcast
+local net_Receive = net.Receive
+
+local net_ReadUInt = net.ReadUInt
+local net_ReadData = net.ReadData
+local net_ReadBool = net.ReadBool
+local net_ReadString = net.ReadString
+
+local net_WriteUInt = net.WriteUInt
+local net_WriteData = net.WriteData
+local net_WriteBool = net.WriteBool
+local net_WriteString = net.WriteString
+
+local util_CRC = util.CRC
+local util_Compress = util.Compress
+local util_Decompress = util.Decompress
+local util_AddNetworkString = util.AddNetworkString
+local table_concat = table.concat
+local table_insert = table.insert
+
 Atlas = {
     Ports = { },
 
     Cache = { }
 }
 
-util.AddNetworkString("tac-networking")
+util_AddNetworkString("tac-networking")
 
 MODE_FAILED = -2
 
@@ -93,19 +120,19 @@ function Atlas:Pack(Data, alreadyPacked)
             end
         end
 
-        return util.Compress(SFS.encode(Constructed))
+        return util_Compress(SFS.encode(Constructed))
     end
 	
 	if #Data < 12000 then
 		return Data
 	end
 
-    return util.Compress(Data)
+    return util_Compress(Data)
 end
 
 function Atlas:Unpack(Data)
     -- Attempt decompression.
-    local Decompressed = util.Decompress(Data)
+    local Decompressed = util_Decompress(Data)
     
     -- If decompression fails, return the original data (not compressed).
     if not Decompressed or Decompressed == "" then
@@ -156,7 +183,7 @@ function Atlas:Split(Data)
             Split[Count] = { }
         end
         
-        table.insert(Split[Count], Character)
+        table_insert(Split[Count], Character)
     end
 
     return Split, Count
@@ -165,43 +192,43 @@ end
 function Atlas:Read()
     local Data = { }
 
-    Data.Chunk = net.ReadData(net.ReadUInt(16))
+    Data.Chunk = net_ReadData(net_ReadUInt(16))
     
-    Data.Index = net.ReadUInt(12)
-    Data.Size  = net.ReadUInt(12)
-    Data.Final = net.ReadBool()
+    Data.Index = net_ReadUInt(8)
+    Data.Size  = net_ReadUInt(8)
+    Data.Final = net_ReadBool()
 
-    Data.Checksum = net.ReadString()
-    Data.Port     = net.ReadString()
+    Data.Checksum = net_ReadString()
+    Data.Port     = net_ReadString()
 
     return Data
 end
 
 function Atlas:Write(Chunk, Size, Checksum, Index, Port)
-    net.WriteUInt(#Chunk, 16)
-    net.WriteData(Chunk, #Chunk)
+    net_WriteUInt(#Chunk, 16)
+    net_WriteData(Chunk, #Chunk)
     
-    net.WriteUInt(Index, 12)
-    net.WriteUInt(Size, 12)
+    net_WriteUInt(Index, 8)
+    net_WriteUInt(Size, 8)
 
-    net.WriteBool(Size == Index)
+    net_WriteBool(Size == Index)
 
-    net.WriteString(Checksum)
-    net.WriteString(Port)
+    net_WriteString(Checksum)
+    net_WriteString(Port)
 end
 
 function Atlas:Send(Port, Target, ...)
     local Data         = self:Pack({ ... })
     local Split, Count = self:Split(Data)
 
-    local Checksum = util.SHA256(Data)
+    local Checksum = util_CRC(Data)
     local Size     = Count
 
     for i = 1, Size do 
         timer.Simple(i, function()
-            net.Start("tac-networking")
-                self:Write(table.concat(Split[i]), Size, Checksum, i, Port)
-            net.Send(Target)
+            net_Start("tac-networking")
+                self:Write(table_concat(Split[i]), Size, Checksum, i, Port)
+            net_Send(Target)
         end)
     end
 end
@@ -210,14 +237,14 @@ function Atlas:Broadcast(Port, ...)
     local Data  = self:Pack({ ... })
     local Split, Count = self:Split(Data)
 
-    local Checksum = util.SHA256(Data)
+    local Checksum = util_CRC(Data)
     local Size     = Count
 
     for i = 1, Size do 
         timer.Simple(i, function()
-            net.Start("tac-networking")
-                self:Write(table.concat(Split[i]), Size, Checksum, i, Port)
-            net.Broadcast()
+            net_Start("tac-networking")
+                self:Write(table_concat(Split[i]), Size, Checksum, i, Port)
+            net_Broadcast()
         end)
     end
 end
@@ -251,12 +278,20 @@ function Atlas:Receive(ENT)
 
     self.Cache[ENT] = self.Cache[ENT] or { }
 
-    local Index = (self.Cache[ENT][Data.Port] or "") .. Data.Chunk
+    local Index = self.Cache[ENT][Data.Port] or {
+        Slot = 0
+    }
+
+    Index.Slot = Index.Slot + 1
+
+    Index[Index.Slot] = Data.Chunk
 
     self:Process(Callbacks, MODE_PARSING, ENT, Data, Index)
 
     if Data.Final then
-        if Data.Checksum == util.SHA256(Index) then 
+        Index = table_concat(Index, "", 1, Index.Slot)
+        
+        if Data.Checksum == util_CRC(Index) then 
             local Arguments = self:Unpack(Index)
 
             self:Process(Callbacks, MODE_DONE, ENT, unpack(Arguments))
@@ -264,12 +299,14 @@ function Atlas:Receive(ENT)
             self:Process(Callbacks, MODE_FAILED, ENT, Index)
         end
 
-        Index = ""
+        Index = {
+            Slot = 0
+        }
     end
 
     self.Cache[ENT][Data.Port] = Index
 end
 
-net.Receive("tac-networking", function(Length, ENT)
+net_Receive("tac-networking", function(Length, ENT)
     Atlas:Receive(ENT)
 end)

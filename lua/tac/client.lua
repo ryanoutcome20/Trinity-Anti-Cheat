@@ -4,11 +4,14 @@
 
 --- Anti-Hooking ---
 
-local NOP = function() end
+local Blank = function() end
 
 for i = 1, 10 do
 	jit.flush()
-		jit.attach(NOP, "trace")
+
+	-- Garry'd
+	-- jit.attach(Blank, "trace")
+
 	jit.flush()
 end
 
@@ -22,8 +25,6 @@ TAC.Print = include("external/sh_print.lua")
 TAC.Loaded = 0
 
 --- Plugin Setup ---
-
-TAC.Garbage = gcinfo()
 
 TAC.Sizes = {
 	Commands = {Key = concommand.GetTable, Index = 1},
