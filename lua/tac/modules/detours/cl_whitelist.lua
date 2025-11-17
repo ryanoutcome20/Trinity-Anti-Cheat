@@ -12,6 +12,14 @@ setmetatable(TAC.Detours.Whitelist.Dumps, {
 	__mode = "k"
 })
 
+local tobool = tobool
+local isstring = isstring
+local pcall = pcall
+local CompileString = CompileString
+
+local math_max = math.max
+local util_CRC = util.CRC
+
 function TAC.Detours.Whitelist.Whitelisted(Function, Info)
 	local Whitelist = TAC.Detours.Whitelist
 
@@ -34,7 +42,7 @@ function TAC.Detours.Whitelist.Whitelisted(Function, Info)
 	local Hash = Whitelist.Hash(Function, Info.short_src)
 
 	if Hash and Whitelist.Hashes[Hash] then
-		Whitelist.Counter = math.max(Whitelist.Counter - 1, 0)
+		Whitelist.Counter = math_max(Whitelist.Counter - 1, 0)
 		return true
 	end
 	
@@ -60,7 +68,7 @@ function TAC.Detours.Whitelist.Hash(Function, Identifier)
 		return 
 	end
 	
-	local Checksum = util.CRC(Dump) 
+	local Checksum = util_CRC(Dump) 
 	
 	TAC.Detours.Whitelist.Dumps[Function] = Checksum
 	
