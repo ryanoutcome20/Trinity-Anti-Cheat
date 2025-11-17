@@ -5,6 +5,7 @@ local Detour = TAC.Detour.Register
 local Wrap = function(ID, Meta)
 	Detour(ID, function(Original, ...)
 		TAC.Captures.Stack(ID)
+
 		return Original(...)
 	end, Meta)
 end
@@ -67,8 +68,6 @@ Wrap("gcinfo")
 Wrap("collectgarbage")
 Wrap("getfenv")
 Wrap("setfenv")
-Wrap("getmetatable")
-Wrap("setmetatable")
 Wrap("FindMetaTable")
 Wrap("print")
 Wrap("Msg")
@@ -87,9 +86,6 @@ Wrap("SetMouseX", "CUserCmd")
 Wrap("SetMouseY", "CUserCmd")
 Wrap("SetSideMove", "CUserCmd")
 Wrap("SetForwardMove", "CUserCmd")
-
-Wrap("RotateAroundAxis", "Angle")
-Wrap("Normalize", "Angle")
 
 Wrap("Forward", "Vector")
 Wrap("Angle", "Vector")
@@ -111,8 +107,6 @@ Wrap("timer.Simple")
 Wrap("timer.Create")
 
 Wrap("util.IsBinaryModuleInstalled")
-Wrap("util.TraceLine")
-Wrap("util.TraceHull")
 
 Wrap("math.random")
 Wrap("math.randomseed")
@@ -131,6 +125,3 @@ Wrap("player.GetAll")
 Wrap("player.GetHumans")
 
 Wrap("gui.EnableScreenClicker")
-
-Wrap("input.IsMouseDown")
-Wrap("input.IsKeyDown")
