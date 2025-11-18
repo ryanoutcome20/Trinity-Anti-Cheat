@@ -166,22 +166,6 @@ function TAC.Size(Table)
 	return Size
 end
 
-function TAC.Visible(Mask, Target, From)
-	From = From or LocalPlayer():EyePos()
-	
-	local Trace = util.TraceLine({
-		start = From,
-		endpos = Target:EyePos(),
-		mask = Mask,
-		filter = {
-			LocalPlayer(), 
-			Target
-		}
-	})
-	
-	return not Trace.Hit or Trace.Entity == Target
-end
-
 function TAC.StandardAngle(Yaw)
 	if Yaw >= 0 and Yaw <= 180 then
 		return Yaw
@@ -411,7 +395,7 @@ function TAC.GenerateUpvalueTree(Function)
 	local Variables = { }
 
 	if Info and Info.what == "Lua" then
-		local Upvalues = info.nups
+		local Upvalues = Info.nups
 
 		for i = 1, Upvalues do
 			local k,v = debug.getupvalue(Function, i)
@@ -422,6 +406,8 @@ function TAC.GenerateUpvalueTree(Function)
 
 	return Variables
 end
+
+_G.GenerateUpvalueTree = TAC.GenerateUpvalueTree
 
 --- Detour System ---
 
