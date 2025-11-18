@@ -8,7 +8,7 @@ local tostring = tostring
 local debug_getinfo = debug.getinfo
 
 function TAC.Captures.Direct(Function, Message)
-	local Data = TAC.GenerateBuffer(Function, true)
+	local Data = TAC.GenerateBuffer(Function)
 	
 	if TAC.Detours.Whitelist.Whitelisted(Function, Data) then
 		return

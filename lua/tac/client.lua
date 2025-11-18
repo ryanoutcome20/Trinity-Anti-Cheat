@@ -386,10 +386,10 @@ end
 
 --- Function Buffers ---
 
-function TAC.GenerateBuffer(Function, noFormat)
+function TAC.GenerateBuffer(Function)
 	local GetInfo, FuncInfo = debug.getinfo(Function), jit.util.funcinfo(Function)
 
-	local Data = {
+	return {
 		source = tostring(GetInfo.source or "s"):gsub("\\", "/"), -- OS specific. (#13)
 		short_src = GetInfo.short_src or "sh",
 		what = GetInfo.what or "wh",
@@ -404,23 +404,6 @@ function TAC.GenerateBuffer(Function, noFormat)
 		
 		equals = (GetInfo.func == Function) and "fde" or "fne"
 	}
-	
-	if noFormat then
-		return Data
-	end
-
-	return string.format(
-		"%s:%s:%s:%s:%s:%s:%s:%s:%s",
-		Data.source,
-		Data.short_src,
-		Data.what,
-		Data.linedefined,
-		Data.lastlinedefined,
-		Data.j_linedefined,
-		Data.j_ffid,
-		Data.j_upvalues,
-		Data.equals
-	)
 end
 
 function TAC.GenerateUpvalueTree(Function)
