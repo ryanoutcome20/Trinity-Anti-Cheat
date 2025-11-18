@@ -79,7 +79,6 @@ Wrap("GetConVar_Internal")
 
 --- Classes ---
 
-Wrap("CommandNumber", "CUserCmd")
 Wrap("TickCount", "CUserCmd")
 Wrap("SetViewAngles", "CUserCmd")
 Wrap("SetMouseX", "CUserCmd")
