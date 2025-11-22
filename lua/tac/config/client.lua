@@ -78,11 +78,15 @@ Config.DebugSelf = true
 Config.Libraries = {
 	Enabled = true,
 	
-	Command = true,
-	Commands = 1,
-			
-	Net = true,
-	Nets = 4
+	concommand = {
+		Enabled = true,
+		Size = 1
+	},
+	
+	net = {
+		Enabled = true,
+		Size = 4
+	}
 }
 
 Config.DebugHooks = {

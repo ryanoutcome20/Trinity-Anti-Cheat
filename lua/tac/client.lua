@@ -24,13 +24,6 @@ TAC.Print = include("external/sh_print.lua")
 
 TAC.Loaded = 0
 
---- Plugin Setup ---
-
-TAC.Sizes = {
-	Commands = {Key = concommand.GetTable, Index = 1},
-	Net = {Key = net.Receivers, Index = -1}
-}
-
 --- Localizers ---
 
 TAC.Localizers = { }
@@ -555,28 +548,6 @@ TAC.Atlas:Listen("Config", "TAC.Config", MODE_DONE, function(Stage, Config)
 	TAC.Hooks.Run("TAC.TransferConfig", Config)
 end)
 
---- Build Sizes ---
-
-for k, Object in pairs(TAC.Sizes) do 
-	if Object.Index == -1 then
-		Object.Size = table.Count(Object.Key)
-	else	
-		local Key, Value = debug.getupvalue(Object.Key, Object.Index)
-		
-		if istable(Value) then
-			Object.Size = table.Count(Value)
-		end
-	end
-end
-
---- Load Message ---
-
-TAC.Print(
-	PRINT_INFO,
-	"Info",
-	"Trinity Pre-Init Loaded"
-)
-
 --- Plugin System ---
 
 TAC.Plugins = { }
@@ -718,6 +689,56 @@ TAC.Detour.Register("debug.getupvalue", function(Original, Function, ...)
 
 	return Name, Value
 end)
+
+--- Libraries Check ---
+
+TAC.Libraries = {
+	Slots = {
+		{
+			Key = concommand.GetTable,
+			Config = "concommand", 
+			Index = "CommandList"
+		},
+		{
+			Key = net.Receivers,
+			Config = "net"
+		}
+	}
+}
+
+for k, Data in ipairs(TAC.Libraries.Slots) do 
+	local Size = -1
+
+	if Data.Index then
+		Size = table.Count(TAC.GenerateUpvalueTree(Data.Key)[Data.Index])
+	else
+		Size = table.Count(Data.Key)
+	end
+
+	Data.Size = Size
+end
+
+function TAC.Libraries.Run()
+	local Config = TAC.Config.Libraries
+
+	if not Config.Enabled then
+		return
+	end
+
+	for k, Data in ipairs(TAC.Libraries.Slots) do 
+		local Sub = Config[Data.Config]
+
+		if not Sub.Enabled then
+			continue
+		end
+
+		if not Data.Size or Data.Size ~= Sub.Size then
+			return TAC.Flag("Libraries", "Bad Libraries [%s; expected: %i; got: %s]", Data.Config, Sub.Size, Data.Size)
+		end
+	end
+end
+
+TAC.Hooks.Add("TAC.TransferConfig", "TAC.Libraries.Run", TAC.Libraries.Run)
 
 --- Debug Mode ---
 
