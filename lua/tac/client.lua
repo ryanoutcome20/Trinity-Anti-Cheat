@@ -269,7 +269,7 @@ end
 --- Function Buffers ---
 
 function TAC.GenerateBuffer(Function)
-	local GetInfo, FuncInfo = debug.getinfo(Function), jit.util.funcinfo(Function)
+	local GetInfo, FuncInfo = debug.getinfo(Function, "fnS"), jit.util.funcinfo(Function)
 
 	return {
 		source = tostring(GetInfo.source or "s"):gsub("\\", "/"), -- OS specific. (#13)
@@ -279,12 +279,8 @@ function TAC.GenerateBuffer(Function)
 		lastlinedefined = GetInfo.lastlinedefined or "lld",
 		
 		j_linedefined = FuncInfo.linedefined or "ld",
-		j_ffid = FuncInfo.ffid or "ffid",
-		j_upvalues = FuncInfo.upvalues or "uv",
 		
 		isfunc = GetInfo.name and GetInfo.namewhat and GetInfo.linedefined > 0,
-		
-		equals = (GetInfo.func == Function) and "fde" or "fne"
 	}
 end
 
@@ -766,6 +762,9 @@ function TAC.Captures.Direct(Function, Message)
 
 	Data.Message = Message
 	
+	Data.source = nil
+	Data.isfunc = nil
+
 	TAC.Batch.Add(
 		"Function", 
 		Data, 
