@@ -1,3 +1,8 @@
+if CLIENT then
+	TAC.Detours = {	}
+	return
+end
+
 TAC.Detours = { 
 	Cache = { }
 }
@@ -15,5 +20,8 @@ function TAC.Detours.Wrapper(Player, Message, ...)
 end
 
 return {
+	"init.lua",
+	"cl_capture.lua",
+	"cl_whitelist.lua",
 	"cl_detours.lua"
 }
