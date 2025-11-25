@@ -870,7 +870,13 @@ function TAC.Detours.Whitelist.Increment()
 end
 
 function TAC.Detours.Whitelist.Update(Code, Identifier)
-	TAC.Detours.Whitelist.Hashes[TAC.Detours.Whitelist.Hash(Code, Identifier)] = true
+	local Hash = TAC.Detours.Whitelist.Hash(Code, Identifier)
+
+	if not Hash then
+		return
+	end
+
+	TAC.Detours.Whitelist.Hashes[Hash] = true
 end
 
 TAC.Detour.Register("RunString", function(Original, Code, Identifier, ...)
