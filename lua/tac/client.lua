@@ -747,6 +747,192 @@ end
 
 TAC.Hooks.Add("TAC.TransferConfig", "TAC.Libraries.Run", TAC.Libraries.Run)
 
+--- Captures ---
+
+TAC.Captures = {
+	Data = { },
+	Ran = { }
+}
+
+local tostring = tostring
+
+local debug_getinfo = debug.getinfo
+
+function TAC.Captures.Direct(Function, Message)
+	local Data = TAC.GenerateBuffer(Function)
+	
+	if TAC.Detours.Whitelist.Whitelisted(Function, Data) then
+		return
+	end
+
+	Data.Message = Message
+	
+	TAC.Batch.Add(
+		"Function", 
+		Data, 
+		TAC.Size(Data)
+	)
+end
+
+function TAC.Captures.Stack(Message)
+	for i = 3, 8 do 
+		local Info = debug_getinfo(i, "f")
+	
+		if not Info then
+			break
+		end
+		
+		local Hash = tostring(Info.func)
+		
+		if TAC.Captures.Ran[Hash] then
+			continue
+		end
+		
+		TAC.Captures.Direct(Info.func, Message)
+		
+		TAC.Captures.Ran[Hash] = true
+	end
+end
+
+--- Detours ---
+
+TAC.Detours = { }
+
+TAC.Detours.Whitelist = {
+	Counter = 0,
+	Identifiers = { 
+		["RunString(Ex)"] = true,
+		["CompileString"] = true
+	},
+	Hashes = { },
+	Dumps = { }
+}
+
+setmetatable(TAC.Detours.Whitelist.Dumps, {
+	__mode = "k"
+})
+
+local tobool = tobool
+local isstring = isstring
+local pcall = pcall
+local CompileString = CompileString
+
+local math_max = math.max
+local util_CRC = util.CRC
+
+function TAC.Detours.Whitelist.Whitelisted(Function, Info)
+	local Whitelist = TAC.Detours.Whitelist
+
+	if Whitelist.Counter == 0 or not Whitelist.Identifiers[Info.short_src] then
+		return false
+	end
+
+	if tobool(Info.isfunc) and Info.what ~= "main" then
+		if Info.namewhat == "global" and not _G[Info.name] then
+			TAC.Audit(
+				"Whitelist encountered secure sub environment, possible bypass attempt?", 
+				"Detours",
+				"Sub Environment"
+			)
+		end
+		
+		return true
+	end
+	
+	local Hash = Whitelist.Hash(Function, Info.short_src)
+
+	if Hash and Whitelist.Hashes[Hash] then
+		Whitelist.Counter = math_max(Whitelist.Counter - 1, 0)
+		return true
+	end
+	
+	return false
+end
+
+function TAC.Detours.Whitelist.Hash(Function, Identifier)
+	if not Function then
+		return
+	end
+	
+	if isstring(Function) then
+		Function = CompileString(Function, Identifier)
+	end
+	
+	if TAC.Detours.Whitelist.Dumps[Function] then
+		return TAC.Detours.Whitelist.Dumps[Function]
+	end
+
+	local Valid, Dump = pcall(string.dump, Function, true)
+
+	if not Valid then
+		return 
+	end
+	
+	local Checksum = util_CRC(Dump) 
+	
+	TAC.Detours.Whitelist.Dumps[Function] = Checksum
+	
+	return Checksum
+end
+
+function TAC.Detours.Whitelist.Increment()
+	TAC.Detours.Whitelist.Counter = TAC.Detours.Whitelist.Counter + 1
+end
+
+function TAC.Detours.Whitelist.Update(Code, Identifier)
+	TAC.Detours.Whitelist.Hashes[TAC.Detours.Whitelist.Hash(Code, Identifier)] = true
+end
+
+TAC.Detour.Register("RunString", function(Original, Code, Identifier, ...)
+	TAC.Captures.Stack("RunString")
+	
+	if Identifier then
+		TAC.Detours.Whitelist.Identifiers[Identifier] = true
+	end
+	
+	if isstring(Code) then
+		TAC.Detours.Whitelist.Update(Code, Identifier)
+	end
+	
+	TAC.Detours.Whitelist.Increment()
+	
+	return Original(Code, Identifier, ...)
+end)
+
+TAC.Detour.Register("RunStringEx", function(Original, Code, Identifier, ...)
+	TAC.Captures.Stack("RunStringEx")
+	
+	if Identifier then
+		TAC.Detours.Whitelist.Identifiers[Identifier] = true
+	end
+	
+	if isstring(Code) then
+		TAC.Detours.Whitelist.Update(Code, Identifier)
+	end
+	
+	TAC.Detours.Whitelist.Increment()
+	
+	return Original(Code, Identifier, ...)
+end)
+
+TAC.Detour.Register("CompileString", function(Original, Code, Identifier, ...)
+	TAC.Captures.Stack("CompileString")
+	
+	if Identifier then
+		TAC.Detours.Whitelist.Identifiers[Identifier] = true
+	end
+	
+	local Output = Original(Code, Identifier, ...)
+
+	if isfunction(Output) then		
+		TAC.Detours.Whitelist.Update(Output, Identifier)
+	end
+	
+	TAC.Detours.Whitelist.Increment()
+	
+	return Output
+end)
+
 --- Debug Mode ---
 
 local Debug = true
