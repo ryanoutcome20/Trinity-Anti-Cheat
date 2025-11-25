@@ -1,3 +1,6 @@
+-- Fork of:
+-- https://github.com/ryanoutcome20/pLib
+
 pLib = { 
 	Cores = { }
 }
