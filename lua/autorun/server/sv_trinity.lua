@@ -63,6 +63,9 @@ AddCSLuaFile("external/atlas/cl_atlas.lua")
 MsgN("  Creating pLib instance")
 include("external/sv_plib.lua")
 
+MsgN("  Creating fLib instance")
+include("external/sv_flib.lua")
+
 --- Lists ---
  
 MsgN("  Caching lists")

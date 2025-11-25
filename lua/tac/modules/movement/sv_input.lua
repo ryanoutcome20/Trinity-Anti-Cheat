@@ -17,6 +17,7 @@ function TAC.Movement.Input(Player, cNew, cOld, CUserCMD)
 	elseif Side > Config.Minimum and not Config.Vectors[Side] then
 		TAC.Punishment.Wrapper("Input", Player, "Input [side: %i]", math.Round(Side, 2))
 	end
+	
 end
 
 hook.Add("TAC.StartCommandPlus", "TAC.Movement.Input", TAC.Movement.Input)

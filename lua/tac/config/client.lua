@@ -9,7 +9,6 @@ local Config = { }
 --- Flag Batches ---
 
 Config.Batch = 32000
-Config.ProcessTime = 0.1
 
 --- Aimbot Checks ---
 
@@ -79,15 +78,11 @@ Config.DebugSelf = true
 Config.Libraries = {
 	Enabled = true,
 	
-	concommand = {
-		Enabled = true,
-		Size = 1
-	},
-	
-	net = {
-		Enabled = true,
-		Size = 4
-	}
+	Command = true,
+	Commands = 1,
+			
+	Net = true,
+	Nets = 4
 }
 
 Config.DebugHooks = {
