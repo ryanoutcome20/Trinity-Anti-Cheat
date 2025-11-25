@@ -9,6 +9,7 @@ local Config = { }
 --- Flag Batches ---
 
 Config.Batch = 32000
+Config.ProcessTime = 0.1
 
 --- Aimbot Checks ---
 

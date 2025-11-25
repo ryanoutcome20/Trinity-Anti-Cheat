@@ -99,7 +99,11 @@ local surface = Get("surface")
 local notify = Get("notify")
 local concommand = Get("concommand")
 
+local tostring = Get("tostring")
+local istable = Get("istable")
 local pcall = Get("pcall")
+local pairs = Get("pairs")
+local ipairs = Get("ipairs")
 local setfenv = Get("setfenv")
 local getfenv = Get("getfenv")
 local Color = Get("Color")
@@ -193,108 +197,6 @@ function TAC.GetBinaryNames(Name)
 	end
 	
 	return Names
-end
-
---- Batch System ---
-
-TAC.Batch = {
-	Cache = { },
-	Buffer = { },
-	Head = 1
-}
-
-function TAC.Batch.Add(Message, Data, Size)
-	TAC.Batch.Buffer[#TAC.Batch.Buffer + 1] = {
-		Message = Message,
-		Data = Data,
-		Size = Size
-	}
-end
-
-function TAC.Batch.Process()
-	-- Check if we have anything to process.
-	if TAC.Batch.Head > #TAC.Batch.Buffer then
-		TAC.Batch.Head = 1
-		TAC.Batch.Buffer = { }
-		return
-	end
-	
-	-- Get our batch that we're sending.
-	local Objects = {
-		Send = { },
-		Size = 0
-	}
-	
-	while true do 
-		local Object = TAC.Batch.Buffer[TAC.Batch.Head]
-		
-		if not Object then
-			break
-		end
-		
-		if Objects.Size + Object.Size > TAC.Config.Batch then
-			break
-		end
-		
-		Objects.Size = Objects.Size + Object.Size
-		
-		Objects.Send[Object.Message] = Objects.Send[Object.Message] or { }
-		
-		table.insert(Objects.Send[Object.Message], Object.Data)
-		
-		TAC.Batch.Head = TAC.Batch.Head + 1
-	end
-	
-	-- Check if we even have anything to process.
-	if Objects.Size == 0 then
-		return
-	end
-	
-	-- Send our alerts.
-	for Name, Send in pairs(Objects.Send) do 
-		TAC.Atlas:Send(
-			Name .. " Batch",
-			Send
-		)
-	end
-end
-
-timer.Create("Batch", 0.25, 0, TAC.Batch.Process)
-
---- Flag System ---
-
-function TAC.FlagEx(Buffered, cID, Message, ...)
-	local Data = {
-		cID = cID,
-		Message = string.format(
-			Message,
-			...
-		)
-	}
-
-	if Buffered then
-		TAC.Batch.Add(
-			"Flag", 
-			Data, 
-			#Data.cID + #Data.Message
-		)
-		
-		return
-	end
-	
-	TAC.Atlas:Send(
-		"Flag", 
-		Data
-	)
-end
-
-function TAC.Flag(cID, Message, ...)	
-	return TAC.FlagEx(
-		true,
-		cID,
-		Message,
-		...
-	)
 end
 
 --- List Manager ---
@@ -537,6 +439,111 @@ end
 TAC.Localizers.Table.hook.Add = TAC.Hooks.Add
 TAC.Localizers.Table.hook.Remove = TAC.Hooks.Remove
 TAC.Localizers.Table.hook.Run = TAC.Hooks.Run
+
+--- Batch System ---
+
+TAC.Batch = {
+	Cache = { },
+	Buffer = { },
+	Head = 1
+}
+
+function TAC.Batch.Add(Message, Data, Size)
+	TAC.Batch.Buffer[#TAC.Batch.Buffer + 1] = {
+		Message = Message,
+		Data = Data,
+		Size = Size
+	}
+end
+
+function TAC.Batch.Process()
+	-- Add our repeat timer.
+	timer.Simple(TAC.Config.ProcessTime, TAC.Batch.Process)
+
+	-- Check if we have anything to process.
+	if TAC.Batch.Head > #TAC.Batch.Buffer then
+		TAC.Batch.Head = 1
+		TAC.Batch.Buffer = { }
+		return
+	end
+	
+	-- Get our batch that we're sending.
+	local Objects = {
+		Send = { },
+		Size = 0
+	}
+	
+	while true do 
+		local Object = TAC.Batch.Buffer[TAC.Batch.Head]
+		
+		if not Object then
+			break
+		end
+		
+		if Objects.Size + Object.Size > TAC.Config.Batch then
+			break
+		end
+		
+		Objects.Size = Objects.Size + Object.Size
+		
+		Objects.Send[Object.Message] = Objects.Send[Object.Message] or { }
+		
+		table.insert(Objects.Send[Object.Message], Object.Data)
+		
+		TAC.Batch.Head = TAC.Batch.Head + 1
+	end
+	
+	-- Check if we even have anything to process.
+	if Objects.Size == 0 then
+		return
+	end
+	
+	-- Send our alerts.
+	for Name, Send in pairs(Objects.Send) do 
+		TAC.Atlas:Send(
+			Name .. " Batch",
+			Send
+		)
+	end
+end
+
+TAC.Hooks.Add("TAC.TransferConfig", "TAC.Batch.Process", TAC.Batch.Process)
+
+--- Flag System ---
+
+function TAC.FlagEx(Buffered, cID, Message, ...)
+	local Data = {
+		cID = cID,
+		Message = string.format(
+			Message,
+			...
+		)
+	}
+
+	if Buffered then
+		TAC.Batch.Add(
+			"Flag", 
+			Data, 
+			#Data.cID + #Data.Message
+		)
+		
+		return
+	end
+	
+	TAC.Atlas:Send(
+		"Flag", 
+		Data
+	)
+end
+
+function TAC.Flag(cID, Message, ...)	
+	return TAC.FlagEx(
+		true,
+		cID,
+		Message,
+		...
+	)
+end
 
 --- Config System ---
 
