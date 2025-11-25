@@ -100,7 +100,9 @@ local notify = Get("notify")
 local concommand = Get("concommand")
 
 local tostring = Get("tostring")
+local tobool = Get("tobool")
 local istable = Get("istable")
+local isstring = Get("isstring")
 local pcall = Get("pcall")
 local pairs = Get("pairs")
 local ipairs = Get("ipairs")
@@ -110,6 +112,7 @@ local Color = Get("Color")
 local Angle = Get("Angle")
 local Vector = Get("Vector")
 local include = Get("include")
+local CompileString = Get("CompileString")
 local CreateClientConVar = Get("CreateClientConVar")
 local LocalPlayer = Get("LocalPlayer")
 local FindMetaTable = Get("FindMetaTable")
@@ -754,10 +757,6 @@ TAC.Captures = {
 	Ran = { }
 }
 
-local tostring = tostring
-
-local debug_getinfo = debug.getinfo
-
 function TAC.Captures.Direct(Function, Message)
 	local Data = TAC.GenerateBuffer(Function)
 	
@@ -776,7 +775,7 @@ end
 
 function TAC.Captures.Stack(Message)
 	for i = 3, 8 do 
-		local Info = debug_getinfo(i, "f")
+		local Info = debug.getinfo(i, "f")
 	
 		if not Info then
 			break
@@ -796,29 +795,21 @@ end
 
 --- Detours ---
 
-TAC.Detours = { }
-
-TAC.Detours.Whitelist = {
-	Counter = 0,
-	Identifiers = { 
-		["RunString(Ex)"] = true,
-		["CompileString"] = true
-	},
-	Hashes = { },
-	Dumps = { }
+TAC.Detours = { 
+	Whitelist = {
+		Counter = 0,
+		Identifiers = { 
+			["RunString(Ex)"] = true,
+			["CompileString"] = true
+		},
+		Hashes = { },
+		Dumps = { }
+	}
 }
 
 setmetatable(TAC.Detours.Whitelist.Dumps, {
 	__mode = "k"
 })
-
-local tobool = tobool
-local isstring = isstring
-local pcall = pcall
-local CompileString = CompileString
-
-local math_max = math.max
-local util_CRC = util.CRC
 
 function TAC.Detours.Whitelist.Whitelisted(Function, Info)
 	local Whitelist = TAC.Detours.Whitelist
@@ -842,7 +833,7 @@ function TAC.Detours.Whitelist.Whitelisted(Function, Info)
 	local Hash = Whitelist.Hash(Function, Info.short_src)
 
 	if Hash and Whitelist.Hashes[Hash] then
-		Whitelist.Counter = math_max(Whitelist.Counter - 1, 0)
+		Whitelist.Counter = math.max(Whitelist.Counter - 1, 0)
 		return true
 	end
 	
@@ -868,7 +859,7 @@ function TAC.Detours.Whitelist.Hash(Function, Identifier)
 		return 
 	end
 	
-	local Checksum = util_CRC(Dump) 
+	local Checksum = util.CRC(Dump) 
 	
 	TAC.Detours.Whitelist.Dumps[Function] = Checksum
 	
