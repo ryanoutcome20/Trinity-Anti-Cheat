@@ -301,8 +301,6 @@ function TAC.GenerateUpvalueTree(Function)
 	return Variables
 end
 
-_G.GenerateUpvalueTree = TAC.GenerateUpvalueTree
-
 --- Detour System ---
 
 TAC.Detour = {
