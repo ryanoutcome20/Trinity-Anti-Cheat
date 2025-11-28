@@ -416,3 +416,6 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Trinity Anti-Cheat debugging files
+lua/tac/modules/debug/
