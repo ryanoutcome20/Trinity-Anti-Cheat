@@ -22,9 +22,6 @@ MsgN("  Loading stub systems")
 include("tac/stubs/punishment_stubs.lua")
 include("tac/stubs/module_stubs.lua")
 
-MsgN("  Checking debug file")
-include("tac/debug.lua")
-
 MsgN("  Loading API")
 include("tac/api.lua")
 
