@@ -96,6 +96,7 @@ Config.DebugHooks = {
 	Enabled = true,
 
 	Lines = true,
+	Target = 7,
 
 	Garbage = true,
 	Delta = 100,
