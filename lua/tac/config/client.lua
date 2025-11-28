@@ -96,12 +96,11 @@ Config.DebugHooks = {
 	Enabled = true,
 
 	Lines = true,
+	Target = 7,
 
 	Garbage = true,
 	Delta = 100,
-	Fill = 3,
-
-	Step = 0.5
+	Fill = 3
 }
 
 --- Static Cheats / Scripts ---
