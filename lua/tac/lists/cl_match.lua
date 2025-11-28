@@ -1,6 +1,7 @@
 return {
 	"legitbot",
 	"ragebot",
+	"aimbot",
 	"hack",
 	"script",
 	"cheat",
