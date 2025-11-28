@@ -9,7 +9,7 @@ local Config = { }
 --- Flag Batches ---
 
 Config.Batch = 32000
-Config.ProcessTime = 0.1
+Config.ProcessTime = 0.25
 
 --- Aimbot Checks ---
 
@@ -70,6 +70,8 @@ Config.MenuMovement = {
  
 --- Integrity ---
 
+Config.PIC = true
+
 Config.Tracer = true
 
 Config.Stack = true
@@ -97,7 +99,7 @@ Config.DebugHooks = {
 
 	Garbage = true,
 	Delta = 100,
-	Fill = 100,
+	Fill = 3,
 
 	Step = 0.5
 }
