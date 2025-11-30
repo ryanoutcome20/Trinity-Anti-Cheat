@@ -132,6 +132,14 @@ Config.ESP = {
 	Enabled = false
 }
 
+--- Heartbeat ---
+
+Config.Heartbeat = {
+	Enabled = true,
+
+	Await = 15
+}
+
 --- Scans ---
 
 Config.Binaries = {
