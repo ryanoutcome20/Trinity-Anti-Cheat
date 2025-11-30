@@ -1060,6 +1060,9 @@ pStub.Register("Detours", {
 	but ideally the hook that causes this check to start its routine won't get called
 	if you have errors.
 
+	If you tune the await timer then you should probably adjust it on the clients config
+	too.
+
 	Probably shouldn't turn this off, if you have issues make a GitHub issue.
 ]]--
 

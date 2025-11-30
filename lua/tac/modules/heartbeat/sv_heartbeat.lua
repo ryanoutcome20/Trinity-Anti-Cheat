@@ -9,7 +9,7 @@ function TAC.Heartbeat.Check(Player)
         return TAC.Print(
             PRINT_WARN,
             "Heartbeat",
-            "Attempted to verify type `%s` which isn't valid",
+            "Attempted to verify heartbeat of type `%s` which isn't valid",
             type(Player)
         )
     end
@@ -22,11 +22,21 @@ function TAC.Heartbeat.Check(Player)
         )	
     end
 
-    -- For disconnecting/retrying players.
-    Player:Set("Heartbeat", false)
+    TAC.Heartbeat.Start(Player)
 end
 
-function TAC.Heartbeat.Initialize(Player)
+function TAC.Heartbeat.Start(Player)
+    if not IsValid(Player) then
+        return TAC.Print(
+            PRINT_WARN,
+            "Heartbeat",
+            "Attempted to start heartbeat of type `%s` which isn't valid",
+            type(Player)
+        )
+    end
+
+    Player:Set("Heartbeat", false)
+
     TAC.Timer(
         Player, 
         TAC.Config.Heartbeat.Await, 
@@ -35,4 +45,4 @@ function TAC.Heartbeat.Initialize(Player)
 end
 
 Atlas:Listen("Heartbeat", "TAC.Heartbeat.Receive", MODE_DONE, TAC.Heartbeat.Receive)
-hook.Add("TAC.TransferStopped", "TAC.Heartbeat.Initialize", TAC.Heartbeat.Initialize)
+hook.Add("TAC.TransferStopped", "TAC.Heartbeat.Start", TAC.Heartbeat.Start)
