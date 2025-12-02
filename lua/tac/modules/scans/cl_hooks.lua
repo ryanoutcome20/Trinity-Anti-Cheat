@@ -1,6 +1,6 @@
 local Hooks = TAC.Lists.Merge("Hooks")
 
-local Config = TAC.Config.Hooks
+local Config = TAC.Config.Scans.Hooks
 
 local function Scan()
 	if not Config.Enabled then
