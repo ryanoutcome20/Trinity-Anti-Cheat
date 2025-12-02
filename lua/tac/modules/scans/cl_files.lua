@@ -2,7 +2,7 @@ local Files = TAC.Lists.Merge("Files")
 local Directories = TAC.Lists.Merge("Directories")
 
 local function Scan()
-	local Config = TAC.Config.Files
+	local Config = TAC.Config.Scans.Files
 
 	if not Config.Enabled then
 		return
