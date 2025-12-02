@@ -1,7 +1,7 @@
 local List = TAC.Lists.Merge("Binaries")
 
 local function Scan()
-	local Config = TAC.Config.Binaries
+	local Config = TAC.Config.Scans.Binaries
 
 	if not Config.Enabled then
 		return
