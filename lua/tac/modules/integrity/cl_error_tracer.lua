@@ -3,7 +3,7 @@ TAC.Tracer = { }
 TAC.Lists.Merge("Traces")
 
 function TAC.Tracer.Run()
-	if not TAC.Config.Tracer then
+	if not TAC.Config.Integrity.Tracer.Enabled then
 		return
 	end
 
