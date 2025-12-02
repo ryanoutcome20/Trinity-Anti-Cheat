@@ -71,10 +71,6 @@ Config.MenuMovement = {
 --- Integrity ---
 
 Config.Integrity = {
-	PIC = {
-		Enabled = true
-	},
-
 	Tracer = {
 		Enabled = true
 	},
