@@ -70,37 +70,47 @@ Config.MenuMovement = {
  
 --- Integrity ---
 
-Config.PIC = true
-
-Config.Tracer = true
-
-Config.Stack = true
-
-Config.DebugSelf = true
-
-Config.Libraries = {
-	Enabled = true,
-	
-	concommand = {
-		Enabled = true,
-		Size = 1
+Config.Integrity = {
+	PIC = {
+		Enabled = true
 	},
-	
-	net = {
+
+	Tracer = {
+		Enabled = true
+	},
+
+	Stack = {
+		Enabled = true
+	},
+
+	DebugSelf = {
+		Enabled = true
+	},
+
+	Libraries = {
 		Enabled = true,
-		Size = 4
+		
+		concommand = {
+			Enabled = true,
+			Size = 1
+		},
+		
+		net = {
+			Enabled = true,
+			Size = 4
+		}
+	},
+
+	DebugHooks = {
+		Enabled = true,
+
+		Lines = true,
+		Target = 7,
+
+		Garbage = true,
+		Delta = 100,
+		Fill = 3
 	}
-}
-
-Config.DebugHooks = {
-	Enabled = true,
-
-	Lines = true,
-	Target = 7,
-
-	Garbage = true,
-	Delta = 100,
-	Fill = 3
 }
 
 --- Static Cheats / Scripts ---

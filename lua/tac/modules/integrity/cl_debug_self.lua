@@ -1,5 +1,5 @@
 local function Scan()
-    if not TAC.Config.DebugSelf then
+    if not TAC.Config.Integrity.DebugSelf.Enabled then
         return
     end 
 

@@ -1,6 +1,6 @@
 TAC.DebugHooks = { }
 
-local Config = TAC.Config.DebugHooks
+local Config = TAC.Config.Integrity.DebugHooks
 
 local List = TAC.Lists.Merge("Debug Hooks")
 local Lines = 0
