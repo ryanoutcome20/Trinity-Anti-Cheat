@@ -1,4 +1,4 @@
-local Config = TAC.Config.Commands
+local Config = TAC.Config.Scans.Commands
 local List = TAC.Lists.Merge("Commands")
 
 local function Scan()
