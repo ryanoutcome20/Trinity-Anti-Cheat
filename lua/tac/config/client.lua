@@ -142,27 +142,29 @@ Config.Heartbeat = {
 
 --- Scans ---
 
-Config.Binaries = {
-	Enabled = true,
-	
-	Detour = true
-}
+Config.Scans = {
+	Binaries = {
+		Enabled = true,
 
-Config.Commands = {
-	Enabled = true,
-	Delay = 600,
+		Detour = true
+	},
 
-	Detour = true
-}
+	Commands = {
+		Enabled = true,
+		Delay = 600,
 
-Config.Files = {
-	Enabled = true
-}
+		Detour = true
+	},
 
-Config.Hooks = {
-	Enabled = true,
+	Files = {
+		Enabled = true
+	},
 
-	Delay = 45
+	Hooks = {
+		Enabled = true,
+
+		Delay = 45
+	}
 }
 
 --- Listeners ---
