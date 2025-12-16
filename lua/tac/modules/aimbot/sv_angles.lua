@@ -5,6 +5,10 @@ function TAC.Aimbot.Angles(Player, cNew, cOld, CUserCMD)
 		return
 	end
 
+	if TAC.TimeSinceCreated(Player) <= Config.TimeSinceCreated then
+		return
+	end
+
 	local Angles = cNew:GetViewAngles()
 
 	if Config.CheckPitch and math.abs(Angles.x) > (Config.MaxPitch + 1) then
