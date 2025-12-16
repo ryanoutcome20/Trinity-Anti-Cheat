@@ -268,6 +268,8 @@ pStub.Register("Angles", {
 	MaxPitch = 90,
 	CheckYaw = true,
 	MaxYaw = 180,
+
+	TimeSinceCreated = 5,
 	
 	Vehicles = true
 })
