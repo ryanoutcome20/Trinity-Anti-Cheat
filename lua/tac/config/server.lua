@@ -918,6 +918,22 @@ pStub.Register("Error Tracer", {
 	Method = PUNISHMENT_LOG
 })
 
+
+--- File IO ---
+
+pStub.Register("File IO", {
+	Enabled = true,
+	Name = "File I/O",
+	Description = "Occurs when a player blocks file I/O.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "File I/O: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
 --- Debug Self ---
 
 pStub.Register("Debug Self", {
