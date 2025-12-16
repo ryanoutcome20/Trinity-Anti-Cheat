@@ -111,6 +111,10 @@ function TAC.Breakers.PVS.Run()
 			local Validated = false
 			
 			for k = 1, #Positions do
+				if not util.IsInWorld(Positions[k]) then
+					continue
+				end
+
 				if TAC.Breakers.PVS.Check(Player, Positions[k], Target) then
 					Validated = true
 					break
