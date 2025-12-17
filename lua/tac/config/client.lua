@@ -5,7 +5,6 @@
 -- Don't touch these.
 local Config = { }
 
-
 --- Flag Batches ---
 
 Config.Batch = 32000
