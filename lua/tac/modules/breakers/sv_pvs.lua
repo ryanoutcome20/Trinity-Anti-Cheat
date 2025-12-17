@@ -109,7 +109,7 @@ function TAC.Breakers.PVS.Run()
 			end
 			
 			local Validated = false
-			
+
 			for k = 1, #Positions do
 				if not util.IsInWorld(Positions[k]) then
 					continue

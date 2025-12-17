@@ -230,8 +230,8 @@ Config.Punishment = {
 
 Config.Networking = {
 	Overreach = 2,
-	Delay = 0.25,
-	Step = 1
+	Delay = 2,
+	Step = 0.5
 }
 
 pStub.Register("Networking Batch", {
@@ -280,9 +280,9 @@ pStub.Register("Snap", {
 	Description = "Detects snapping to players in a single tick.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
-	Delta = 25,
+	Delta = 15,
 	Distance = 65000,
 	TimeSinceSpawned = 3.5,
 	
@@ -291,7 +291,7 @@ pStub.Register("Snap", {
 	Decay = 4,
 	
 	Vehicles = true,
-	Ping = 90,
+	Ping = 250,
 	Loss = 80
 })
 
@@ -309,13 +309,13 @@ pStub.Register("Mouse", {
 	Distance = 8000,
 	
 	Flags = true,
-	Maximum = 6,
+	Maximum = 2,
 	Decay = 4,
 	
-	AlertFlagsMinimum = 3,
+	AlertFlagsMinimum = 1,
 	
 	Vehicles = true,
-	Ping = 150,
+	Ping = 250,
 	Loss = 80
 })
 
@@ -334,13 +334,13 @@ pStub.Register("Micromovement", {
 	Distance = 4000,
 	
 	Flags = true,
-	Maximum = 6,
+	Maximum = 2,
 	Decay = 4,
 	
-	AlertFlagsMinimum = 3,
+	AlertFlagsMinimum = 1,
 	
 	Vehicles = true,
-	Ping = 150,
+	Ping = 250,
 	Loss = 80
 })
 
@@ -381,7 +381,7 @@ pStub.Register("Nospread", {
 })
 
 pStub.Register("Emulated Mouse", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Emulated Mouse",
 	Description = "Detects emulated mouse movements by verifying mouse step amounts relative to sensitivity.",
 	Category = "Aimbot",
@@ -390,7 +390,7 @@ pStub.Register("Emulated Mouse", {
 	
 	Client = true,
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_LOG,
 	
 	Flags = true,
 	Maximum = 2,
@@ -429,7 +429,7 @@ pStub.Register("Autostrafe", {
 	Description = "Detects players with artificial movement patterns related to strafing.",
 	Category = "Movement",
 	
-	Method = PUNISHMENT_BAN,
+	Method = PUNISHMENT_KICK,
 		
 	Flags = true,
 	Maximum = 20,
@@ -709,7 +709,7 @@ pStub.Register("Command Enforcer", {
 ]]--
 
 Config.Interpolated = {
-	Enabled = false,
+	Enabled = true,
 	
 	Ratio = 0.00005,
 	Randomize = true,
@@ -746,8 +746,8 @@ Config.PVS = {
 	Enabled = true,
 	
 	squareSize = 1,
-	squaredSize = 128,
-	intervalScale = 1,
+	squaredSize = 256,
+	intervalScale = 256,
 	Step = 8
 }
 
