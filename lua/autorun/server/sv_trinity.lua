@@ -22,9 +22,6 @@ MsgN("  Loading stub systems")
 include("tac/stubs/punishment_stubs.lua")
 include("tac/stubs/module_stubs.lua")
 
-MsgN("  Checking debug file")
-include("tac/debug.lua")
-
 MsgN("  Loading API")
 include("tac/api.lua")
 
@@ -36,7 +33,7 @@ MsgN("  Caching resources")
 
 --- Config ---
 
-TAC.Version = "0.2.6"
+TAC.Version = "0.2.7"
 TAC.Edition = "Alpha"
 
 MsgN("  Loading config")
@@ -62,9 +59,6 @@ AddCSLuaFile("external/atlas/cl_atlas.lua")
 
 MsgN("  Creating pLib instance")
 include("external/sv_plib.lua")
-
-MsgN("  Creating fLib instance")
-include("external/sv_flib.lua")
 
 --- Lists ---
  

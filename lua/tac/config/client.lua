@@ -5,10 +5,10 @@
 -- Don't touch these.
 local Config = { }
 
-
 --- Flag Batches ---
 
 Config.Batch = 32000
+Config.ProcessTime = 0.25
 
 --- Aimbot Checks ---
 
@@ -69,32 +69,43 @@ Config.MenuMovement = {
  
 --- Integrity ---
 
-Config.Tracer = true
+Config.Integrity = {
+	Tracer = {
+		Enabled = true
+	},
 
-Config.Stack = true
+	Stack = {
+		Enabled = true
+	},
 
-Config.DebugSelf = true
+	DebugSelf = {
+		Enabled = true
+	},
 
-Config.Libraries = {
-	Enabled = true,
-	
-	Command = true,
-	Commands = 1,
-			
-	Net = true,
-	Nets = 4
-}
+	Libraries = {
+		Enabled = true,
+		
+		concommand = {
+			Enabled = true,
+			Size = 1
+		},
+		
+		net = {
+			Enabled = true,
+			Size = 4
+		}
+	},
 
-Config.DebugHooks = {
-	Enabled = true,
+	DebugHooks = {
+		Enabled = true,
 
-	Lines = true,
+		Lines = true,
+		Target = 7,
 
-	Garbage = true,
-	Delta = 100,
-	Fill = 100,
-
-	Step = 0.5
+		Garbage = true,
+		Delta = 100,
+		Fill = 3
+	}
 }
 
 --- Static Cheats / Scripts ---
@@ -126,29 +137,39 @@ Config.ESP = {
 	Enabled = false
 }
 
+--- Heartbeat ---
+
+Config.Heartbeat = {
+	Enabled = true,
+
+	Await = 15
+}
+
 --- Scans ---
 
-Config.Binaries = {
-	Enabled = true,
-	
-	Detour = true
-}
+Config.Scans = {
+	Binaries = {
+		Enabled = true,
 
-Config.Commands = {
-	Enabled = true,
-	Delay = 600,
+		Detour = true
+	},
 
-	Detour = true
-}
+	Commands = {
+		Enabled = true,
+		Delay = 600,
 
-Config.Files = {
-	Enabled = true
-}
+		Detour = true
+	},
 
-Config.Hooks = {
-	Enabled = true,
+	Files = {
+		Enabled = true
+	},
 
-	Delay = 45
+	Hooks = {
+		Enabled = true,
+
+		Delay = 45
+	}
 }
 
 --- Listeners ---

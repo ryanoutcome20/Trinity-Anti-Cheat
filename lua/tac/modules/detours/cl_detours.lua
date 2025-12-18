@@ -10,58 +10,6 @@ local Wrap = function(ID, Meta)
 	end, Meta)
 end
 
---- Whitelist ---
-
-Detour("RunString", function(Original, Code, Identifier, ...)
-	TAC.Captures.Stack("RunString")
-	
-	if Identifier then
-		TAC.Detours.Whitelist.Identifiers[Identifier] = true
-	end
-	
-	if isstring(Code) then
-		TAC.Detours.Whitelist.Update(Code, Identifier)
-	end
-	
-	TAC.Detours.Whitelist.Increment()
-	
-	return Original(Code, Identifier, ...)
-end)
-
-Detour("RunStringEx", function(Original, Code, Identifier, ...)
-	TAC.Captures.Stack("RunStringEx")
-	
-	if Identifier then
-		TAC.Detours.Whitelist.Identifiers[Identifier] = true
-	end
-	
-	if isstring(Code) then
-		TAC.Detours.Whitelist.Update(Code, Identifier)
-	end
-	
-	TAC.Detours.Whitelist.Increment()
-	
-	return Original(Code, Identifier, ...)
-end)
-
-Detour("CompileString", function(Original, Code, Identifier, ...)
-	TAC.Captures.Stack("CompileString")
-	
-	if Identifier then
-		TAC.Detours.Whitelist.Identifiers[Identifier] = true
-	end
-	
-	local Output = Original(Code, Identifier, ...)
-
-	if isfunction(Output) then		
-		TAC.Detours.Whitelist.Update(Output, Identifier)
-	end
-	
-	TAC.Detours.Whitelist.Increment()
-	
-	return Output
-end)
-
 --- Globals ---
 
 Wrap("gcinfo")
@@ -79,7 +27,6 @@ Wrap("GetConVar_Internal")
 
 --- Classes ---
 
-Wrap("CommandNumber", "CUserCmd")
 Wrap("TickCount", "CUserCmd")
 Wrap("SetViewAngles", "CUserCmd")
 Wrap("SetMouseX", "CUserCmd")

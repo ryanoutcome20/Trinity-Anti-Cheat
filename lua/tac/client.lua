@@ -24,13 +24,6 @@ TAC.Print = include("external/sh_print.lua")
 
 TAC.Loaded = 0
 
---- Plugin Setup ---
-
-TAC.Sizes = {
-	Commands = {Key = concommand.GetTable, Index = 1},
-	Net = {Key = net.Receivers, Index = -1}
-}
-
 --- Localizers ---
 
 TAC.Localizers = { }
@@ -106,13 +99,20 @@ local surface = Get("surface")
 local notify = Get("notify")
 local concommand = Get("concommand")
 
+local tostring = Get("tostring")
+local tobool = Get("tobool")
+local istable = Get("istable")
+local isstring = Get("isstring")
 local pcall = Get("pcall")
+local pairs = Get("pairs")
+local ipairs = Get("ipairs")
 local setfenv = Get("setfenv")
 local getfenv = Get("getfenv")
 local Color = Get("Color")
 local Angle = Get("Angle")
 local Vector = Get("Vector")
 local include = Get("include")
+local CompileString = Get("CompileString")
 local CreateClientConVar = Get("CreateClientConVar")
 local LocalPlayer = Get("LocalPlayer")
 local FindMetaTable = Get("FindMetaTable")
@@ -166,22 +166,6 @@ function TAC.Size(Table)
 	return Size
 end
 
-function TAC.Visible(Mask, Target, From)
-	From = From or LocalPlayer():EyePos()
-	
-	local Trace = util.TraceLine({
-		start = From,
-		endpos = Target:EyePos(),
-		mask = Mask,
-		filter = {
-			LocalPlayer(), 
-			Target
-		}
-	})
-	
-	return not Trace.Hit or Trace.Entity == Target
-end
-
 function TAC.StandardAngle(Yaw)
 	if Yaw >= 0 and Yaw <= 180 then
 		return Yaw
@@ -216,108 +200,6 @@ function TAC.GetBinaryNames(Name)
 	end
 	
 	return Names
-end
-
---- Batch System ---
-
-TAC.Batch = {
-	Cache = { },
-	Buffer = { },
-	Head = 1
-}
-
-function TAC.Batch.Add(Message, Data, Size)
-	TAC.Batch.Buffer[#TAC.Batch.Buffer + 1] = {
-		Message = Message,
-		Data = Data,
-		Size = Size
-	}
-end
-
-function TAC.Batch.Process()
-	-- Check if we have anything to process.
-	if TAC.Batch.Head > #TAC.Batch.Buffer then
-		TAC.Batch.Head = 1
-		TAC.Batch.Buffer = { }
-		return
-	end
-	
-	-- Get our batch that we're sending.
-	local Objects = {
-		Send = { },
-		Size = 0
-	}
-	
-	while true do 
-		local Object = TAC.Batch.Buffer[TAC.Batch.Head]
-		
-		if not Object then
-			break
-		end
-		
-		if Objects.Size + Object.Size > TAC.Config.Batch then
-			break
-		end
-		
-		Objects.Size = Objects.Size + Object.Size
-		
-		Objects.Send[Object.Message] = Objects.Send[Object.Message] or { }
-		
-		table.insert(Objects.Send[Object.Message], Object.Data)
-		
-		TAC.Batch.Head = TAC.Batch.Head + 1
-	end
-	
-	-- Check if we even have anything to process.
-	if Objects.Size == 0 then
-		return
-	end
-	
-	-- Send our alerts.
-	for Name, Send in pairs(Objects.Send) do 
-		TAC.Atlas:Send(
-			Name .. " Batch",
-			Send
-		)
-	end
-end
-
-timer.Create("Batch", 0.25, 0, TAC.Batch.Process)
-
---- Flag System ---
-
-function TAC.FlagEx(Buffered, cID, Message, ...)
-	local Data = {
-		cID = cID,
-		Message = string.format(
-			Message,
-			...
-		)
-	}
-
-	if Buffered then
-		TAC.Batch.Add(
-			"Flag", 
-			Data, 
-			#Data.cID + #Data.Message
-		)
-		
-		return
-	end
-	
-	TAC.Atlas:Send(
-		"Flag", 
-		Data
-	)
-end
-
-function TAC.Flag(cID, Message, ...)	
-	return TAC.FlagEx(
-		true,
-		cID,
-		Message,
-		...
-	)
 end
 
 --- List Manager ---
@@ -386,10 +268,10 @@ end
 
 --- Function Buffers ---
 
-function TAC.GenerateBuffer(Function, noFormat)
-	local GetInfo, FuncInfo = debug.getinfo(Function), jit.util.funcinfo(Function)
+function TAC.GenerateBuffer(Function)
+	local GetInfo, FuncInfo = debug.getinfo(Function, "fnS"), jit.util.funcinfo(Function)
 
-	local Data = {
+	return {
 		source = tostring(GetInfo.source or "s"):gsub("\\", "/"), -- OS specific. (#13)
 		short_src = GetInfo.short_src or "sh",
 		what = GetInfo.what or "wh",
@@ -397,30 +279,9 @@ function TAC.GenerateBuffer(Function, noFormat)
 		lastlinedefined = GetInfo.lastlinedefined or "lld",
 		
 		j_linedefined = FuncInfo.linedefined or "ld",
-		j_ffid = FuncInfo.ffid or "ffid",
-		j_upvalues = FuncInfo.upvalues or "uv",
 		
 		isfunc = GetInfo.name and GetInfo.namewhat and GetInfo.linedefined > 0,
-		
-		equals = (GetInfo.func == Function) and "fde" or "fne"
 	}
-	
-	if noFormat then
-		return Data
-	end
-
-	return string.format(
-		"%s:%s:%s:%s:%s:%s:%s:%s:%s",
-		Data.source,
-		Data.short_src,
-		Data.what,
-		Data.linedefined,
-		Data.lastlinedefined,
-		Data.j_linedefined,
-		Data.j_ffid,
-		Data.j_upvalues,
-		Data.equals
-	)
 end
 
 function TAC.GenerateUpvalueTree(Function)
@@ -428,7 +289,7 @@ function TAC.GenerateUpvalueTree(Function)
 	local Variables = { }
 
 	if Info and Info.what == "Lua" then
-		local Upvalues = info.nups
+		local Upvalues = Info.nups
 
 		for i = 1, Upvalues do
 			local k,v = debug.getupvalue(Function, i)
@@ -576,6 +437,111 @@ TAC.Localizers.Table.hook.Add = TAC.Hooks.Add
 TAC.Localizers.Table.hook.Remove = TAC.Hooks.Remove
 TAC.Localizers.Table.hook.Run = TAC.Hooks.Run
 
+--- Batch System ---
+
+TAC.Batch = {
+	Cache = { },
+	Buffer = { },
+	Head = 1
+}
+
+function TAC.Batch.Add(Message, Data, Size)
+	TAC.Batch.Buffer[#TAC.Batch.Buffer + 1] = {
+		Message = Message,
+		Data = Data,
+		Size = Size
+	}
+end
+
+function TAC.Batch.Process()
+	-- Add our repeat timer.
+	timer.Simple(TAC.Config.ProcessTime, TAC.Batch.Process)
+
+	-- Check if we have anything to process.
+	if TAC.Batch.Head > #TAC.Batch.Buffer then
+		TAC.Batch.Head = 1
+		TAC.Batch.Buffer = { }
+		return
+	end
+	
+	-- Get our batch that we're sending.
+	local Objects = {
+		Send = { },
+		Size = 0
+	}
+	
+	while true do 
+		local Object = TAC.Batch.Buffer[TAC.Batch.Head]
+		
+		if not Object then
+			break
+		end
+		
+		if Objects.Size + Object.Size > TAC.Config.Batch then
+			break
+		end
+		
+		Objects.Size = Objects.Size + Object.Size
+		
+		Objects.Send[Object.Message] = Objects.Send[Object.Message] or { }
+		
+		table.insert(Objects.Send[Object.Message], Object.Data)
+		
+		TAC.Batch.Head = TAC.Batch.Head + 1
+	end
+	
+	-- Check if we even have anything to process.
+	if Objects.Size == 0 then
+		return
+	end
+	
+	-- Send our alerts.
+	for Name, Send in pairs(Objects.Send) do 
+		TAC.Atlas:Send(
+			Name .. " Batch",
+			Send
+		)
+	end
+end
+
+TAC.Hooks.Add("TAC.TransferConfig", "TAC.Batch.Process", TAC.Batch.Process)
+
+--- Flag System ---
+
+function TAC.FlagEx(Buffered, cID, Message, ...)
+	local Data = {
+		cID = cID,
+		Message = string.format(
+			Message,
+			...
+		)
+	}
+
+	if Buffered then
+		TAC.Batch.Add(
+			"Flag", 
+			Data, 
+			#Data.cID + #Data.Message
+		)
+		
+		return
+	end
+	
+	TAC.Atlas:Send(
+		"Flag", 
+		Data
+	)
+end
+
+function TAC.Flag(cID, Message, ...)	
+	return TAC.FlagEx(
+		true,
+		cID,
+		Message,
+		...
+	)
+end
+
 --- Config System ---
 
 TAC.Config = { }
@@ -585,28 +551,6 @@ TAC.Atlas:Listen("Config", "TAC.Config", MODE_DONE, function(Stage, Config)
 
 	TAC.Hooks.Run("TAC.TransferConfig", Config)
 end)
-
---- Build Sizes ---
-
-for k, Object in pairs(TAC.Sizes) do 
-	if Object.Index == -1 then
-		Object.Size = table.Count(Object.Key)
-	else	
-		local Key, Value = debug.getupvalue(Object.Key, Object.Index)
-		
-		if istable(Value) then
-			Object.Size = table.Count(Value)
-		end
-	end
-end
-
---- Load Message ---
-
-TAC.Print(
-	PRINT_INFO,
-	"Info",
-	"Trinity Pre-Init Loaded"
-)
 
 --- Plugin System ---
 
@@ -750,29 +694,235 @@ TAC.Detour.Register("debug.getupvalue", function(Original, Function, ...)
 	return Name, Value
 end)
 
---- Debug Mode ---
+--- Libraries Check ---
 
-local Debug = true
+TAC.Libraries = {
+	Slots = {
+		{
+			Key = concommand.GetTable,
+			Config = "concommand", 
+			Index = "CommandList"
+		},
+		{
+			Key = net.Receivers,
+			Config = "net"
+		}
+	}
+}
 
-if Debug then
-	TAC.Print(
-		PRINT_DEBUG,
-		"Debug",
-		"Trinity Debug Enabled"
-	)
+for k, Data in ipairs(TAC.Libraries.Slots) do 
+	local Size = -1
 
-	concommand.Add("tac_globalize", function()
-		_G.TAC = TAC
-		
-		TAC.Print(
-			PRINT_DEBUG,
-			"Debug",
-			"Object `%s` dumped to globals",
-			tostring(_G.TAC)
-		)
-	end)
-	
-	concommand.Add("tac_dbg_out", function()
-		PrintTable(TAC)
-	end)
+	if Data.Index then
+		Size = table.Count(TAC.GenerateUpvalueTree(Data.Key)[Data.Index])
+	else
+		Size = table.Count(Data.Key)
+	end
+
+	Data.Size = Size
 end
+
+function TAC.Libraries.Run()
+	local Config = TAC.Config.Integrity.Libraries
+
+	if not Config.Enabled then
+		return
+	end
+
+	for k, Data in ipairs(TAC.Libraries.Slots) do 
+		local Sub = Config[Data.Config]
+
+		if not Sub.Enabled then
+			continue
+		end
+
+		if not Data.Size or Data.Size ~= Sub.Size then
+			return TAC.Flag("Libraries", "Bad Libraries [%s; expected: %i; got: %s]", Data.Config, Sub.Size, Data.Size)
+		end
+	end
+end
+
+TAC.Hooks.Add("TAC.TransferConfig", "TAC.Libraries.Run", TAC.Libraries.Run)
+
+--- Captures ---
+
+TAC.Captures = {
+	Data = { },
+	Ran = { }
+}
+
+function TAC.Captures.Direct(Function, Message)
+	local Data = TAC.GenerateBuffer(Function)
+	
+	if TAC.Detours.Whitelist.Whitelisted(Function, Data) then
+		return
+	end
+
+	Data.Message = Message
+	
+	Data.source = nil
+	Data.isfunc = nil
+
+	TAC.Batch.Add(
+		"Function", 
+		Data, 
+		TAC.Size(Data)
+	)
+end
+
+function TAC.Captures.Stack(Message)
+	for i = 3, 8 do 
+		local Info = debug.getinfo(i, "f")
+	
+		if not Info then
+			break
+		end
+		
+		local Hash = tostring(Info.func)
+		
+		if TAC.Captures.Ran[Hash] then
+			continue
+		end
+		
+		TAC.Captures.Direct(Info.func, Message)
+		
+		TAC.Captures.Ran[Hash] = true
+	end
+end
+
+--- Detours ---
+
+TAC.Detours = { 
+	Whitelist = {
+		Counter = 0,
+		Identifiers = { 
+			["RunString(Ex)"] = true,
+			["CompileString"] = true
+		},
+		Hashes = { },
+		Dumps = { }
+	}
+}
+
+setmetatable(TAC.Detours.Whitelist.Dumps, {
+	__mode = "k"
+})
+
+function TAC.Detours.Whitelist.Whitelisted(Function, Info)
+	local Whitelist = TAC.Detours.Whitelist
+
+	if Whitelist.Counter == 0 or not Whitelist.Identifiers[Info.short_src] then
+		return false
+	end
+
+	if tobool(Info.isfunc) and Info.what ~= "main" then
+		if Info.namewhat == "global" and not _G[Info.name] then
+			TAC.Audit(
+				"Whitelist encountered secure sub environment, possible bypass attempt?", 
+				"Detours",
+				"Sub Environment"
+			)
+		end
+		
+		return true
+	end
+	
+	local Hash = Whitelist.Hash(Function, Info.short_src)
+
+	if Hash and Whitelist.Hashes[Hash] then
+		Whitelist.Counter = math.max(Whitelist.Counter - 1, 0)
+		return true
+	end
+	
+	return false
+end
+
+function TAC.Detours.Whitelist.Hash(Function, Identifier)
+	if not Function then
+		return
+	end
+	
+	if isstring(Function) then
+		Function = CompileString(Function, Identifier)
+	end
+	
+	if TAC.Detours.Whitelist.Dumps[Function] then
+		return TAC.Detours.Whitelist.Dumps[Function]
+	end
+
+	local Valid, Dump = pcall(string.dump, Function, true)
+
+	if not Valid then
+		return 
+	end
+	
+	local Checksum = util.CRC(Dump) 
+	
+	TAC.Detours.Whitelist.Dumps[Function] = Checksum
+	
+	return Checksum
+end
+
+function TAC.Detours.Whitelist.Increment()
+	TAC.Detours.Whitelist.Counter = TAC.Detours.Whitelist.Counter + 1
+end
+
+function TAC.Detours.Whitelist.Update(Code, Identifier)
+	local Hash = TAC.Detours.Whitelist.Hash(Code, Identifier)
+
+	if not Hash then
+		return
+	end
+
+	TAC.Detours.Whitelist.Hashes[Hash] = true
+end
+
+TAC.Detour.Register("RunString", function(Original, Code, Identifier, ...)
+	TAC.Captures.Stack("RunString")
+	
+	if Identifier then
+		TAC.Detours.Whitelist.Identifiers[Identifier] = true
+	end
+	
+	if isstring(Code) then
+		TAC.Detours.Whitelist.Update(Code, Identifier)
+	end
+	
+	TAC.Detours.Whitelist.Increment()
+	
+	return Original(Code, Identifier, ...)
+end)
+
+TAC.Detour.Register("RunStringEx", function(Original, Code, Identifier, ...)
+	TAC.Captures.Stack("RunStringEx")
+	
+	if Identifier then
+		TAC.Detours.Whitelist.Identifiers[Identifier] = true
+	end
+	
+	if isstring(Code) then
+		TAC.Detours.Whitelist.Update(Code, Identifier)
+	end
+	
+	TAC.Detours.Whitelist.Increment()
+	
+	return Original(Code, Identifier, ...)
+end)
+
+TAC.Detour.Register("CompileString", function(Original, Code, Identifier, ...)
+	TAC.Captures.Stack("CompileString")
+	
+	if Identifier then
+		TAC.Detours.Whitelist.Identifiers[Identifier] = true
+	end
+	
+	local Output = Original(Code, Identifier, ...)
+
+	if isfunction(Output) then		
+		TAC.Detours.Whitelist.Update(Output, Identifier)
+	end
+	
+	TAC.Detours.Whitelist.Increment()
+	
+	return Output
+end)

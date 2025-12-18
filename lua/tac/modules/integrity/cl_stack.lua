@@ -36,7 +36,11 @@ function TAC.Stack.Self()
 	-- This might false flag on other operating systems other than Windows.
 	
 	local Self = debug.getinfo(1)
-	
+
+	if not Self then
+		return TAC.Flag("Stack", "Stack Fields [invalid]")
+	end
+
 	if Self.name ~= "Self" or Self.namewhat ~= "field" then
 		return TAC.Flag("Stack", "Stack Fields [local]")
 	end
@@ -52,7 +56,7 @@ function TAC.Stack.Caller()
 	timer.Simple(5, TAC.Stack.Caller)
 end
 
-if TAC.Config.Stack then
+if TAC.Config.Integrity.Stack.Enabled then
 	timer.Simple(5, TAC.Stack.Caller)
 end
 

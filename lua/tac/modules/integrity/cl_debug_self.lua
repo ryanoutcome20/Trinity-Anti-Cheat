@@ -1,5 +1,5 @@
 local function Scan()
-    if not TAC.Config.DebugSelf then
+    if not TAC.Config.Integrity.DebugSelf.Enabled then
         return
     end 
 
@@ -7,7 +7,7 @@ local function Scan()
     local Next = debug.getinfo(debug.getinfo)
 
     if Data.func ~= Next.func then
-        local DataPointer, NextPointer = tostring(Data), tostring(Next) 
+        local DataPointer, NextPointer = tostring(Data.func), tostring(Next.func) 
 
         if DataPointer == NextPointer then
             return TAC.Flag(
@@ -18,8 +18,8 @@ local function Scan()
             return TAC.Flag(
                 "Debug Self", 
                 "Incorrect function addresses [%s -> %s]",
-                tostring(Data.func),
-                tostring(Next.func)
+                DataPointer,
+                NextPointer
             )
         end
     elseif Data.source ~= Next.source then
