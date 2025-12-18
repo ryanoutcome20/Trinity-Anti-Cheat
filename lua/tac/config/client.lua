@@ -13,24 +13,6 @@ Config.ProcessTime = 0.25
 --- Aimbot Checks ---
 
 /*
-	This check leverages the default games mouse calculations to attempt to
-	detect strange mouse patterns. 
-	
-	This occurs most commonly in faulty or incomplete C++ mouse aimbots 
-	although some Lua based ones will fail this as well.
-*/
-
-Config.Mouse = {
-	Enabled = true,
-
-	CheckY = true,
-	OffsetY = 5,
-	
-	CheckX = true,
-	OffsetX = 5
-}
-
-/*
 	This check simply detects when the player is using movement code more
 	than once to fix a prediction issue with all Source games. This fix 
 	increases their accuracy with Aimbots but is also trivial to detect.

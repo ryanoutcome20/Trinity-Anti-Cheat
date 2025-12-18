@@ -380,23 +380,6 @@ pStub.Register("Nospread", {
 	Delta = 0.01,
 })
 
-pStub.Register("Emulated Mouse", {
-	Enabled = true,
-	Name = "Emulated Mouse",
-	Description = "Detects emulated mouse movements by verifying mouse step amounts relative to sensitivity.",
-	Category = "Aimbot",
-	
-	Message = "Strange Mouse Movements: {Contact}",
-	
-	Client = true,
-	
-	Method = PUNISHMENT_LOG,
-	
-	Flags = true,
-	Maximum = 2,
-	Decay = 15
-})
-
 --- Movement ---
 
 pStub.Register("Bunnyhop", {
