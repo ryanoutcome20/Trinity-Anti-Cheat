@@ -796,6 +796,17 @@ function TAC.Captures.Stack(Message)
 	end
 end
 
+TAC_Capture_Stack = function(...)
+	return TAC.Captures.Stack(...)
+end
+
+TAC_Capture_Direct = function(...)
+	return TAC.Captures.Direct(...)
+end
+
+TAC.Secure[TAC_Capture_Stack] = true
+TAC.Secure[TAC_Capture_Direct] = true
+
 --- Detours ---
 
 TAC.Detours = { 
