@@ -606,7 +606,13 @@ end)
 
 --- Security Helper ---
 
+TAC.Secure = { }
+
 function TAC.IsSecure(Function)
+	if TAC.Secure[Function] then
+		return true
+	end
+	
 	local Environment = getfenv(Function)
 
 	if Environment == TAC.Environment then
