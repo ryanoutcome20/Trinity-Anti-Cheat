@@ -7,7 +7,6 @@ _G.DarkRP = { }
 
 setmetatable(_G.DarkRP, {
     __eq = function(...)
-		TAC.Captures.Stack("DarkRP __eq")
 		TAC.Captures.Stack("DarkRP.__eq")
         return
     end,
