@@ -523,7 +523,6 @@ return {
     {Hook = "OnPlayerChat", Name = "damnBot_chat"},
     {Hook = "InitPostEntity", Name = "FixShit"},
     {Hook = "InitPostEntity", Name = "PhysgunPickup"},
-    {Hook = "PhysgunPickup", Name = "FPP_CL_PhysgunPickup"},
     {Hook = "OnPlayerChat", Name = "FGetVotes"},
     {Hook = "Think", Name = "sh_menu"},
     {Hook = "Think", Name = "MiscFeatures"},
