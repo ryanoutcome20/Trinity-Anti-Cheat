@@ -743,11 +743,11 @@ Config.Spread = {
 	Maximum = 0.05
 }
 
---- Client Mouse ---
+--- Menu Movement ---
 
-pStub.Register("Client Mouse", {
+pStub.Register("Menu Movement", {
 	Enabled = true,
-	Name = "Client Mouse",
+	Name = "Menu Movement",
 	Description = "Occurs when the player moves their MouseX/MouseY while in an active menu.",
 	Category = "Aimbot",
 	
