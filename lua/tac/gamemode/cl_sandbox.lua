@@ -7,17 +7,17 @@ _G.DarkRP = { }
 
 setmetatable(_G.DarkRP, {
     __eq = function(...)
-		TAC.Captures.Stack("DarkRP __eq")
+		TAC.Captures.Stack("DarkRP.__eq")
         return
     end,
 	
 	__index = function(...)
-		TAC.Captures.Stack("DarkRP __index")
+		TAC.Captures.Stack("DarkRP.__index")
 		return
 	end,
 	
 	__newindex = function(...)
-		TAC.Captures.Stack("DarkRP __newindex")
+		TAC.Captures.Stack("DarkRP.__newindex")
 		return
 	end
 })
@@ -32,7 +32,7 @@ function ENTITY:getDarkRPVar(...)
 		)
 	end
 
-	TAC.Captures.Stack("getDarkRPVar")
+	TAC.Captures.Stack("ENTITY:getDarkRPVar")
 end
 
 PLAYER.getDarkRPVar = ENTITY.getDarkRPVar
@@ -49,7 +49,7 @@ function ENTITY:IsDetective(...)
 		)
 	end
 
-	TAC.Captures.Stack("IsDetective")
+	TAC.Captures.Stack("ENTITY:IsDetective")
 end
 
 PLAYER.IsDetective = ENTITY.IsDetective
@@ -64,7 +64,7 @@ function ENTITY:IsTraitor(...)
 		)
 	end
 
-	TAC.Captures.Stack("IsTraitor")
+	TAC.Captures.Stack("ENTITY:IsTraitor")
 end
 
 PLAYER.IsTraitor = ENTITY.IsTraitor

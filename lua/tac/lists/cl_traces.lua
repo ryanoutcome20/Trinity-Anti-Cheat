@@ -52,11 +52,6 @@ return {
 	{Pointer = string.Split, Name = "string.Split", Message = "lua/includes/extensions/string.lua:94: bad argument #1 to 'string_len' (string expected, got nil)"},
 	{Pointer = string.ToColor, Name = "string.ToColor", Message = "lua/includes/extensions/string.lua:345: bad argument #1 to 'match' (string expected, got nil)"},
 
-	-- team
-	{Pointer = team.GetSpawnPoints, Name = "team.GetSpawnPoints", Message = "lua/includes/modules/team.lua:63: attempt to index a nil value"},
-	{Pointer = team.AddScore, Name = "team.AddScore", Message = "lua/includes/modules/team.lua:198: attempt to perform arithmetic on local 'score' (a nil value)"},
-	{Pointer = team.SetUp, Name = "team.SetUp", Message = "lua/includes/modules/team.lua:29: table index is nil"},
-
 	-- net
 	{Pointer = net.Receive, Name = "net.Receive", Message = "lua/includes/extensions/net.lua:12: attempt to index local 'name' (a nil value)"},
 	{Pointer = net.Start, Name = "net.Start", Message = "bad argument #1 to '?' (string expected, got nil)"}

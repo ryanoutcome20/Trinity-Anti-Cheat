@@ -13,7 +13,7 @@ function TAC.MenuMovement.Run(CUserCMD)
 		return
 	end
 
-	TAC.Flag("Client Mouse", "Menu Movement")
+	TAC.Flag("Menu Movement", "Menu Movement")
 end
 
 hook.Add("CreateMove", "TAC.MenuMovement.Run", TAC.MenuMovement.Run)
