@@ -730,7 +730,7 @@ Config.PVS = {
 	
 	squareSize = 1,
 	squaredSize = 256,
-	intervalScale = 256,
+	intervalScale = 128,
 	Step = 8
 }
 
