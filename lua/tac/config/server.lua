@@ -992,6 +992,19 @@ pStub.Register("Files", {
 	Method = PUNISHMENT_LOG
 })
 
+pStub.Register("Globals", {
+	Enabled = true,
+	Name = "Globals",
+	Description = "Occurs when an invalid global is registered on the clientside.",
+	Category = "Scans",
+	
+	Client = true,
+	
+	Message = "Bad Global: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
 pStub.Register("Hooks", {
 	Enabled = true,
 	Name = "Hooks",
