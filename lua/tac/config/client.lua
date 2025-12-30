@@ -143,6 +143,12 @@ Config.Scans = {
 		Detour = true
 	},
 
+	Globals = {
+		Enabled = true,
+
+		Delay = 5
+	},
+
 	Files = {
 		Enabled = true
 	},
