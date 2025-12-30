@@ -7,11 +7,13 @@ local function Scan()
 		return
 	end
 
-	for k, Global in ipairs(List) do
-		if _G[Global] then
-			TAC.Flag("Globals", "Bad Global [name: %s]", Global)
-        end
-    end
+	for k, Data in ipairs(List) do
+		if _G[Data.Name] then
+			TAC.Flag("Globals", "Bad Global [name: %s; suspect: %s]", Data.Name, Data.Flag)
+		end
+	end
+	
+	timer.Simple(Config.Delay, Scan)
 end
 
 hook.Add("TAC.Initialize", "TAC.Globals", function()
