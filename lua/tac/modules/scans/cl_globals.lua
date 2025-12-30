@@ -8,11 +8,11 @@ local function Scan()
 	end
 
 	for k, Data in ipairs(List) do
-		if _G[Data.Name] then
+		if _G[Data.Name] ~= nil then
 			TAC.Flag("Globals", "Bad Global [name: %s; suspect: %s]", Data.Name, Data.Flag)
 		end
 	end
-	
+
 	timer.Simple(Config.Delay, Scan)
 end
 
