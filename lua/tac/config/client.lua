@@ -93,13 +93,7 @@ Config.Integrity = {
 --- Static Cheats / Scripts ---
 
 Config.Static = {
-	Enabled = true,
-
-	Interstate = true,
-	Memoriam = true,
-	Coffee = true,
-	D3C = true,
-	Majestic = true
+	Enabled = true
 }
 
 --- Breakers ---
