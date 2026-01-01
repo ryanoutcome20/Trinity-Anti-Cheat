@@ -140,7 +140,7 @@ Config.Scans = {
 	Globals = {
 		Enabled = true,
 
-		Delay = 5
+		Delay = 60
 	},
 
 	Files = {
@@ -150,7 +150,7 @@ Config.Scans = {
 	Hooks = {
 		Enabled = true,
 
-		Delay = 45
+		Delay = 120
 	}
 }
 
