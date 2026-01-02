@@ -251,5 +251,8 @@ return {
     {Name = "beginAim", Flag = "nBot"},
 
     -- ColdFire
-    {Name = "CF_SetConvar", Flag = "ColdFire"}
+    {Name = "CF_SetConvar", Flag = "ColdFire"},
+
+    -- RoachHook
+    {Name = "RoachHook", Flag = "RoachHook"}
 }
