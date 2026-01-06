@@ -5,7 +5,7 @@
 -- Don't touch these.
 local Config = { }
 
---- Flag Batches ---
+--- Batches ---
 
 Config.Batch = 32000
 Config.ProcessTime = 0.25
