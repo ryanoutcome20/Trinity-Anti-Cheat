@@ -647,6 +647,12 @@ pStub.Register("Accuracy", {
 	with the server (sv_cheats 1) then it'll get 
 	fixed automatically.
 
+	Note that "interval" is the time between calls to
+	the client and "await" is the time the server is
+	willing to wait before verfying the player sent
+	the message, if it fails then it calls command
+	enforcer with "Not Initialized".
+
 	Log makes the command log only. Useful for
 	commands that are capable of being seperated
 	but suspicious.
@@ -676,6 +682,7 @@ pStub.Register("Command Enforcer", {
 		}
 	},
 	
+	Interval = 50,
 	Await = 25,
 	
 	Flags = false,

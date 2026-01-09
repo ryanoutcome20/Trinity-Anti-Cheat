@@ -103,11 +103,11 @@ function TAC.Commands.Hook(Player)
 
     hook.Run("TAC.PreCommands", Player)
 
-    local Await = TAC.Config["Command Enforcer"].Await
+    local Config = TAC.Config["Command Enforcer"]
 
 	TAC.Timer(
 		Player, 
-		Await / 2,
+		Config.Await,
 		function(self)
             if self:Get("Command Enforcer") then
                 return TAC.Punishment.Wrapper(
@@ -121,7 +121,7 @@ function TAC.Commands.Hook(Player)
 
     TAC.Timer(
 		Player, 
-		Await, 
+		Config.Interval, 
 		TAC.Commands.Hook
 	)
 end
