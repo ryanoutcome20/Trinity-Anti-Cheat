@@ -1952,7 +1952,9 @@ return {
 	["zesp_delbuddy"] = true,
 	["zesp_addsteambuddies"] = true,
 	["zesp_printbuddies"] = true,
-	
+	["fatal_headshot_menu"] = true,
+	["fatal_headshot_cache"] = true,
+
 	-- CreateClientConVar.
 	
 	["nine_eleven_antiaim_method"] = true,
