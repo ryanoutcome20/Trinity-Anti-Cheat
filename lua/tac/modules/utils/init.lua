@@ -1,5 +1,6 @@
 MsgN("  Loading utility plugins")
 
+include("sv_physgun_objects.lua")
 include("sv_player_timers.lua")
 include("sv_verbose.lua")
 include("sv_audits.lua")
