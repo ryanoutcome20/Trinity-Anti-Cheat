@@ -4,7 +4,7 @@ function TAC.Aimbot.Snap(Player, Cache)
 	if not Config.Enabled then
 		return
 	end
-	
+
 	if TAC.TimeSinceSpawned(Player) <= Config.TimeSinceSpawned then
 		return
 	end
@@ -22,7 +22,11 @@ function TAC.Aimbot.Snap(Player, Cache)
 		if not Trace.Valid then
 			continue
 		end
-		
+
+		if Trace.Entity == cNew:GetPhysgunTarget() then
+			continue
+		end
+
 		local Distance = Trace.Entity:GetPos():DistToSqr(cNew:GetPos())
 
 		if Distance <= Config.Distance then
