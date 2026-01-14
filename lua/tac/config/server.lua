@@ -309,8 +309,8 @@ pStub.Register("Mouse", {
 	Distance = 8000,
 	
 	Flags = true,
-	Maximum = 2,
-	Decay = 4,
+	Maximum = 8,
+	Decay = 0.5,
 	
 	AlertFlagsMinimum = 1,
 	
