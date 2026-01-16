@@ -1,6 +1,7 @@
 <div align="center">
   <img width="256" height="256" alt="GitHub Icon" src="https://github.com/user-attachments/assets/3a73664a-c4ba-4728-a113-b3d1c1267ce5" />
-  
+
+  Trinity Anti-Cheat
   <hr>
   
   <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/ryanoutcome20/Trinity-Anti-Cheat?style=for-the-badge&logoColor=blue&color=blue"> <a href="https://discord.gg/Brdm4tFG9K"> <img alt="Discord" src="https://img.shields.io/discord/1410210633302937622?style=for-the-badge&color=blue&labelColor=grey&label=Discord&logo=discord">
