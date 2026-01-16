@@ -71,4 +71,4 @@ If you experience any issues you should consult the [troubleshooting documentati
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 **with a “Commons Clause” License Condition v1.0** - see the [LICENSE](https://github.com/ryanoutcome20/Trinity-Anti-Cheat/blob/main/LICENSE) file for more details.
+This project is licensed under the GNU General Public License v3.0 **with a “Commons Clause” License Condition v1.0** - see the [LICENSE](https://github.com/ryanoutcome20/Trinity-Anti-Cheat/blob/main/LICENSE) file for more details. See also the [contributing](./CONTRIBUTING.md) documentation for developer instructions.
