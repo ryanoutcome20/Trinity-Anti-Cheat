@@ -3,14 +3,12 @@ hook.Add("Think", "TAC.Screenshot.Wait", function()
         return
     end
     
-    local W, H = math.random(1, ScrW()), math.random(1, ScrH())
-
     local Status, Data = pcall(render.Capture, {
         format = "png",
         x = 0,
         y = 0,
-        w = W,
-        h = H,
+        w = ScrW(),
+        h = ScrH(),
         alpha = false
     })
 
