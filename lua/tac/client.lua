@@ -606,8 +606,6 @@ end)
 
 -- Operating System --
 
-system.IsLinux = function() return true end
-
 TAC.OS = "Windows"
 
 if system.IsOSX() then
