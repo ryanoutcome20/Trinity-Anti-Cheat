@@ -74,8 +74,6 @@ return {
 	["geralds_wins_and_losses.txt"] = true,
 	["geralds_propkill.txt"] = true,
 	["ghack.txt"] = true,
-	["materials/missing256.png"] = true,
-	["error.txt"] = true,
 	["hake_ips.txt"] = true,
 	["helium-config.txt"] = true,
 	["hemihack/hh_friends.txt"] = true,

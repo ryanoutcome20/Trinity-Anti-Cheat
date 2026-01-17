@@ -5,7 +5,7 @@
 -- Don't touch these.
 local Config = { }
 
---- Flag Batches ---
+--- Batches ---
 
 Config.Batch = 32000
 Config.ProcessTime = 0.25
@@ -93,13 +93,7 @@ Config.Integrity = {
 --- Static Cheats / Scripts ---
 
 Config.Static = {
-	Enabled = true,
-
-	Interstate = true,
-	Memoriam = true,
-	Coffee = true,
-	D3C = true,
-	Majestic = true
+	Enabled = true
 }
 
 --- Breakers ---
@@ -143,6 +137,12 @@ Config.Scans = {
 		Detour = true
 	},
 
+	Globals = {
+		Enabled = true,
+
+		Delay = 60
+	},
+
 	Files = {
 		Enabled = true
 	},
@@ -150,7 +150,7 @@ Config.Scans = {
 	Hooks = {
 		Enabled = true,
 
-		Delay = 45
+		Delay = 120
 	}
 }
 

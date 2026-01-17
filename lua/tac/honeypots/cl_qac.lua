@@ -2,17 +2,17 @@ _G.QAC = {}
 
 setmetatable(_G.QAC, {
     __eq = function(...)
-		TAC.Honeypot.Alert("QAC: equals")
+		TAC.Captures.Stack("QAC.__eq")
         return
     end,
 	
 	__index = function(...)
-		TAC.Honeypot.Alert("QAC: index")
+		TAC.Captures.Stack("QAC.__index")
 		return
 	end,
 	
 	__newindex = function(...)
-		TAC.Honeypot.Alert("QAC: new index")
+		TAC.Captures.Stack("QAC.__newindex")
 		return
 	end
 })

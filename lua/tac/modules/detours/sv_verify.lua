@@ -22,15 +22,15 @@ function TAC.Detours.Verify(Mode, Player, Objects)
 			end
 		
 			if Object.linedefined ~= -1 or Object.linedefined ~= Object.lastlinedefined then
-				TAC.Detours.Wrapper(Player, "Emulated C [%i ~= %i]", Object.linedefined, Object.lastlinedefined)
+				return TAC.Detours.Wrapper(Player, "Emulated C [%i ~= %i]", Object.linedefined, Object.lastlinedefined)
 			end
 			
 			if Object.j_linedefined ~= "ld" then
-				TAC.Detours.Wrapper(Player, "Emulated C [line: %s]", TAC.Fix(Object.j_linedefined))
+				return TAC.Detours.Wrapper(Player, "Emulated C [line: %s]", TAC.Fix(Object.j_linedefined))
 			end
 			
 			if Object.what == "main" then
-				TAC.Detours.Wrapper(Player, "Lua Executor")
+				return TAC.Detours.Wrapper(Player, "Lua Executor")
 			end
 			
 			continue
@@ -39,7 +39,7 @@ function TAC.Detours.Verify(Mode, Player, Objects)
 		local Cache = TAC.Detours.Get(Object.short_src)
 	
 		if not Cache.Exists then
-			TAC.Detours.Wrapper(Player, "Source [%s -> %s]", TAC.Fix(Object.Message), TAC.Fix(Object.short_src))
+			return TAC.Detours.Wrapper(Player, "Source [%s -> %s]", TAC.Fix(Object.Message), TAC.Fix(Object.short_src))
 		end
 	end
 end

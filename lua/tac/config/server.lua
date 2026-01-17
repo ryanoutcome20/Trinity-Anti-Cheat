@@ -309,8 +309,8 @@ pStub.Register("Mouse", {
 	Distance = 8000,
 	
 	Flags = true,
-	Maximum = 2,
-	Decay = 4,
+	Maximum = 8,
+	Decay = 0.5,
 	
 	AlertFlagsMinimum = 1,
 	
@@ -647,6 +647,12 @@ pStub.Register("Accuracy", {
 	with the server (sv_cheats 1) then it'll get 
 	fixed automatically.
 
+	Note that "interval" is the time between calls to
+	the client and "await" is the time the server is
+	willing to wait before verfying the player sent
+	the message, if it fails then it calls command
+	enforcer with "Not Initialized".
+
 	Log makes the command log only. Useful for
 	commands that are capable of being seperated
 	but suspicious.
@@ -676,6 +682,7 @@ pStub.Register("Command Enforcer", {
 		}
 	},
 	
+	Interval = 50,
 	Await = 25,
 	
 	Flags = false,
@@ -730,7 +737,7 @@ Config.PVS = {
 	
 	squareSize = 1,
 	squaredSize = 256,
-	intervalScale = 256,
+	intervalScale = 128,
 	Step = 8
 }
 
@@ -988,6 +995,19 @@ pStub.Register("Files", {
 	Client = true,
 	
 	Message = "Bad File: {Contact}",
+	
+	Method = PUNISHMENT_LOG
+})
+
+pStub.Register("Globals", {
+	Enabled = true,
+	Name = "Globals",
+	Description = "Occurs when an invalid global is registered on the clientside.",
+	Category = "Scans",
+	
+	Client = true,
+	
+	Message = "Bad Global: {Contact}",
 	
 	Method = PUNISHMENT_LOG
 })

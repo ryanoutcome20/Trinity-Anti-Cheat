@@ -36,6 +36,8 @@ AccessorFunc(Base, "OnGround", "OnGround")
 AccessorFunc(Base, "Delta", "Delta")
 AccessorFunc(Base, "TraceData", "TraceData")
 
+AccessorFunc(Base, "PhysgunTarget", "PhysgunTarget")
+
 function TAC.SCP.CopyMeta(Player, CUserCMD)
 	local Meta = setmetatable({ }, {
 		__index = Base
@@ -62,6 +64,8 @@ function TAC.SCP.CopyMeta(Player, CUserCMD)
 	else
 		Meta.ViewAngles = CUserCMD:GetViewAngles()
 	end
+
+	Meta.PhysgunTarget = Player:Get("Physgun Target")
 
 	return Meta
 end
