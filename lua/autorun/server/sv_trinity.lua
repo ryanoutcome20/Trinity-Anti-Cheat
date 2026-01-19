@@ -61,7 +61,7 @@ MsgN("  Creating pLib instance")
 include("external/sv_plib.lua")
 
 --- Lists ---
- 
+
 MsgN("  Caching lists")
 
 for k, List in ipairs(file.Find("tac/lists/*.lua", "LUA")) do 
@@ -99,7 +99,7 @@ local function LoadPlugins(Root)
         local Formatted = Directory .. "/init.lua"
 
         if file.Exists(Formatted, "LUA") then
-			TAC.Plugins = TAC.Plugins + 1
+		    TAC.Plugins = TAC.Plugins + 1
 			
             local Clientside, Absolute = include(Formatted)
 
