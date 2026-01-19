@@ -1,7 +1,7 @@
 function TAC.Commands.BuildSlots()
     -- Get slots and patch.
     
-    local Slots = hook.Run("TAC.Commands", Player) or { }
+    local Slots = { }
 
     table.Merge(
         Slots, 
@@ -23,34 +23,25 @@ function TAC.Commands.BuildSlots()
         Slots[Name].Value = ConVar:GetString()
     end
 
-    -- Get built values.
+    return Slots
+end
+
+function TAC.Commands.BuildBuilt()
+    -- Incredible name, I know.
+    local Commands = TAC.Config["Command Enforcer"].Commands
 
     local Built = { }
 
-    for Name, Input in pairs(Slots) do 
+    for Name, Input in pairs(Commands) do 
         Built[Name] = true
     end
 
-    return Slots, Built
+    return Built
 end
 
-function TAC.Commands.Setup(Player)
-    local Slots, Built = TAC.Commands.BuildSlots()
-
-    Player:Set(
-        "Command Enforcer",
-        Slots
-    )
-
-    Atlas:Send(
-		"Commands", 
-		Player, 
-        Built
-	)
-end
 
 function TAC.Commands.Receiver(Stage, Player, Slots)
-    local Cache = Player:Get("Command Enforcer")
+    local Cache = TAC.Commands.BuildSlots()
 
     if not Cache then
         return
@@ -62,8 +53,8 @@ function TAC.Commands.Receiver(Stage, Player, Slots)
 
     for Name, Input in pairs(Slots) do
         local Cached = Cache[Name]
-        
-        if not Cached or Input ~= Cached.Value then
+
+        if not Cached or tostring(Input) ~= tostring(Cached.Value) then
             if Cached.Log then
                 TAC.API.Log(
                     Player,
@@ -87,13 +78,6 @@ function TAC.Commands.Receiver(Stage, Player, Slots)
             end
         end
     end
-
-    Player:Set(
-        "Command Enforcer",
-        nil
-    )
-
-    hook.Run("TAC.PostCommands", Player, Slots, Cache)
 end
 
 function TAC.Commands.Hook(Player)
@@ -101,7 +85,11 @@ function TAC.Commands.Hook(Player)
 		return
 	end
 
-    hook.Run("TAC.PreCommands", Player)
+    Atlas:Send(
+		"Commands", 
+		Player, 
+        TAC.Commands.BuildBuilt()
+	)
 
     local Config = TAC.Config["Command Enforcer"]
 
@@ -128,5 +116,4 @@ end
 
 Atlas:Listen("Commands", "TAC.Commands.Receiver", MODE_DONE, TAC.Commands.Receiver)
 
-hook.Add("TAC.PreCommands", "TAC.Commands.Setup", TAC.Commands.Setup)
 hook.Add("TAC.TransferConfig", "TAC.Commands.Hook", TAC.Commands.Hook)
