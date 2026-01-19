@@ -27,6 +27,10 @@ function TAC.Aimbot.Snap(Player, Cache)
 			continue
 		end
 
+		if not IsValid(Trace.Entity) then
+			continue
+		end
+
 		local Distance = Trace.Entity:GetPos():DistToSqr(cNew:GetPos())
 
 		if Distance <= Config.Distance then
