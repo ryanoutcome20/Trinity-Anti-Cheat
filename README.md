@@ -35,6 +35,7 @@ Installation is very simple:
 * Install the anti-cheat to the directory: `GarrysMod\garrysmod\addons\`.
 
 You should check the [known addon incompatibility list](./docs/user/compatibility.md) before installation!
+You should also read the [documentation](./docs) and [wiki](https://github.com/ryanoutcome20/Trinity-Anti-Cheat/wiki) for guidance.
 
 ## Configuration
 
