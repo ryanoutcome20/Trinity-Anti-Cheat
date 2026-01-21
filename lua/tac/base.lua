@@ -139,7 +139,7 @@ function TAC.Format(Token, Text, ...)
 	local Player = Token.Player
 	
 	local Interpolated = string.Interpolate(Text, {
-		["Name"] = TAC.Fix(Player:Nick()),
+		["Name"] = TAC.Fix(Player:Name()),
 		["SteamID64"] = Player:SteamID64(),
 		["SteamID"] = Player:SteamID(),
 		["IP"] = TAC.IP(Player),
