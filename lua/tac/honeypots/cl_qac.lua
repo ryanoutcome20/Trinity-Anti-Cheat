@@ -2,17 +2,14 @@ _G.QAC = {}
 
 setmetatable(_G.QAC, {
     __eq = function(...)
-		TAC.Captures.Stack("QAC.__eq")
-        return
+        return TAC.Captures.Stack("QAC.__eq")
     end,
 	
 	__index = function(...)
-		TAC.Captures.Stack("QAC.__index")
-		return
+		return TAC.Captures.Stack("QAC.__index")
 	end,
 	
 	__newindex = function(...)
-		TAC.Captures.Stack("QAC.__newindex")
-		return
+		return TAC.Captures.Stack("QAC.__newindex")
 	end
 })

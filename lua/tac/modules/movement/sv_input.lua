@@ -6,8 +6,7 @@ function TAC.Movement.Input(Player, cNew, cOld, CUserCMD)
 	end
 	
 	if TAC.LastTouchTime(Player) <= Config.LTT then
-		TAC.Punishment.ResetFlags(Player, "Input")
-		return
+		return TAC.Punishment.ResetFlags(Player, "Input")
 	end
 	
 	local Forward, Side = math.abs(cNew:GetForwardMove()), math.abs(cNew:GetSideMove())

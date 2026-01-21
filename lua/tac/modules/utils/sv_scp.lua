@@ -86,8 +86,7 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 	local cNew = TAC.SCP.CopyMeta(Player, CUserCMD)
 		
 	if not cOld then
-		Player:Set("SCP", cNew)
-		return
+		return Player:Set("SCP", cNew)
 	end
 	
 	cNew.Delta = math_abs(math_AngleDifference(TAC.StandardAngle(cNew.ViewAngles.y), TAC.StandardAngle(cOld.ViewAngles.y)))

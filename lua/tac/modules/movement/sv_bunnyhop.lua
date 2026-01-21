@@ -10,8 +10,7 @@ function TAC.Movement.Bunnyhop(Player, cNew, cOld, CUserCMD)
 	end
 
 	if TAC.LastTouchTime(Player) <= Config.LTT then
-		TAC.Punishment.ResetFlags(Player, "Bunnyhop")
-		return
+		return TAC.Punishment.ResetFlags(Player, "Bunnyhop")
 	end
 	
 	if not cNew:GetOnGround() or cOld:GetOnGround() then
@@ -19,8 +18,7 @@ function TAC.Movement.Bunnyhop(Player, cNew, cOld, CUserCMD)
 	end
 	
 	if not CUserCMD:KeyDown(IN_JUMP) then
-		TAC.Punishment.ResetFlags(Player, "Bunnyhop")
-		return
+		return TAC.Punishment.ResetFlags(Player, "Bunnyhop")
 	end
 	
 	TAC.Punishment.Wrapper("Bunnyhop", Player, "Bunnyhop")

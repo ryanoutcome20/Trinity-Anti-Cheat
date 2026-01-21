@@ -7,18 +7,15 @@ _G.DarkRP = { }
 
 setmetatable(_G.DarkRP, {
     __eq = function(...)
-		TAC.Captures.Stack("DarkRP.__eq")
-        return
+        return TAC.Captures.Stack("DarkRP.__eq")
     end,
 	
 	__index = function(...)
-		TAC.Captures.Stack("DarkRP.__index")
-		return
+		return TAC.Captures.Stack("DarkRP.__index")
 	end,
 	
 	__newindex = function(...)
-		TAC.Captures.Stack("DarkRP.__newindex")
-		return
+		return TAC.Captures.Stack("DarkRP.__newindex")
 	end
 })
 

@@ -51,8 +51,7 @@ end
 
 local function Load(Player)
 	if Player then
-		Player:ChatPrint("This is serverside only!")
-		return
+		return Player:ChatPrint("This is serverside only!")
 	end
 
 	pLib.Cores = { }
