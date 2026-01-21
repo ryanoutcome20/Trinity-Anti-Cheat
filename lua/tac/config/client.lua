@@ -76,17 +76,6 @@ Config.Integrity = {
 			Enabled = true,
 			Size = 4
 		}
-	},
-
-	DebugHooks = {
-		Enabled = true,
-
-		Lines = true,
-		Target = 7,
-
-		Garbage = true,
-		Delta = 100,
-		Fill = 3
 	}
 }
 

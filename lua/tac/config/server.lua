@@ -941,21 +941,6 @@ pStub.Register("Debug Self", {
 	Method = PUNISHMENT_LOG
 })
 
---- Debug Hooks ---
-
-pStub.Register("Debug Hooks", {
-	Enabled = true,
-	Name = "Debug Hooks",
-	Description = "Occurs when a player detours a function or various internal just-in-time functions.",
-	Category = "Integrity",
-	
-	Client = true,
-	
-	Message = "JIT: {Contact}",
-	
-	Method = PUNISHMENT_LOG
-})
-
 --- Libraries ---
 
 pStub.Register("Libraries", {
