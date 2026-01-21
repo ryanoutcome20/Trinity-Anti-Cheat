@@ -260,7 +260,7 @@ function PLAYER:tSayHi() -- Use : in this very specific case.
 		PRINT_INFO,
 		"Info",
         "Hello: %s!",
-        self:Nick()
+        self:Name()
 	)
 end
 ```
