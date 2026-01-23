@@ -309,7 +309,7 @@ pStub.Register("Mouse", {
 	Distance = 8000,
 	
 	Flags = true,
-	Maximum = 8,
+	Maximum = 3,
 	Decay = 0.5,
 	
 	AlertFlagsMinimum = 1,
@@ -327,15 +327,15 @@ pStub.Register("Micromovement", {
 	
 	Method = PUNISHMENT_LOG,
 		
-	Delta = 0.05,
-	LowOffset = 0.10,
+	Delta = 0.15,
+	LowOffset = 0.20,
 	HighOffset = 0.75,
 	HighIncrement = 3,
 	Distance = 4000,
 	
 	Flags = true,
-	Maximum = 2,
-	Decay = 4,
+	Maximum = 3,
+	Decay = 0.5,
 	
 	AlertFlagsMinimum = 1,
 	
