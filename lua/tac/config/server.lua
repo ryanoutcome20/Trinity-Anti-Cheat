@@ -530,9 +530,9 @@ pStub.Register("Tickcount", {
 })
 
 pStub.Register("Fakelag", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Fakelag",
-	Description = "Detects constant lag patterns to find players who fakelag.",
+	Description = "Detects constant lag patterns to find players who fakelag. May false flag depending on various common conditions.",
 	Category = "Exploit",
 	
 	Message = "Strange Lag Patterns: {Contact}",
