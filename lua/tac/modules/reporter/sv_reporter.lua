@@ -1,6 +1,7 @@
 function TAC.Reporter(Stage, Player, OS, Sensitivity, Resolution)
     OS = isstring(OS) and OS or "Windows"
     Sensitivity = isnumber(Sensitivity) and Sensitivity or 3
+    
     Resolution = {
         ScrW = isnumber(Resolution.ScrW) and Resolution.ScrW or 1920,
         ScrH = isnumber(Resolution.ScrH) and Resolution.ScrH or 1080
