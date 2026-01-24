@@ -210,6 +210,7 @@ Config.Punishment = {
 		-- Avoidance
 		Ping = -1,
 		Loss = -1,
+		Sensitivity = -1,
 		Vehicles = false,
 		Water = false,
 		Noclip = false,
@@ -316,7 +317,8 @@ pStub.Register("Mouse", {
 	
 	Vehicles = true,
 	Ping = 250,
-	Loss = 80
+	Loss = 80,
+	Sensitivity = 1
 })
 
 pStub.Register("Micromovement", {
@@ -341,7 +343,8 @@ pStub.Register("Micromovement", {
 	
 	Vehicles = true,
 	Ping = 250,
-	Loss = 80
+	Loss = 80,
+	Sensitivity = 1
 })
 
 pStub.Register("Autoclicker", {
