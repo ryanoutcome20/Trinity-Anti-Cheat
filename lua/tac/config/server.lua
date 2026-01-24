@@ -427,7 +427,7 @@ pStub.Register("Autostrafe", {
 })
 
 pStub.Register("Input", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Input",
 	Description = "Detects players who are using something to manipulate their movement vectors.",
 	Category = "Movement",
