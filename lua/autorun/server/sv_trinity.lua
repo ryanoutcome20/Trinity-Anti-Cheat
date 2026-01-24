@@ -152,3 +152,13 @@ if not game.IsDedicated() then
 		"Loopback / LAN server detected, anti-cheat cannot run at full capacity"
 	)
 end
+
+--- Singleplayer ---
+
+if game.SinglePlayer() then
+	TAC.Print(
+		PRINT_WARN,
+		"Info",
+		"Singleplayer server detected, anti-cheat WILL false flag!"
+	)
+end
