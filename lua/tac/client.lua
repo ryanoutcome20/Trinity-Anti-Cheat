@@ -280,7 +280,7 @@ function TAC.GenerateBuffer(Function)
 		
 		j_linedefined = FuncInfo.linedefined or "ld",
 		
-		isfunc = GetInfo.name and GetInfo.namewhat and GetInfo.linedefined > 0,
+		isfunc = GetInfo.name and GetInfo.namewhat and GetInfo.linedefined > 0
 	}
 end
 
@@ -759,13 +759,13 @@ TAC.Captures = {
 
 function TAC.Captures.Direct(Function, Message)
 	local Data = TAC.GenerateBuffer(Function)
-	
+
 	if TAC.Detours.Whitelist.Whitelisted(Function, Data) then
 		return
 	end
 
 	Data.Message = Message
-	
+
 	Data.source = nil
 	Data.isfunc = nil
 
@@ -777,7 +777,7 @@ function TAC.Captures.Direct(Function, Message)
 end
 
 function TAC.Captures.Stack(Message)
-	for i = 3, 8 do 
+	for i = 2, 8 do 
 		local Info = debug.getinfo(i, "f")
 	
 		if not Info then
