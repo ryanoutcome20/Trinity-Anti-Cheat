@@ -61,9 +61,6 @@ Wrap("math.randomseed")
 Wrap("hook.Add")
 Wrap("hook.Remove")
 
-Wrap("concommand.Add")
-Wrap("concommand.Remove")
-
 Wrap("input.SetCursorPos")
 
 Wrap("net.SendToServer")
