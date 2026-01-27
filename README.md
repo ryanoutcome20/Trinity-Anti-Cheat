@@ -25,7 +25,8 @@ Trinity Anti-Cheat is a complete anti-cheat solution for Garry's Mod. Its archit
 2. [Configuration](#configuration)
 3. [Help & Issues](#help--issues)
 4. [Links](#links)
-5. [License](#license)
+5. [Credits](#credits)
+6. [License](#license)
 
 ## Installation
 
@@ -69,6 +70,13 @@ If you experience any issues you should consult the [troubleshooting documentati
 * [License (GNU v3.0 w/ “Commons Clause”)](https://github.com/ryanoutcome20/Trinity-Anti-Cheat/blob/main/LICENSE)
 * [API](./lua/tac/api.lua)
 * [Contribute](./CONTRIBUTING.md)
+
+## Credits
+
+* Srlion - The SFS serialization library.
+* Vectivus - The print library.
+* Wholecream - Providing some detection ideas.
+* Matthew B. (HeX) - Providing the biggest source of motivation to finish this project and awesome detection resources for when I'm out of ideas. 
 
 ## License
 
