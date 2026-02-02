@@ -20,6 +20,8 @@ function TAC.Detours.CheckC(Player, Object)
 	if Object.what == "main" then
 		return TAC.Detours.Wrapper(Player, "Lua Executor")
 	end
+	
+	return true
 end
 
 function TAC.Detours.CheckLua(Player, Object)
@@ -46,6 +48,8 @@ function TAC.Detours.CheckLua(Player, Object)
 	elseif Object.lastlinedefined > Cache.Lines then
 		return TAC.Detours.Wrapper(Player, "Source [%s -> %s, lines]", TAC.Fix(Object.Message), TAC.Fix(Object.short_src))
 	end
+	
+	return true
 end
 
 function TAC.Detours.Verify(Mode, Player, Objects)
@@ -61,11 +65,11 @@ function TAC.Detours.Verify(Mode, Player, Objects)
 		if TAC.Detours.Whitelisted(Player, Object.short_src, Object.what) then
 			continue
 		end
+
+		local Valid = Object.short_src == "[C]" and TAC.Detours.CheckC(Player, Object) or TAC.Detours.CheckLua(Player, Object)
 		
-		if Object.short_src == "[C]" then
-			TAC.Detours.CheckC(Player, Object)
-		else
-			TAC.Detours.CheckLua(Player, Object)
+		if Valid ~= true then
+			break
 		end
 	end
 end
