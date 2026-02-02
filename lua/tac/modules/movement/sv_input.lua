@@ -9,6 +9,10 @@ function TAC.Movement.Input(Player, cNew, cOld, CUserCMD)
 		return TAC.Punishment.ResetFlags(Player, "Input")
 	end
 	
+	if cNew:GetPhysgunTarget() then
+		return
+	end
+
 	local Forward, Side = math.abs(cNew:GetForwardMove()), math.abs(cNew:GetSideMove())
 
 	if Forward > Config.Minimum and not Config.Vectors[Forward] then
