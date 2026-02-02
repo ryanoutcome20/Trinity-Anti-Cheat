@@ -283,13 +283,13 @@ pStub.Register("Snap", {
 	
 	Method = PUNISHMENT_LOG,
 	
-	Delta = 15,
-	Distance = 65000,
+	Delta = 35,
+	Distance = 10000,
 	TimeSinceSpawned = 3.5,
 	
-	Flags = false,
+	Flags = true,
 	Maximum = 2,
-	Decay = 4,
+	Decay = 1,
 	
 	Vehicles = true,
 	Ping = 250,
@@ -435,7 +435,7 @@ pStub.Register("Input", {
 	Method = PUNISHMENT_LOG,
 	
 	Minimum = 1000,
-	LTT = 1.5,
+	LTT = 2.5,
 
 	Vectors = {
 		[2500] = true,
@@ -444,7 +444,7 @@ pStub.Register("Input", {
 		[10000] = true
 	},
 	
-	Flags = false,
+	Flags = true,
 	Maximum = 12,
 	Decay = 8,
 	
