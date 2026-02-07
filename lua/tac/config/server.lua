@@ -96,7 +96,7 @@ Config.Staff = {
 	Handles giving server administrators a pointer to look into a player due
 	to specific check failures or clientside issues (often bypasses or attempts).
 
-	Set timeout to -1 to disable it completely (not recommended).
+	Set timeout to -1 to disable timeouts completely (not recommended).
 --]]
 
 Config.Audits = {
@@ -139,8 +139,8 @@ Config.Alerts = {
 
 Config.Logging = {
 	Console = true,
-	DB = false,
 	File = true,
+	DB = false,
 	
 	DBCreate = function()
 		return "CREATE TABLE IF NOT EXISTS trinity_db( sid TEXT, type TEXT, text TEXT )"
