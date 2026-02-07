@@ -61,9 +61,17 @@ TAC.Config = Config
 
 --- General ---
 
+-- Contact text used when {Contact} interpolated string is used.
 Config.Contact = "github.com/ryanoutcome20/Trinity-Anti-Cheat/"
 
+--[[
+	When patching text sent from the clientside this will be the maximum
+	size cap to the text. This prevents someone from spamming your logs
+	with endless text.
+--]]
 Config.Sanitization = 96
+
+--- Staff ---
 
 Config.Staff = {
 	Roles = {
