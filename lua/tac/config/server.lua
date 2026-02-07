@@ -261,15 +261,15 @@ Config.Networking = {
 }
 
 --[[
-This usually occurs when the client manipulates data before sending it to
-the serverside. It can occur from both "detours" and "network" modules.
+	This usually occurs when the client manipulates data before sending it to
+	the serverside. It can occur from both "detours" and "network" modules.
 
-Detours throws a client integrity when it sends a batch of functions that
-are empty. This doesn't happen normally and is either an addon conflict or
-is a bypass attempt.
+	Detours throws a client integrity when it sends a batch of functions that
+	are empty. This doesn't happen normally and is either an addon conflict or
+	is a bypass attempt.
 
-The network module throws it from receiving invalid flags; this also shouldn't
-happen. And will only occur with an addon conflict or bypass attempt.
+	The network module throws it from receiving invalid flags; this also shouldn't
+	happen. And will only occur with an addon conflict or bypass attempt.
 --]]
 
 pStub.Register("Client Integrity", {
@@ -278,16 +278,14 @@ pStub.Register("Client Integrity", {
 	Description = "Occurs when invalid data is sent to the server from the clientside. Can occur from various modules.",
 	Category = "Networking",
 	
-	Message = "Integrity: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 --- Aimbots ---
 
 --[[
 	This occurs when CUserCMD reports angles outside of the limit
-	(MaxPitch & MaxYaw). Depending on the addons you have this can
+	(MaxPitch & MaxYaw). Depending on the addons you have, this can
 	false flag quite a bit.
 
 	Adjust the MaxPitch/MaxYaw to reduce false positives if you have an
@@ -314,8 +312,8 @@ pStub.Register("Angles", {
 
 --[[
 	This occurs when a player snaps to another player in a single tick. The 
-	"delta" of the tick, or difference between this angle and last angle will
-	be what stops it from false flagging.
+	"delta" of the tick, or difference between this angle and the last angle,
+	will be what stops it from false flagging.
 
 	Beware of aimbot addons or similar things. Teleportation addons can also
 	cause some degree of false positives if they make you look at the person you
@@ -408,10 +406,10 @@ pStub.Register("Micromovement", {
 
 --[[
 	This occurs when a player is clicking as fast as the engine will allow. Most
-	commonly triggered by rapidfire scripts although it can be triggered through
+	commonly triggered by rapidfire scripts, although it can be triggered through
 	"double click" methods like butterfly clicking. 
 
-	While unlikely, it still can false positive.
+	While unlikely, any detection can still can be a false positive.
 --]]
 
 pStub.Register("Autoclicker", {
@@ -435,15 +433,20 @@ pStub.Register("Autoclicker", {
 
 --- Movement ---
 
+--[[
+	This occurs when a player lands perfect bunny hops back-to-back. If you have
+	a very good player they can actually false flag this, so beware.
+
+	LTT is Last Touch Time which handles avoiding collision-based false positives.
+--]]
+
 pStub.Register("Bunnyhop", {
 	Enabled = true,
 	Name = "Bunnyhop",
 	Description = "Detects players with perfect bunnyhop. Will false flag bunnyhop addons.",
 	Category = "Movement",
 	
-	Message = "Bunnyhop: {Contact}",
-	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	LTT = 1.5,
 	TimeSinceSpawned = 3.5,
