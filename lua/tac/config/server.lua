@@ -247,20 +247,18 @@ Config.Punishment = {
 
 --- Networking ---
 
+--[[
+	Delay handles the initial transfer delay, in other words, how long the
+	server will take after the player spawns to begin transferring files
+	to them.
+
+	Step handles the speed in which each file transfer will occur.
+--]]
+
 Config.Networking = {
-	Overreach = 2,
 	Delay = 2,
 	Step = 0.5
 }
-
-pStub.Register("Networking Batch", {
-	Enabled = true,
-	Name = "Networking Batch",
-	Description = "Occurs when a player manipulates the punishment batch processing on the clientside.",
-	Category = "Networking",
-		
-	Method = PUNISHMENT_LOG
-})
 
 pStub.Register("Client Integrity", {
 	Enabled = true,
