@@ -437,7 +437,7 @@ pStub.Register("Autoclicker", {
 	This occurs when a player lands perfect bunny hops back-to-back. If you have
 	a very good player they can actually false flag this, so beware.
 
-	LTT is Last Touch Time which handles avoiding collision-based false positives.
+	LTT is Last Touch Time, which handles avoiding collision-based false positives.
 --]]
 
 pStub.Register("Bunnyhop", {
