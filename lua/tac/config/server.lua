@@ -462,13 +462,18 @@ pStub.Register("Bunnyhop", {
 	Noclip = true
 })
 
+--[[
+	This occurs when the movement of a player flip flops between the same value
+	back to back (IE: 1000, -1000, 1000, -1000, etc). Unlikely to false flag.
+--]]
+
 pStub.Register("Autostrafe", {
 	Enabled = true,
 	Name = "Autostrafe",
 	Description = "Detects players with artificial movement patterns related to strafing.",
 	Category = "Movement",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_BAN,
 		
 	Flags = true,
 	Maximum = 20,
@@ -479,13 +484,19 @@ pStub.Register("Autostrafe", {
 	}
 })
 
+--[[
+	This occurs when a player has a movement value that isn't clamped to one
+	that the engine will use. Can false flag when interacting with predicted
+	entities (prediction errors).
+--]]
+
 pStub.Register("Input", {
 	Enabled = true,
 	Name = "Input",
 	Description = "Detects players who are using something to manipulate their movement vectors.",
 	Category = "Movement",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Minimum = 1000,
 	LTT = 2.5,
@@ -505,7 +516,7 @@ pStub.Register("Input", {
 		Flags = ALERT_NONE
 	},
 	
-	Ping = 200,
+	Ping = 250,
 	Loss = 90,
 	Vehicles = true,
 	Water = true
