@@ -29,6 +29,7 @@ AccessorFunc(Base, "TickCount", "TickCount")
 AccessorFunc(Base, "IsForced", "IsForced")
 
 AccessorFunc(Base, "Pos", "Pos")
+AccessorFunc(Base, "RoughAngles", "RoughAngles")
 AccessorFunc(Base, "EyeTrace", "EyeTrace")
 AccessorFunc(Base, "Weapon", "Weapon")
 AccessorFunc(Base, "OnGround", "OnGround")
@@ -59,10 +60,12 @@ function TAC.SCP.CopyMeta(Player, CUserCMD)
 	
 	Meta.EyeTrace = TAC.EyeTrace(Player, true)
 
+	Meta.RoughAngles = CUserCMD:GetViewAngles()
+
 	if TAC.Config.AccurateAngles then
 		Meta.ViewAngles = Player:GetAimVector():AngleEx(vector_origin)
 	else
-		Meta.ViewAngles = CUserCMD:GetViewAngles()
+		Meta.ViewAngles = Meta.RoughAngles
 	end
 
 	Meta.PhysgunTarget = Player:Get("Physgun Target")
