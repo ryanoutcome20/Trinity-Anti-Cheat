@@ -12,41 +12,51 @@ TAC.Config = Config
 --[[
 	Default Player Strings:
 	
-	{Name}
-	{SteamID64}
-	{SteamID}
-	{IP}
-	{Ping}
-	{Loss}
-	{Position}
-	{Angle}
+	These only function if a player is provided (IE: punishment context, etc).
+
+	{Name} - Provides the name of a player.
+	{SteamID64} - Provides the SteamID64 of a player.
+	{SteamID} - Provides the SteamID of a player.
+	{IP} - Provides the IP of a player in non-port (1.1.1.1) form.
+	{Ping} - Provides the ping of a player.
+	{Loss} - Provides the packet loss of a player.
+	{Position} - Provides the position (x y z) of a player.
+	{Angle} - Provides the angle (x y r) of a player.
 --]]
 
 --[[
 	Default Token Strings:
 	
-	{Info}
-	{ID}
+	These only function if a token is provided (punishment context).
+
+	{Info} - Punishment reason.
+	{ID} - Punishment config ID.
 --]]
 
 --[[
 	Flags Specific Strings:
 
-	{Flags}
+	This only functions when in the FormatFlags context.
+
+	{Flags} - The number of flags total a player has received for this config ID. 
 --]]
 
 --[[
 	Delayed Punishment Specific Strings:
 
-	{Timer}
+	This only functions when in the FormatDelayedPunishment context.
+
+	{Timer} - The time until the punishment executes.
 --]]
 
 --[[
 	Default Global Strings:
 
-	{Contact}
-	{Map}
-	{Gamemode}
+	This function always, they provide global context for the server.
+
+	{Contact} - Contact string (Config.Contact).
+	{Map} - Map.
+	{Gamemode} - Gamemode name.
 --]]
 
 --- General ---
