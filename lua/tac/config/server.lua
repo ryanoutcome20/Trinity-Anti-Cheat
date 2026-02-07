@@ -260,6 +260,18 @@ Config.Networking = {
 	Step = 0.5
 }
 
+--[[
+This usually occurs when the client manipulates data before sending it to
+the serverside. It can occur from both "detours" and "network" modules.
+
+Detours throws a client integrity when it sends a batch of functions that
+are empty. This doesn't happen normally and is either an addon conflict or
+is a bypass attempt.
+
+The network module throws it from receiving invalid flags; this also shouldn't
+happen. And will only occur with an addon conflict or bypass attempt.
+--]]
+
 pStub.Register("Client Integrity", {
 	Enabled = true,
 	Name = "Client Integrity",
