@@ -285,23 +285,42 @@ pStub.Register("Client Integrity", {
 
 --- Aimbots ---
 
+--[[
+	This occurs when CUserCMD reports angles outside of the limit
+	(MaxPitch & MaxYaw). Depending on the addons you have this can
+	false flag quite a bit.
+
+	Adjust the MaxPitch/MaxYaw to reduce false positives if you have an
+	addon confliction.
+--]]
+
 pStub.Register("Angles", {
 	Enabled = true,
 	Name = "Angles",
 	Description = "Detects invalid source engine angles.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 	
 	CheckPitch = true,
 	MaxPitch = 90,
 	CheckYaw = true,
 	MaxYaw = 180,
 
-	TimeSinceCreated = 5,
+	TimeSinceCreated = 25,
 	
 	Vehicles = true
 })
+
+--[[
+	This occurs when a player snaps to another player in a single tick. The 
+	"delta" of the tick, or difference between this angle and last angle will
+	be what stops it from false flagging.
+
+	Beware of aimbot addons or similar things. Teleportation addons can also
+	cause some degree of false positives if they make you look at the person you
+	teleport to.
+--]]
 
 pStub.Register("Snap", {
 	Enabled = true,
@@ -309,7 +328,7 @@ pStub.Register("Snap", {
 	Description = "Detects snapping to players in a single tick.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 	
 	Delta = 35,
 	Distance = 10000,
@@ -321,8 +340,14 @@ pStub.Register("Snap", {
 	
 	Vehicles = true,
 	Ping = 250,
-	Loss = 80
+	Loss = 90
 })
+
+--[[
+	This occurs when a player is updating angles but not updating the 
+	MouseX/MouseY input handlers from the engine. This is unlikely
+	to false positive unless someone manually edits them.
+--]]
 
 pStub.Register("Mouse", {
 	Enabled = true,
@@ -330,7 +355,7 @@ pStub.Register("Mouse", {
 	Description = "Detects invalid MouseX/MouseY values compared to angle changes.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 	
 	InputlessDeltaMax = 2.5,
 	InputlessDeltaMin = 0.25,
@@ -338,16 +363,22 @@ pStub.Register("Mouse", {
 	Distance = 8000,
 	
 	Flags = true,
-	Maximum = 3,
+	Maximum = 4,
 	Decay = 0.5,
 	
-	AlertFlagsMinimum = 1,
-	
+	AlertFlagsMinimum = 2,
+
 	Vehicles = true,
 	Ping = 250,
-	Loss = 80,
+	Loss = 90,
 	Sensitivity = 1
 })
+
+--[[
+	This occurs when a player has a "shaky" angle delta over another player. It
+	can occur due to various factors such as recoil or spread cheats. Unlikely
+	to false positive.
+--]]
 
 pStub.Register("Micromovement", {
 	Enabled = true,
@@ -355,25 +386,33 @@ pStub.Register("Micromovement", {
 	Description = "Detects strange stuttery movement within a players view angles.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 		
 	Delta = 0.001,
 	LowOffset = 0.20,
 	HighOffset = 0.75,
 	HighIncrement = 3,
-	Distance = 4000,
+	Distance = 8000,
 	
 	Flags = true,
-	Maximum = 3,
+	Maximum = 4,
 	Decay = 0.5,
 	
-	AlertFlagsMinimum = 1,
+	AlertFlagsMinimum = 2,
 	
 	Vehicles = true,
 	Ping = 250,
-	Loss = 80,
+	Loss = 90,
 	Sensitivity = 1
 })
+
+--[[
+	This occurs when a player is clicking as fast as the engine will allow. Most
+	commonly triggered by rapidfire scripts although it can be triggered through
+	"double click" methods like butterfly clicking. 
+
+	While unlikely, it still can false positive.
+--]]
 
 pStub.Register("Autoclicker", {
 	Enabled = true,
@@ -381,7 +420,7 @@ pStub.Register("Autoclicker", {
 	Description = "Detects autoclickers. Will flag external autoclickers as well.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	ResetOnFailure = false,
 	
@@ -392,23 +431,6 @@ pStub.Register("Autoclicker", {
 	Alerts = {
 		Flags = ALERT_NONE
 	}
-})
-
-pStub.Register("Nospread", {
-	Enabled = true,
-	Name = "Nospread",
-	Description = "Detects seed nospreads by using a delta sample check. Can be expensive and may not be worth the performance.",
-	Category = "Aimbot",
-	
-	Message = "Unusual Spread Cone: {Contact}",
-	
-	Method = PUNISHMENT_LOG,
-	
-	Samples = 15,
-	DeltaSamples = 8,
-	MinimumCone = 0.05,
-	Distance = 400,
-	Delta = 0.01,
 })
 
 --- Movement ---
@@ -571,7 +593,7 @@ pStub.Register("Fakelag", {
 	Method = PUNISHMENT_LOG,
 	
 	Window = 32,
-	TimeSinceSpawned = 1,
+	TimeSinceSpawned = 3.5,
 	
 	Flags = true,
 	Maximum = 15,
