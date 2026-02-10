@@ -27,8 +27,6 @@ end
 
 function TAC.Networking.FlagBatch(Stage, Player, Objects)
 	Objects = istable(Objects) and Objects or { }
-	
-	Objects = { }
 
 	if #Objects == 0 then
 		return TAC.Networking.Integrity(Player, "Networking Batch [empty]")	
