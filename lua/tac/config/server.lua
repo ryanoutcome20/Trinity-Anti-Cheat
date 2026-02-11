@@ -611,37 +611,6 @@ pStub.Register("Tickcount", {
 })
 
 --[[
-	This is a check that occurs when a player has strange and inconsistant jumps between command number deltas. It practically detects
-	held back updates through bSendPacket. Unfortunately we recommend against enabling this in its current state because of the engine
-	bugs associated with it. 
---]]
-
-pStub.Register("Fakelag", {
-	Enabled = false,
-	Name = "Fakelag",
-	Description = "Detects constant lag patterns to find players who fakelag. May false flag depending on various common conditions.",
-	Category = "Exploit",
-	
-	Message = "Strange Lag Patterns: {Contact}",
-	
-	Method = PUNISHMENT_LOG,
-	
-	Window = 32,
-	TimeSinceSpawned = 3.5,
-	
-	Flags = true,
-	Maximum = 15,
-	Decay = 10,
-	
-	Alerts = {
-		Flags = ALERT_NONE
-	},
-	
-	Ping = 250,
-	Loss = 90
-})
-
---[[
 	This is a check that occurs when a player uses a cheat called "Desynculator". It is an engine exploit where in which you are able to
 	lower your simulation time to negative values and when combined with other exploits even positive values. This can be very dangerous
 	since it will break engine timers and predicted timers (in hooks such as Move).
@@ -869,7 +838,7 @@ pStub.Register("Menu Movement", {
 --- Engine Prediction ---
 
 pStub.Register("Engine Prediction", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Engine Prediction",
 	Description = "Occurs when the player attempts to use an aimbot prediction.",
 	Category = "Aimbot",
