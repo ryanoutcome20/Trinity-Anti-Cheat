@@ -524,6 +524,12 @@ pStub.Register("Input", {
 
 --- Exploits ---
 
+--[[
+	This occurs when a player either breaks lerp completely (positive direction desynculator) or sets their interpolation off by
+	abusing hidden console commands (cl_interpolate). You cannot naturally set your interpolation off without a module, so the risk
+	of this false flagging is practically nonexistent.
+--]]
+
 pStub.Register("Interpolation Abuse", {
 	Enabled = true,
 	Name = "Interpolation Abuse",
@@ -543,6 +549,14 @@ pStub.Register("Interpolation Abuse", {
 	Ping = 350,
 	Loss = 80
 })
+
+--[[
+	This is a check that occurs from either command number manipulation or speedhack. It will not false flag unless the player is 
+	cheating or your server uses an external module.
+
+	You should also consider forcing sv_maxusrcmdprocessticks to a value that isn't zero. When it is at zero it allows a player to
+	speedhack by sending extra commands.
+--]]
 
 pStub.Register("Speedhack", {
 	Enabled = true,
@@ -568,6 +582,12 @@ pStub.Register("Speedhack", {
 	Loss = 80
 })
 
+--[[
+	This is a check that occurs when a player messes with their tickcount. This usually occurs with backtrack but can also occur
+	with some aimbot quality of life features like aligning simulation time with tickcount.
+
+	It will not false flag unless the player is cheating or your server uses an external module.
+--]]
 
 pStub.Register("Tickcount", {
 	Enabled = true,
@@ -596,6 +616,12 @@ pStub.Register("Tickcount", {
 	Loss = 80
 })
 
+--[[
+	This is a check that occurs when a player has strange and inconsistant jumps between command number deltas. It practically detects
+	held back updates through bSendPacket. Unfortunately we recommend against enabling this in its current state because of the engine
+	bugs associated with it. 
+--]]
+
 pStub.Register("Fakelag", {
 	Enabled = false,
 	Name = "Fakelag",
@@ -621,6 +647,12 @@ pStub.Register("Fakelag", {
 	Loss = 35
 })
 
+--[[
+	This is a check that occurs when a player uses a cheat called "Desynculator". It is an engine exploit where in which you are able to
+	lower your simulation time to negative values and when combined with other exploits even positive values. This can be very dangerous
+	since it will break engine timers and predicted timers (in hooks such as Move).
+--]]
+
 pStub.Register("Simulation Time", {
 	Enabled = true,
 	Name = "Simulation Time",
@@ -642,6 +674,10 @@ pStub.Register("Simulation Time", {
 	Ping = 250,
 	Loss = 80
 })
+
+--[[
+	This is a check that occurs when an exploit is used that allows a player to move while act taunting.
+--]]
 
 pStub.Register("Act", {
 	Enabled = true,
