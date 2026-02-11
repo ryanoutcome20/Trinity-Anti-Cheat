@@ -423,7 +423,7 @@ pStub.Register("Autoclicker", {
 	ResetOnFailure = false,
 	
 	Flags = true,
-	Maximum = 15,
+	Maximum = 35,
 	Decay = 1.0,
 	
 	Alerts = {
