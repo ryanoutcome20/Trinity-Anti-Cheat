@@ -544,8 +544,8 @@ pStub.Register("Interpolation Abuse", {
 	Maximum = 4,
 	Decay = 8,
 	
-	Ping = 350,
-	Loss = 80
+	Ping = 250,
+	Loss = 90
 })
 
 --[[
@@ -574,8 +574,8 @@ pStub.Register("Speedhack", {
 		Flags = ALERT_NONE
 	},
 	
-	Ping = 100,
-	Loss = 80
+	Ping = 250,
+	Loss = 90
 })
 
 --[[
@@ -606,8 +606,8 @@ pStub.Register("Tickcount", {
 		Flags = ALERT_NONE
 	},
 	
-	Ping = 80,
-	Loss = 80
+	Ping = 250,
+	Loss = 90
 })
 
 --[[
@@ -637,8 +637,8 @@ pStub.Register("Fakelag", {
 		Flags = ALERT_NONE
 	},
 	
-	Ping = 150,
-	Loss = 35
+	Ping = 250,
+	Loss = 90
 })
 
 --[[
@@ -666,7 +666,7 @@ pStub.Register("Simulation Time", {
 	Decay = 5,
 	
 	Ping = 250,
-	Loss = 80
+	Loss = 90
 })
 
 --[[
