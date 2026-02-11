@@ -640,6 +640,8 @@ pStub.Register("Simulation Time", {
 
 --[[
 	This is a check that occurs when an exploit is used that allows a player to move while act taunting.
+
+	Set CheckGamemode to false if you want this to activate on any gamemode other than sandbox.
 --]]
 
 pStub.Register("Act", {
@@ -647,10 +649,12 @@ pStub.Register("Act", {
 	Name = "Act",
 	Description = "Detects players who are moving while taunting (act commands).",
 	Category = "Exploit",
-	
+
 	Message = "Act Movement: {Contact}",
-	
-	Method = PUNISHMENT_KICK
+
+	Method = PUNISHMENT_KICK,
+
+	CheckGamemode = false
 })
 
 --- Extras ---
