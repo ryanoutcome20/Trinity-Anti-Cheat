@@ -536,9 +536,7 @@ pStub.Register("Interpolation Abuse", {
 	Description = "Detects two methods of interpolation abuse to catch cheaters.",
 	Category = "Exploit",
 	
-	Message = "Strange Interpolation: {Contact}",
-	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 	
 	Overflow = true,
 	
@@ -563,10 +561,8 @@ pStub.Register("Speedhack", {
 	Name = "Speedhack",
 	Description = "Detects speedhack on servers with sv_maxusrcmdprocessticks set to zero. May also detect other exploits.",
 	Category = "Exploit",
-	
-	Message = "Strange Lag Patterns: {Contact}",
-	
-	Method = PUNISHMENT_LOG,
+
+	Method = PUNISHMENT_BAN,
 	
 	Flags = true,
 	Maximum = 45,
@@ -595,9 +591,7 @@ pStub.Register("Tickcount", {
 	Description = "Detects tickcount manipulation to do things like backtrack.",
 	Category = "Exploit",
 	
-	Message = "Strange Lag Patterns: {Contact}",
-	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 	
 	Regular = true,
 	
@@ -659,9 +653,9 @@ pStub.Register("Simulation Time", {
 	Description = "Detects players using the 'Desynculator' simulation time exploit.",
 	Category = "Exploit",
 	
-	Message = "Timed Out: {Contact}",
+	Message = "Simulation Time: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	TimeSinceCreated = 25,
 	Low = -150,
@@ -685,7 +679,9 @@ pStub.Register("Act", {
 	Description = "Detects players who are moving while taunting (act commands).",
 	Category = "Exploit",
 	
-	Method = PUNISHMENT_LOG
+	Message = "Act Movement: {Contact}",
+	
+	Method = PUNISHMENT_KICK
 })
 
 --- Extras ---
