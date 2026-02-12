@@ -3,7 +3,6 @@ return {
 	"ragebot",
 	"aimbot",
 	"hack",
-	"script",
 	"cheat",
 	"bhop",
 	"bunnyhop",
