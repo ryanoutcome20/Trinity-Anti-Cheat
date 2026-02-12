@@ -32,5 +32,6 @@ return {
 	["scorch/"] = true,
 	["sh/"] = true,
 	["majestic/"] = true,
-	["coffee/"] = true
+	["coffee/"] = true,
+	["roachhook/"] = true
 }
