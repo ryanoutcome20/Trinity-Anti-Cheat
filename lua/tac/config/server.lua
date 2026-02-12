@@ -69,7 +69,7 @@ Config.Contact = "github.com/ryanoutcome20/Trinity-Anti-Cheat/"
 	size cap to the text. This prevents someone from spamming your logs
 	with endless text.
 --]]
-Config.Sanitization = 96
+Config.Sanitization = 120
 
 --- Staff ---
 
