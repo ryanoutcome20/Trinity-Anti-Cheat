@@ -788,6 +788,13 @@ pStub.Register("Command Enforcer", {
 --- Interpolated View Angles ---
 
 --[[
+	What this does is break aimbots and other cheats by desyncing
+	view angles between client and server. To see what it does to
+	aimbot cheats you can checkout the offical TAC `Aimbot Breaker`
+	showcase:
+
+	https://www.youtube.com/watch?v=xNqrlCG11Ws
+
 	This will cause prediction issues but considering how low
 	the TPS of most Garry's Mod servers are anyway it shouldn't
 	effect the player as much as it effects the cheats.
