@@ -659,14 +659,27 @@ pStub.Register("Act", {
 
 --- Extras ---
 
+--[[
+	This is a check that goes off when a player changes their username. It can be used to kick players who are using
+	name spoofers but will also kick players who just simply change their name on Steam.
+--]]
+
 pStub.Register("Name Changer", {
 	Enabled = true,
 	Name = "Name Changer",
-	Description = "Detects when players change steam username/name command, can be used to kick players if needed.",
+	Description = "Detects when players change Steam username/name command, can be used to kick players if needed.",
 	Category = "Extra",
 	
 	Method = PUNISHMENT_LOG
 })
+
+--[[
+	This is a check that goes off when a player presses a specific key; it can be used to log a player who might be
+	using a cheat menu (insert and delete are the most common ones).
+
+	Maximum logs controls the amount of times the key will have to be pressed back to back in order to 
+	flag (set to -1 to always flag).
+--]]
 
 pStub.Register("Suspicious Keypresses", {
 	Enabled = true,
@@ -684,6 +697,11 @@ pStub.Register("Suspicious Keypresses", {
 	}
 })
 
+--[[
+	This is a check that goes off when a player encounters an error. Can be used to catch cheaters who have 
+	faulty cheats.
+--]]
+
 pStub.Register("Errors", {
 	Enabled = true,
 	Name = "Errors",
@@ -694,17 +712,17 @@ pStub.Register("Errors", {
 })
 
 pStub.Register("Accuracy", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Accuracy",
 	Description = "Gives reports about suspicious aiming accuracy.",
 	Category = "Extra",
 	
 	Method = PUNISHMENT_LOG,
 
-	Distance = -1,
-	Window = 10,
+	Distance = 1000,
+	Window = 25,
 	ShotWait = 0.1,
-	MinimumAccuracy = 0.5
+	MinimumAccuracy = 0.75
 })
 
 --- Command Enforcer ---
