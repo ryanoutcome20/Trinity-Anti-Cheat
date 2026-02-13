@@ -826,6 +826,13 @@ Config.WorldClicker = true
 --- Improved PVS (ESP Breaker) ---
 
 --[[
+	What this does is break ESP by not sending entity information down to
+	clients from the server when the player isn't visible to one of the 
+	nodes around the target player. Check out the showcase to see what these
+	nodes look like:
+
+	https://www.youtube.com/watch?v=Nwy0jQc8S4Y
+
 	This may come with a moderate to severe proformance impact depending on
 	the size of the server and the amount of players present in the players
 	default PVS.
