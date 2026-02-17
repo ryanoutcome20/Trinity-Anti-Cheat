@@ -369,7 +369,7 @@ pStub.Register("Mouse", {
 	Vehicles = true,
 	Ping = 250,
 	Loss = 90,
-	Sensitivity = 1
+	Sensitivity = 0.5
 })
 
 --[[
@@ -386,22 +386,22 @@ pStub.Register("Micromovement", {
 	
 	Method = PUNISHMENT_BAN,
 		
-	Delta = 0.001,
-	LowOffset = 0.20,
+	Delta = 0.01,
+	LowOffset = 0.000001,
 	HighOffset = 0.75,
 	HighIncrement = 3,
-	Distance = 8000,
+	Distance = 2000,
 	
 	Flags = true,
 	Maximum = 4,
 	Decay = 0.5,
 	
 	AlertFlagsMinimum = 2,
-	
+
 	Vehicles = true,
 	Ping = 250,
 	Loss = 90,
-	Sensitivity = 1
+	Sensitivity = 0.5
 })
 
 --[[
