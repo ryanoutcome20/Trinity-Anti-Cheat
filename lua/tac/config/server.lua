@@ -848,6 +848,14 @@ Config.PVS = {
 
 --- Menu Movement ---
 
+--[[
+	This check occurs when a player starts moving his mouse while the mouse is visible. This
+	usually signifies a C++ cheat menu.
+
+	It is unlikely to false flag, although updates and addons can affect the stability of this
+	check.
+--]]
+
 pStub.Register("Menu Movement", {
 	Enabled = true,
 	Name = "Menu Movement",
