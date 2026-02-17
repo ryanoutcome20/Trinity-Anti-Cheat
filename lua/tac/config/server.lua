@@ -757,7 +757,7 @@ pStub.Register("Command Enforcer", {
 	
 	Message = "Bad Command: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Commands = {
 		["sv_cheats"] = {
@@ -889,7 +889,7 @@ pStub.Register("Engine Prediction", {
 	
 	Client = true,
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 	
 	Flags = true,
 	Maximum = 4,
