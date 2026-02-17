@@ -982,6 +982,10 @@ pStub.Register("Stack", {
 --- Honeypot ---
 
 --[[
+	This check acts like popular anti-cheat addons and tries to see if they are
+	bypassed or accessed in any weird ways. Detects a lot of older cheats and
+	some security scripts.
+
 	Wait handles the delay between times the client can request a punishment.
 --]]
 
@@ -998,6 +1002,10 @@ pStub.Register("Honeypot", {
 
 --- Static Script ---
 
+--[[
+	This check detects the files of known cheats. See the `cl_static.lua` list.
+--]]
+
 pStub.Register("Static Script", {
 	Enabled = true,
 	Name = "Static Script",
@@ -1013,6 +1021,12 @@ pStub.Register("Static Script", {
 
 --- Anti-Screengrab ---
 
+--[[
+	This check will attempt to capture a screenshot of the players view. If it 
+	fails that means the screenshot (or screengrab) is being blocked. Can be used
+	in combination with a screengrab addon.
+--]]
+
 pStub.Register("Anti-Screengrab", {
 	Enabled = true,
 	Name = "Anti-Screengrab",
@@ -1027,6 +1041,11 @@ pStub.Register("Anti-Screengrab", {
 })
 
 --- Error Tracer ---
+
+--[[
+	This check verifies that errors that occur on the clientside are matched to what
+	they should be. It manually causes hidden errors to facilitate this.
+--]]
 
 pStub.Register("Error Tracer", {
 	Enabled = true,
@@ -1044,6 +1063,11 @@ pStub.Register("Error Tracer", {
 
 --- File IO ---
 
+--[[
+	This check attempts to write & delete files, if it cannot do that then the player is
+	blocking file I/O through a security script like Spectre or Majestic.
+--]]
+
 pStub.Register("File IO", {
 	Enabled = true,
 	Name = "File I/O",
@@ -1058,6 +1082,11 @@ pStub.Register("File IO", {
 })
 
 --- Debug Self ---
+
+--[[
+	This check abuses a logical flaw in security scripts to detect when a player is detouring debug
+	functions and returning fake information.
+--]]
 
 pStub.Register("Debug Self", {
 	Enabled = true,
@@ -1074,6 +1103,12 @@ pStub.Register("Debug Self", {
 
 --- Libraries ---
 
+--[[
+	This check verifies the size of libraries on the clientside when loading in. They shouldn't
+	change unless another addon is also running in pre-init like us.
+--]]
+
+
 pStub.Register("Libraries", {
 	Enabled = true,
 	Name = "Libraries",
@@ -1088,6 +1123,11 @@ pStub.Register("Libraries", {
 })
 
 --- Scans ---
+
+--[[
+	All of these scans are manual scans that use the lists located in `tac/lists/*`. Its recommended
+	you read the description of each check and configure them accordingly.
+--]]
 
 pStub.Register("Binaries", {
 	Enabled = true,
