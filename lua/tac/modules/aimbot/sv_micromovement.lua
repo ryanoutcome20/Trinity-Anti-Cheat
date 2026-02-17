@@ -24,7 +24,7 @@ function TAC.Aimbot.Micromovement(Player, cNew, cOld, CUserCMD)
 			
 				return TAC.Execute(Token)
 			end
-		elseif Offset >= Config.LowOffset then
+		elseif Offset <= Config.LowOffset then
 			TAC.Punishment.Wrapper("Micromovement", Player, "Micromovement [offset: %f; delta: %f; low]", Offset, Delta)
 		end
 	end
