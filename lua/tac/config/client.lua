@@ -31,12 +31,12 @@ Config.Prediction = {
 Config.InputGuard = {
 	Enabled = true,
 
-	Angles = false,
+	Angles = true,
 	Offset = 1,
 
-	Buttons = false,
+	Buttons = true,
 
-	Movement = false
+	Movement = true
 }
 
 /*

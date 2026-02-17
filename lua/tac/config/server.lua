@@ -898,6 +898,11 @@ pStub.Register("Engine Prediction", {
 
 --- Input Guard ---
 
+--[[
+	This check occurs when a player adjusts his angles without actually moving his angles naturally. 
+	Due to the nature of a check like this, it is highly susceptible to addon compatibility issues.
+--]]
+
 pStub.Register("Input Guard Angles", {
 	Enabled = true,
 	Name = "Input Guard Angles",
@@ -906,12 +911,17 @@ pStub.Register("Input Guard Angles", {
 	
 	Client = true,
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 10,
 	Decay = 3
 })
+
+--[[
+	This check occurs when a player registers button presses without actually pressing buttons naturally. 
+	Due to the nature of a check like this, it is highly susceptible to addon compatibility issues.
+--]]
 
 pStub.Register("Input Guard Buttons", {
 	Enabled = true,
@@ -921,8 +931,17 @@ pStub.Register("Input Guard Buttons", {
 	
 	Client = true,
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK,
+
+	Flags = true,
+	Maximum = 4,
+	Decay = 3
 })
+
+--[[
+	This check occurs when a player updates his movement values without actually moving naturally.
+	Due to the nature of a check like this, it is highly susceptible to addon compatibility issues.
+--]]
 
 pStub.Register("Input Guard Movement", {
 	Enabled = true,
@@ -932,7 +951,7 @@ pStub.Register("Input Guard Movement", {
 	
 	Client = true,
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 
 	Flags = true,
 	Maximum = 15,
