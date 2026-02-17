@@ -107,6 +107,7 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 	
 	if cOld.Delta and cOld.TraceData then
 		hook_Run("TAC.StartCommandPlus", Player, cNew, cOld, CUserCMD)
+		hook_Run("TAC.PostStartCommandPlus", Player, cNew, cOld, CUserCMD)
 	end
 end
 
