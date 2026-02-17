@@ -737,20 +737,16 @@ pStub.Register("Accuracy", {
 	shared ConVars by making sure the values are
 	replicated on the server. 
 	
-	In simple terms, if your config uses a shared 
-	value (sv_cheats) and the config is desynced 
-	with the server (sv_cheats 1) then it'll get 
-	fixed automatically.
+	For each ConVar you wish you verify you have
+	a few options:
 
-	Note that "interval" is the time between calls to
-	the client and "await" is the time the server is
-	willing to wait before verfying the player sent
-	the message, if it fails then it calls command
-	enforcer with "Not Initialized".
+		- Value: This is the value that will be verified by the anti-cheat.
+		- Patch: This makes the value replicated, it'll dynamically grab it from the server instead of using a static number.
+		- Log: Logs instead of banning, useful for ConVars that can be changed by the client.
 
-	Log makes the command log only. Useful for
-	commands that are capable of being seperated
-	but suspicious.
+	Interval is the amount of time between each check of the commands.
+
+	Await is the amount of time until the server verifies that commands have been sent. Keep this lower than the interval.
 --]]
 
 pStub.Register("Command Enforcer", {
