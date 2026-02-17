@@ -285,8 +285,8 @@ pStub.Register("Client Integrity", {
 
 --[[
 	This occurs when CUserCMD reports angles outside of the limit
-	(MaxPitch & MaxYaw). Depending on the addons you have, this can
-	false flag quite a bit.
+	of the engine (89 pitch & 180 yaw). Depending on the addons 
+	you have, this can false flag quite a bit.
 
 	Adjust the MaxPitch/MaxYaw to reduce false positives if you have an
 	addon confliction.
