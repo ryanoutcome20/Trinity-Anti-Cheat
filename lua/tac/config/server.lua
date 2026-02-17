@@ -864,7 +864,7 @@ pStub.Register("Menu Movement", {
 	
 	Client = true,
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 6,
@@ -872,6 +872,14 @@ pStub.Register("Menu Movement", {
 })
 
 --- Engine Prediction ---
+
+--[[
+	This check occurs when a player attempts to predict his movement for the next tick to match the
+	server. This usually is done to improve aimbot accuracy although some exploits will also trigger
+	this.
+
+	Chances of false flagging are low, but not impossible depending on the addons on the server.
+--]]
 
 pStub.Register("Engine Prediction", {
 	Enabled = true,
