@@ -7,6 +7,16 @@ local Config = { }
 
 --- Batches ---
 
+--[[
+	These are the options that control the rate in which the client will
+	transfer data to the server.
+
+	Batch is the size of individual net messages, lower this if you keep
+	getting "overflowed network channel" errors in console.
+
+	ProcessTime is the time between each burst.
+--]]
+
 Config.Batch = 32000
 Config.ProcessTime = 0.25
 
