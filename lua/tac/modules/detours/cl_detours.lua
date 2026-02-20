@@ -55,9 +55,6 @@ Wrap("timer.Create")
 
 Wrap("util.IsBinaryModuleInstalled")
 
-Wrap("math.random")
-Wrap("math.randomseed")
-
 Wrap("hook.Add")
 Wrap("hook.Remove")
 
