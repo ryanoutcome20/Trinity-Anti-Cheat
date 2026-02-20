@@ -418,6 +418,8 @@ pStub.Register("Autoclicker", {
 	Description = "Detects autoclickers. Will flag external autoclickers as well.",
 	Category = "Aimbot",
 	
+	Message = "Autoclicker: {Contact}",
+
 	Method = PUNISHMENT_KICK,
 	
 	ResetOnFailure = false,
@@ -445,6 +447,8 @@ pStub.Register("Bunnyhop", {
 	Name = "Bunnyhop",
 	Description = "Detects players with perfect bunnyhop. Will false flag bunnyhop addons.",
 	Category = "Movement",
+	
+	Message = "Bunnyhop: {Contact}",
 	
 	Method = PUNISHMENT_KICK,
 	
@@ -495,6 +499,8 @@ pStub.Register("Input", {
 	Name = "Input",
 	Description = "Detects players who are using something to manipulate their movement vectors.",
 	Category = "Movement",
+	
+	Message = "Movement Vector Error: {Contact}",
 	
 	Method = PUNISHMENT_KICK,
 	
@@ -599,7 +605,7 @@ pStub.Register("Tickcount", {
 	Range = -350,
 	
 	Flags = true,
-	Maximum = 10,
+	Maximum = 25,
 	Decay = 5,
 	
 	Alerts = {
@@ -624,7 +630,7 @@ pStub.Register("Simulation Time", {
 	
 	Message = "Simulation Time: {Contact}",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_BAN,
 	
 	TimeSinceCreated = 25,
 	Low = -150,
@@ -863,6 +869,8 @@ pStub.Register("Menu Movement", {
 	Category = "Aimbot",
 	
 	Client = true,
+
+	Message = "Invalid Movement: {Contact}",
 	
 	Method = PUNISHMENT_KICK,
 	
@@ -904,12 +912,14 @@ pStub.Register("Engine Prediction", {
 --]]
 
 pStub.Register("Input Guard Angles", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Input Guard Angles",
 	Description = "Occurs when the player is detected for manipulating angles. Likely to flag poorly coded addons.",
 	Category = "Aimbot",
 	
 	Client = true,
+
+	Message = "Angle Input Error: {Contact}",
 	
 	Method = PUNISHMENT_KICK,
 	
@@ -924,12 +934,14 @@ pStub.Register("Input Guard Angles", {
 --]]
 
 pStub.Register("Input Guard Buttons", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Input Guard Buttons",
 	Description = "Occurs when the player is detected for manipulating buttons. Unlikely to false flag.",
 	Category = "Aimbot",
 	
 	Client = true,
+
+	Message = "Button Input Error: {Contact}",
 	
 	Method = PUNISHMENT_KICK,
 
@@ -944,12 +956,14 @@ pStub.Register("Input Guard Buttons", {
 --]]
 
 pStub.Register("Input Guard Movement", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Input Guard Movement",
 	Description = "Occurs when the player is detected for manipulating movement values. Likely to flag poorly coded addons.",
 	Category = "Aimbot",
 	
 	Client = true,
+
+	Message = "Movement Input Error: {Contact}",
 	
 	Method = PUNISHMENT_KICK,
 
@@ -992,10 +1006,12 @@ pStub.Register("Honeypot", {
 	Name = "Honeypot",
 	Description = "Emulates popular anti-cheat plugins to detect players attempting bruteforce bypasses.",
 	Category = "Integrity",
-
-	Wait = 0.25,
 	
-	Method = PUNISHMENT_KICK
+	Message = "Compatibility Error: {Contact}",
+
+	Method = PUNISHMENT_KICK,
+
+	Wait = 0.25
 })
 
 --- Static Script ---
@@ -1031,7 +1047,7 @@ pStub.Register("Anti-Screengrab", {
 	
 	Client = true,
 	
-	Message = "Screengrab Bypass: {Contact}",
+	Message = "Screengrab Error: {Contact}",
 	
 	Method = PUNISHMENT_KICK
 })
@@ -1152,9 +1168,7 @@ pStub.Register("Globals", {
 	
 	Client = true,
 	
-	Message = "Bad Global: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 pStub.Register("Hooks", {
@@ -1165,9 +1179,7 @@ pStub.Register("Hooks", {
 	
 	Client = true,
 	
-	Message = "Bad Hook: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 pStub.Register("Commands", {
@@ -1178,9 +1190,7 @@ pStub.Register("Commands", {
 	
 	Client = true,
 	
-	Message = "Bad Command: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 pStub.Register("Listener", {
@@ -1190,10 +1200,8 @@ pStub.Register("Listener", {
 	Category = "Scans",
 	
 	Client = true,
-	
-	Message = "Bad Listener: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+
+	Method = PUNISHMENT_BAN
 })
 
 --- Detours ---
@@ -1212,9 +1220,7 @@ pStub.Register("Detours", {
 	Description = "Occurs when detours are triggered clientside and called from invalid files, contains C function checks as well.",
 	Category = "Scans",
 	
-	Message = "Detour System: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 --- Heartbeat ---
@@ -1239,8 +1245,8 @@ pStub.Register("Heartbeat", {
 	Category = "Integrity",
 	
 	Message = "Failed to load! Rejoin!",
-	
-	Await = 30,
 
-	Method = PUNISHMENT_KICK
+	Method = PUNISHMENT_KICK,
+
+	Await = 30
 })

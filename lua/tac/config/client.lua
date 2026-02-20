@@ -36,20 +36,17 @@ Config.Prediction = {
 --[[
 	This is the clientside version of the config for the various `Input Guard` checks 
 	serverside.
-
-	This controls whether or not to run the check. This check doesn't have a huge impact
-	on clientside performance so it is not necessary to disable it here.
 --]]
 
 Config.InputGuard = {
-	Enabled = true,
+	Enabled = false,
 
-	Angles = true,
+	Angles = false,
 	Offset = 1,
 
-	Buttons = true,
+	Buttons = false,
 
-	Movement = true
+	Movement = false
 }
 
 --[[
