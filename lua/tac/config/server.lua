@@ -973,10 +973,8 @@ pStub.Register("Stack", {
 	Category = "Integrity",
 	
 	Client = true,
-	
-	Message = "Bad Stack Frame: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+		
+	Method = PUNISHMENT_BAN
 })
 
 --- Honeypot ---
@@ -997,7 +995,7 @@ pStub.Register("Honeypot", {
 
 	Wait = 0.25,
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Static Script ---
@@ -1014,9 +1012,7 @@ pStub.Register("Static Script", {
 	
 	Client = true,
 	
-	Message = "Likely Cheater: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 --- Anti-Screengrab ---
@@ -1037,7 +1033,7 @@ pStub.Register("Anti-Screengrab", {
 	
 	Message = "Screengrab Bypass: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Error Tracer ---
@@ -1055,9 +1051,9 @@ pStub.Register("Error Tracer", {
 	
 	Client = true,
 	
-	Message = "Error: {Contact}",
+	Message = "Error Issue: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 
@@ -1076,9 +1072,9 @@ pStub.Register("File IO", {
 	
 	Client = true,
 	
-	Message = "File I/O: {Contact}",
+	Message = "File I/O Error: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Debug Self ---
@@ -1096,9 +1092,7 @@ pStub.Register("Debug Self", {
 	
 	Client = true,
 	
-	Message = "Debug Self: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 --- Libraries ---
@@ -1108,7 +1102,6 @@ pStub.Register("Debug Self", {
 	change unless another addon is also running in pre-init like us.
 --]]
 
-
 pStub.Register("Libraries", {
 	Enabled = true,
 	Name = "Libraries",
@@ -1117,9 +1110,9 @@ pStub.Register("Libraries", {
 	
 	Client = true,
 	
-	Message = "Library Failure: {Contact}",
+	Message = "Library Size Error: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Scans ---
@@ -1137,9 +1130,7 @@ pStub.Register("Binaries", {
 	
 	Client = true,
 	
-	Message = "Bad Module: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 pStub.Register("Files", {
@@ -1150,9 +1141,7 @@ pStub.Register("Files", {
 	
 	Client = true,
 	
-	Message = "Bad File: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 pStub.Register("Globals", {
