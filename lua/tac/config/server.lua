@@ -844,7 +844,7 @@ Config.WorldClicker = true
 ]]--
 
 Config.PVS = {
-	Enabled = true,
+	Enabled = false,
 	
 	squareSize = 1,
 	squaredSize = 256,
@@ -1249,4 +1249,5 @@ pStub.Register("Heartbeat", {
 	Method = PUNISHMENT_KICK,
 
 	Await = 30
+
 })
