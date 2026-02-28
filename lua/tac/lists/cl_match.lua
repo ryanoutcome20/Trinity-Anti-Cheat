@@ -2,7 +2,6 @@ return {
 	"legitbot",
 	"ragebot",
 	"aimbot",
-	"hack",
 	"cheat",
 	"bhop",
 	"bunnyhop",
