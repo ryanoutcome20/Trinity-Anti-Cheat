@@ -588,16 +588,16 @@ pStub.Register("Speedhack", {
 	This is a check that occurs when a player messes with their tickcount. This usually occurs with backtrack but can also occur
 	with some aimbot quality of life features like aligning simulation time with tickcount.
 
-	It will not false flag unless the player is cheating or your server uses an external module.
+	It has a decent chance of false flagging if a server is under heavy lag.
 --]]
 
 pStub.Register("Tickcount", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Tickcount",
 	Description = "Detects tickcount manipulation to do things like backtrack.",
 	Category = "Exploit",
 	
-	Method = PUNISHMENT_BAN,
+	Method = PUNISHMENT_LOG,
 	
 	Regular = true,
 	
@@ -1251,3 +1251,4 @@ pStub.Register("Heartbeat", {
 	Await = 30
 
 })
+
