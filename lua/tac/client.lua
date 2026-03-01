@@ -280,7 +280,7 @@ function TAC.GenerateBuffer(Function)
 		
 		j_linedefined = FuncInfo.linedefined or "ld",
 		
-		isfunc = GetInfo.name and GetInfo.namewhat and GetInfo.linedefined > 0,
+		isfunc = GetInfo.name and GetInfo.namewhat and GetInfo.linedefined > 0
 	}
 end
 
@@ -604,21 +604,6 @@ TAC.Atlas:Listen("Plugin", "TAC.Plugins", MODE_DONE, function(Stage, File, Code)
 	TAC.LoadCode(Code, File)
 end)
 
--- Operating System --
-
-TAC.OS = "Windows"
-
-if system.IsOSX() then
-    TAC.OS = "OSX"
-elseif system.IsLinux() then
-   	TAC.OS = "Linux"
-end
-
-TAC.Atlas:Send(
-    "Operating System",
-    TAC.OS
-)
-
 --- Security Helper ---
 
 TAC.Secure = { }
@@ -774,13 +759,13 @@ TAC.Captures = {
 
 function TAC.Captures.Direct(Function, Message)
 	local Data = TAC.GenerateBuffer(Function)
-	
+
 	if TAC.Detours.Whitelist.Whitelisted(Function, Data) then
 		return
 	end
 
 	Data.Message = Message
-	
+
 	Data.source = nil
 	Data.isfunc = nil
 
@@ -792,7 +777,7 @@ function TAC.Captures.Direct(Function, Message)
 end
 
 function TAC.Captures.Stack(Message)
-	for i = 3, 8 do 
+	for i = 2, 8 do 
 		local Info = debug.getinfo(i, "f")
 	
 		if not Info then

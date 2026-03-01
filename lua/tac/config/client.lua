@@ -7,29 +7,39 @@ local Config = { }
 
 --- Batches ---
 
+--[[
+	These are the options that control the rate in which the client will
+	transfer data to the server.
+
+	Batch is the size of individual net messages, lower this if you keep
+	getting "overflowed network channel" errors in console.
+
+	ProcessTime is the time between each burst.
+--]]
+
 Config.Batch = 32000
 Config.ProcessTime = 0.25
 
 --- Aimbot Checks ---
 
-/*
-	This check simply detects when the player is using movement code more
-	than once to fix a prediction issue with all Source games. This fix 
-	increases their accuracy with Aimbots but is also trivial to detect.
-*/
+--[[
+	This is the clientside version of the config for `Engine Prediction` serverside.
+
+	This controls whether or not to run the check. This check doesn't have a huge impact
+	on clientside performance so it is not necessary to disable it here.
+--]]
 
 Config.Prediction = {
 	Enabled = true
 }
 
-/*
-	This check simply sits between StartCommand and SetupMove to detect players
-	manipulating CUserCMD values within CreateMove. Likely to false flag some
-	addons that meddle with these values especially view angles.
-*/
+--[[
+	This is the clientside version of the config for the various `Input Guard` checks 
+	serverside.
+--]]
 
 Config.InputGuard = {
-	Enabled = true,
+	Enabled = false,
 
 	Angles = false,
 	Offset = 1,
@@ -39,17 +49,29 @@ Config.InputGuard = {
 	Movement = false
 }
 
-/*
-	This check simply checks if the player is adjusting view angles within a
-	VGUI frame. Might false flag alot of addons but you should probably
-	disable it serverside!
-*/
+--[[
+	This is the clientside version of the config for `Menu Movement` serverside.
+
+	This controls whether or not to run the check. This check doesn't have a huge impact
+	on clientside performance so it is not necessary to disable it here.
+--]]
 
 Config.MenuMovement = {
 	Enabled = true
 }
  
 --- Integrity ---
+
+--[[
+	These are the clientside version of the various `Integrity` checks 
+	you'll find serverside.
+	
+	These do not have a huge impact on clientside performance so it is
+	not necessary to disable them here.
+
+	As for the libraries size, you can adjust them to fix false flags here.
+	This isn't recommended though.
+--]]
 
 Config.Integrity = {
 	Tracer = {
@@ -76,27 +98,30 @@ Config.Integrity = {
 			Enabled = true,
 			Size = 4
 		}
-	},
-
-	DebugHooks = {
-		Enabled = true,
-
-		Lines = true,
-		Target = 7,
-
-		Garbage = true,
-		Delta = 100,
-		Fill = 3
 	}
 }
 
 --- Static Cheats / Scripts ---
+
+--[[
+	This is the clientside version of the config for `Static Script` serverside.
+
+	This controls whether or not to run the check. This check doesn't have a huge impact
+	on clientside performance so it is not necessary to disable it here.
+--]]
+
 
 Config.Static = {
 	Enabled = true
 }
 
 --- Breakers ---
+
+--[[
+	What this does is spam RunString with corrupted identifiers to attempt to confuse
+	or break file stealers. Various file stealers are prevented from working properly
+	with this enabled (Interstate, GLuaSteal, etc).
+--]]
 
 Config.FSB = {
 	Enabled = false,
@@ -109,11 +134,22 @@ Config.FSB = {
 	Size = 1
 }
 
+--[[
+	What this does is setup a render target (new camera) and destroying it every frame to break
+	C++ ESP systems. Works on a various cheats but can be extremely performance intensive.
+--]]
+
 Config.ESP = {
 	Enabled = false
 }
 
 --- Heartbeat ---
+
+--[[
+	This is the clientside version of the config for `Heartbeat` serverside.
+
+	This is the heartbeat sent to the server every couple of seconds (controlled by Await).
+--]]
 
 Config.Heartbeat = {
 	Enabled = true,
@@ -122,6 +158,16 @@ Config.Heartbeat = {
 }
 
 --- Scans ---
+
+--[[
+	These are the clientside version of the various `Scan` checks 
+	you'll find serverside.
+	
+	These do not have a huge impact on clientside performance so it is
+	not necessary to disable them here.
+
+	You can control the individual flags in the lists files (`tac/lists/*`)
+--]]
 
 Config.Scans = {
 	Binaries = {
@@ -155,6 +201,17 @@ Config.Scans = {
 }
 
 --- Listeners ---
+
+--[[
+	These are the clientside version of the `Listener` check 
+	you'll find serverside.
+
+	This controls whether or not to run the check. This check doesn't have a huge impact
+	on clientside performance so it is not necessary to disable it here.
+
+	If you'd like to modify the listeners individually you can modify them in the file:
+	`tac/lists/cl_listener.lua`
+--]]
 
 Config.Listeners = {
 	Enabled = true

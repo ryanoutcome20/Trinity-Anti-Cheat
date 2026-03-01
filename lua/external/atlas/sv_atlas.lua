@@ -141,6 +141,11 @@ function Atlas:Unpack(Data)
 
     -- Try parsing SFS to check if it's a table.
     local Parsed, Failed = SFS.decode(Decompressed)
+
+    -- Some weird low number compression bug.
+    if not istable(Parsed) then
+        return Decompressed, true
+    end
     
     -- If SFS parsing fails, return decompressed string.
     if Failed ~= nil then
@@ -156,13 +161,37 @@ function Atlas:Unpack(Data)
         end
 
         if Data.Type == TYPE_STRING then
-            Constructed[k] = tostring(self:Unpack(Data.Value))
+            local Unpacked, Failed = self:Unpack(Data.Value)
+
+            if Failed then 
+                return Decompressed, true
+            end
+
+            Constructed[k] = tostring(Unpacked)
         elseif Data.Type == TYPE_NUMBER then
-            Constructed[k] = tonumber(self:Unpack(Data.Value))
+            local Unpacked, Failed = self:Unpack(Data.Value)
+
+            if Failed then 
+                return Decompressed, true
+            end
+
+            Constructed[k] = tonumber(Unpacked)
         elseif Data.Type == TYPE_BOOL then
-            Constructed[k] = self:Unpack(tostring(Data.Value)) == "true"
+            local Unpacked, Failed = self:Unpack(tostring(Data.Value))
+
+            if Failed then 
+                return Decompressed, true
+            end
+
+            Constructed[k] = tostring(Unpacked) == "true"
         else
-            Constructed[k] = self:Unpack(Data.Value)
+            local Unpacked, Failed = self:Unpack(Data.Value)
+
+            if Failed then 
+                return Decompressed, true
+            end
+
+            Constructed[k] = Unpacked
         end
     end
 
@@ -292,9 +321,13 @@ function Atlas:Receive(ENT)
         Index = table_concat(Index, "", 1, Index.Slot)
         
         if Data.Checksum == util_CRC(Index) then 
-            local Arguments = self:Unpack(Index)
+            local Arguments, Failed = self:Unpack(Index)
 
-            self:Process(Callbacks, MODE_DONE, ENT, unpack(Arguments))
+            if Failed then
+                self:Process(Callbacks, MODE_FAILED, ENT, Index)
+            else
+                self:Process(Callbacks, MODE_DONE, ENT, unpack(Arguments))
+            end
         else
             self:Process(Callbacks, MODE_FAILED, ENT, Index)
         end

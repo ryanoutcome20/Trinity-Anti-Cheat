@@ -32,4 +32,4 @@ function TAC.Breakers.InterpolateViewAngles(Player, cNew, cOld, CUserCMD)
 	))
 end
 
-hook.Add("TAC.StartCommandPlus", "TAC.Breakers.InterpolateViewAngles", TAC.Breakers.InterpolateViewAngles)
+hook.Add("TAC.PostStartCommandPlus", "TAC.Breakers.InterpolateViewAngles", TAC.Breakers.InterpolateViewAngles)

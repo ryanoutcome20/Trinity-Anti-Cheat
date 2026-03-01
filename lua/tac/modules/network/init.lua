@@ -27,11 +27,9 @@ end
 
 function TAC.Networking.FlagBatch(Stage, Player, Objects)
 	Objects = istable(Objects) and Objects or { }
-	
-	local Config = TAC.Config["Networking Batch"]
-	
+
 	if #Objects == 0 then
-		return TAC.Punishment.Wrapper("Networking Batch", Player, "Networking Batch [got: %i]", #Objects)
+		return TAC.Networking.Integrity(Player, "Networking Batch [empty]")	
 	end
 	
 	for k, Object in ipairs(Objects) do 

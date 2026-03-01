@@ -33,8 +33,6 @@ function TAC.Stack.Scan()
 end
 
 function TAC.Stack.Self()
-	-- This might false flag on other operating systems other than Windows.
-	
 	local Self = debug.getinfo(1)
 
 	if not Self then

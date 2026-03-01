@@ -6,7 +6,7 @@ return "xAdmin", {
 	end,
 
 	Ban = function(Player, Reason, Time)
-		return xAdmin.Database.CreateBan(Player:SteamID64(), Player:Nick(), "", "", Reason, Time * 60, function() end)
+		return xAdmin.Database.CreateBan(Player:SteamID64(), Player:Name(), "", "", Reason, Time * 60, function() end)
 	end,
 	
 	BanID = function(SID, Reason, Time)

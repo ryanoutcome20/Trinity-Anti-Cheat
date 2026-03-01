@@ -17,15 +17,15 @@ function TAC.Aimbot.Micromovement(Player, cNew, cOld, CUserCMD)
 		local Offset = cOld:GetDelta() - Delta
 
 		if Offset >= Config.HighOffset then
-			local Status, Token = TAC.Punishment.Evaluate("Micromovement", Player, "Micromovement [offset: %f; high]", Offset)
+			local Status, Token = TAC.Punishment.Evaluate("Micromovement", Player, "Micromovement [offset: %f; delta: %f; high]", Offset, Delta)
 	
 			if Status == EVALUATE_SUCCESS and Token then
 				Token.Increment = Config.HighIncrement
 			
 				return TAC.Execute(Token)
 			end
-		elseif Offset >= Config.LowOffset then
-			TAC.Punishment.Wrapper("Micromovement", Player, "Micromovement [offset: %f; low]", Offset)
+		elseif Offset <= Config.LowOffset then
+			TAC.Punishment.Wrapper("Micromovement", Player, "Micromovement [offset: %f; delta: %f; low]", Offset, Delta)
 		end
 	end
 end

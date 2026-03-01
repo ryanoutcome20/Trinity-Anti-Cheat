@@ -78,6 +78,10 @@ function TAC.Punishment.Valid(Player, Config, isToken, noDelay)
 	if Config.Loss ~= -1 and Player:PacketLoss() >= Config.Loss then
 		return
 	end
+
+	if Config.Sensitivity ~= -1 and Player:Get("Sensitivity", 3) < Config.Sensitivity then
+		return
+	end
 	
 	if Config.Vehicles and Player:InVehicle() then
 		return

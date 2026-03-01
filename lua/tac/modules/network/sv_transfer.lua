@@ -71,7 +71,7 @@ function TAC.Transfer.Start(Data)
 			timer.Create(
 				ID,
 				Config.Step,
-				#mStub.Files * Config.Overreach,
+				-1,
 				function()
 					TAC.Transfer.Step(self, ID)
 				end

@@ -71,7 +71,7 @@ function TAC.Verbose.Dump(Player)
 	
 	local Dump = string.format(
 		"Verbose dump:\n\nname:%s\nsteamid:%s\nusergroup:%s\npos:[%s,%s,%s]\nvel:[%s,%s,%s]\nang:[%s,%s,%s]\nang_comp:[%s,%s,%s]\nmove:%i\ncar:%s\nswep:%s",
-		Player:Nick(),
+		Player:Name(),
 		Player:SteamID64(),
 		Player:GetUserGroup(),
 		Position.x, Position.y, Position.z,

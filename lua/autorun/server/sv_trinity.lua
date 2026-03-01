@@ -33,8 +33,8 @@ MsgN("  Caching resources")
 
 --- Config ---
 
-TAC.Version = "0.2.9"
-TAC.Edition = "Alpha"
+TAC.Version = "0.3.0"
+TAC.Edition = "Release"
 
 MsgN("  Loading config")
 include("tac/config/server.lua")
@@ -42,6 +42,12 @@ include("tac/config/server.lua")
 --- Clientside ---
 
 MsgN("  Creating clientside")
+AddCSLuaFile("includes/extensions/client/panel/scriptedpanels.lua")
+AddCSLuaFile("includes/extensions/player_auth.lua")
+AddCSLuaFile("includes/extensions/coroutine.lua")
+AddCSLuaFile("includes/modules/concommand.lua")
+AddCSLuaFile("includes/modules/draw.lua")
+AddCSLuaFile("includes/modules/team.lua")
 AddCSLuaFile("tac/client.lua")
 
 --- External Libraries ---
@@ -61,7 +67,7 @@ MsgN("  Creating pLib instance")
 include("external/sv_plib.lua")
 
 --- Lists ---
- 
+
 MsgN("  Caching lists")
 
 for k, List in ipairs(file.Find("tac/lists/*.lua", "LUA")) do 
@@ -99,7 +105,7 @@ local function LoadPlugins(Root)
         local Formatted = Directory .. "/init.lua"
 
         if file.Exists(Formatted, "LUA") then
-			TAC.Plugins = TAC.Plugins + 1
+		    TAC.Plugins = TAC.Plugins + 1
 			
             local Clientside, Absolute = include(Formatted)
 
@@ -133,6 +139,8 @@ MsgN(string.format(
 	TAC.Edition
 ))
 
+MsgN("\n  Open Source Software\n  github.com/ryanoutcome20/Trinity-Anti-Cheat")
+
 Header()
 
 --- Dedicated Server ---
@@ -141,6 +149,16 @@ if not game.IsDedicated() then
 	TAC.Print(
 		PRINT_WARN,
 		"Info",
-		"Loopback / LAN server detected, anti-cheat cannot run at full capacity"
+		"Loopback / LAN server detected, anti-cheat cannot run at full capacity."
+	)
+end
+
+--- Singleplayer ---
+
+if game.SinglePlayer() then
+	TAC.Print(
+		PRINT_WARN,
+		"Info",
+		"Singleplayer server detected, anti-cheat WILL false flag!"
 	)
 end

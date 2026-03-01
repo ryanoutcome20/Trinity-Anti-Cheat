@@ -55,14 +55,8 @@ Wrap("timer.Create")
 
 Wrap("util.IsBinaryModuleInstalled")
 
-Wrap("math.random")
-Wrap("math.randomseed")
-
 Wrap("hook.Add")
 Wrap("hook.Remove")
-
-Wrap("concommand.Add")
-Wrap("concommand.Remove")
 
 Wrap("input.SetCursorPos")
 
@@ -72,3 +66,5 @@ Wrap("player.GetAll")
 Wrap("player.GetHumans")
 
 Wrap("gui.EnableScreenClicker")
+
+Wrap("render.IsTakingScreenshot")

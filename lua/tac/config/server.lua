@@ -12,48 +12,66 @@ TAC.Config = Config
 --[[
 	Default Player Strings:
 	
-	{Name}
-	{SteamID64}
-	{SteamID}
-	{IP}
-	{Ping}
-	{Loss}
-	{Position}
-	{Angle}
+	These only function if a player is provided (IE: punishment context, etc).
+
+	{Name} - Provides the name of a player.
+	{SteamID64} - Provides the SteamID64 of a player.
+	{SteamID} - Provides the SteamID of a player.
+	{IP} - Provides the IP of a player in non-port (1.1.1.1) form.
+	{Ping} - Provides the ping of a player.
+	{Loss} - Provides the packet loss of a player.
+	{Position} - Provides the position (x y z) of a player.
+	{Angle} - Provides the angle (x y r) of a player.
 --]]
 
 --[[
 	Default Token Strings:
 	
-	{Info}
-	{ID}
+	These only function if a token is provided (punishment context).
+
+	{Info} - Punishment reason.
+	{ID} - Punishment config ID.
 --]]
 
 --[[
 	Flags Specific Strings:
 
-	{Flags}
+	This only functions when in the FormatFlags context.
+
+	{Flags} - The number of flags total a player has received for this config ID. 
 --]]
 
 --[[
 	Delayed Punishment Specific Strings:
 
-	{Timer}
+	This only functions when in the FormatDelayedPunishment context.
+
+	{Timer} - The time until the punishment executes.
 --]]
 
 --[[
 	Default Global Strings:
 
-	{Contact}
-	{Map}
-	{Gamemode}
+	This function always, they provide global context for the server.
+
+	{Contact} - Contact string (Config.Contact).
+	{Map} - Map.
+	{Gamemode} - Gamemode name.
 --]]
 
 --- General ---
 
+-- Contact text used when {Contact} interpolated string is used.
 Config.Contact = "github.com/ryanoutcome20/Trinity-Anti-Cheat/"
 
-Config.Sanitization = 96
+--[[
+	When patching text sent from the clientside this will be the maximum
+	size cap to the text. This prevents someone from spamming your logs
+	with endless text.
+--]]
+Config.Sanitization = 120
+
+--- Staff ---
 
 Config.Staff = {
 	Roles = {
@@ -78,7 +96,7 @@ Config.Staff = {
 	Handles giving server administrators a pointer to look into a player due
 	to specific check failures or clientside issues (often bypasses or attempts).
 
-	Set timeout to -1 to disable it completely (not recommended).
+	Set timeout to -1 to disable timeouts completely (not recommended).
 --]]
 
 Config.Audits = {
@@ -121,8 +139,8 @@ Config.Alerts = {
 
 Config.Logging = {
 	Console = true,
-	DB = false,
 	File = true,
+	DB = false,
 	
 	DBCreate = function()
 		return "CREATE TABLE IF NOT EXISTS trinity_db( sid TEXT, type TEXT, text TEXT )"
@@ -210,6 +228,7 @@ Config.Punishment = {
 		-- Avoidance
 		Ping = -1,
 		Loss = -1,
+		Sensitivity = -1,
 		Vehicles = false,
 		Water = false,
 		Noclip = false,
@@ -228,20 +247,30 @@ Config.Punishment = {
 
 --- Networking ---
 
+--[[
+	Delay handles the initial transfer delay, in other words, how long the
+	server will take after the player spawns to begin transferring files
+	to them.
+
+	Step handles the speed in which each file transfer will occur.
+--]]
+
 Config.Networking = {
-	Overreach = 2,
 	Delay = 2,
 	Step = 0.5
 }
 
-pStub.Register("Networking Batch", {
-	Enabled = true,
-	Name = "Networking Batch",
-	Description = "Occurs when a player manipulates the punishment batch processing on the clientside.",
-	Category = "Networking",
-		
-	Method = PUNISHMENT_LOG
-})
+--[[
+	This usually occurs when the client manipulates data before sending it to
+	the serverside. It can occur from both "detours" and "network" modules.
+
+	Detours throws a client integrity when it sends a batch of functions that
+	are empty. This doesn't happen normally and is either an addon conflict or
+	is a bypass attempt.
+
+	The network module throws it from receiving invalid flags; this also shouldn't
+	happen. And will only occur with an addon conflict or bypass attempt.
+--]]
 
 pStub.Register("Client Integrity", {
 	Enabled = true,
@@ -249,12 +278,19 @@ pStub.Register("Client Integrity", {
 	Description = "Occurs when invalid data is sent to the server from the clientside. Can occur from various modules.",
 	Category = "Networking",
 	
-	Message = "Integrity: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 --- Aimbots ---
+
+--[[
+	This occurs when CUserCMD reports angles outside of the limit
+	of the engine (89 pitch & 180 yaw). Depending on the addons 
+	you have, this can false flag quite a bit.
+
+	Adjust the MaxPitch/MaxYaw to reduce false positives if you have an
+	addon confliction.
+--]]
 
 pStub.Register("Angles", {
 	Enabled = true,
@@ -262,17 +298,27 @@ pStub.Register("Angles", {
 	Description = "Detects invalid source engine angles.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 	
 	CheckPitch = true,
 	MaxPitch = 90,
 	CheckYaw = true,
 	MaxYaw = 180,
 
-	TimeSinceCreated = 5,
+	TimeSinceCreated = 25,
 	
 	Vehicles = true
 })
+
+--[[
+	This occurs when a player snaps to another player in a single tick. The 
+	"delta" of the tick, or difference between this angle and the last angle,
+	will be what stops it from false flagging.
+
+	Beware of aimbot addons or similar things. Teleportation addons can also
+	cause some degree of false positives if they make you look at the person you
+	teleport to.
+--]]
 
 pStub.Register("Snap", {
 	Enabled = true,
@@ -280,20 +326,26 @@ pStub.Register("Snap", {
 	Description = "Detects snapping to players in a single tick.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 	
-	Delta = 15,
-	Distance = 65000,
+	Delta = 35,
+	Distance = 10000,
 	TimeSinceSpawned = 3.5,
 	
-	Flags = false,
+	Flags = true,
 	Maximum = 2,
-	Decay = 4,
+	Decay = 1,
 	
 	Vehicles = true,
 	Ping = 250,
-	Loss = 80
+	Loss = 90
 })
+
+--[[
+	This occurs when a player is updating angles but not updating the 
+	MouseX/MouseY input handlers from the engine. This is unlikely
+	to false positive unless someone manually edits them.
+--]]
 
 pStub.Register("Mouse", {
 	Enabled = true,
@@ -301,7 +353,7 @@ pStub.Register("Mouse", {
 	Description = "Detects invalid MouseX/MouseY values compared to angle changes.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 	
 	InputlessDeltaMax = 2.5,
 	InputlessDeltaMin = 0.25,
@@ -309,15 +361,22 @@ pStub.Register("Mouse", {
 	Distance = 8000,
 	
 	Flags = true,
-	Maximum = 8,
+	Maximum = 4,
 	Decay = 0.5,
 	
-	AlertFlagsMinimum = 1,
-	
+	AlertFlagsMinimum = 2,
+
 	Vehicles = true,
 	Ping = 250,
-	Loss = 80
+	Loss = 90,
+	Sensitivity = 0.5
 })
+
+--[[
+	This occurs when a player has a "shaky" angle delta over another player. It
+	can occur due to various factors such as recoil or spread cheats. Unlikely
+	to false positive.
+--]]
 
 pStub.Register("Micromovement", {
 	Enabled = true,
@@ -325,24 +384,33 @@ pStub.Register("Micromovement", {
 	Description = "Detects strange stuttery movement within a players view angles.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 		
-	Delta = 0.05,
-	LowOffset = 0.10,
+	Delta = 0.01,
+	LowOffset = 0.000001,
 	HighOffset = 0.75,
 	HighIncrement = 3,
-	Distance = 4000,
+	Distance = 2000,
 	
 	Flags = true,
-	Maximum = 2,
-	Decay = 4,
+	Maximum = 4,
+	Decay = 0.5,
 	
-	AlertFlagsMinimum = 1,
-	
+	AlertFlagsMinimum = 2,
+
 	Vehicles = true,
 	Ping = 250,
-	Loss = 80
+	Loss = 90,
+	Sensitivity = 0.5
 })
+
+--[[
+	This occurs when a player is clicking as fast as the engine will allow. Most
+	commonly triggered by rapidfire scripts, although it can be triggered through
+	"double click" methods like butterfly clicking. 
+
+	While unlikely, any detection can still can be a false positive.
+--]]
 
 pStub.Register("Autoclicker", {
 	Enabled = true,
@@ -350,12 +418,14 @@ pStub.Register("Autoclicker", {
 	Description = "Detects autoclickers. Will flag external autoclickers as well.",
 	Category = "Aimbot",
 	
-	Method = PUNISHMENT_LOG,
+	Message = "Autoclicker: {Contact}",
+
+	Method = PUNISHMENT_KICK,
 	
 	ResetOnFailure = false,
 	
 	Flags = true,
-	Maximum = 15,
+	Maximum = 35,
 	Decay = 1.0,
 	
 	Alerts = {
@@ -363,24 +433,14 @@ pStub.Register("Autoclicker", {
 	}
 })
 
-pStub.Register("Nospread", {
-	Enabled = true,
-	Name = "Nospread",
-	Description = "Detects seed nospreads by using a delta sample check. Can be expensive and may not be worth the performance.",
-	Category = "Aimbot",
-	
-	Message = "Unusual Spread Cone: {Contact}",
-	
-	Method = PUNISHMENT_LOG,
-	
-	Samples = 15,
-	DeltaSamples = 8,
-	MinimumCone = 0.05,
-	Distance = 400,
-	Delta = 0.01,
-})
-
 --- Movement ---
+
+--[[
+	This occurs when a player lands perfect bunny hops back-to-back. If you have
+	a very good player they can actually false flag this, so beware.
+
+	LTT is Last Touch Time, which handles avoiding collision-based false positives.
+--]]
 
 pStub.Register("Bunnyhop", {
 	Enabled = true,
@@ -390,7 +450,7 @@ pStub.Register("Bunnyhop", {
 	
 	Message = "Bunnyhop: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	LTT = 1.5,
 	TimeSinceSpawned = 3.5,
@@ -406,13 +466,18 @@ pStub.Register("Bunnyhop", {
 	Noclip = true
 })
 
+--[[
+	This occurs when the movement of a player flip flops between the same value
+	back to back (IE: 1000, -1000, 1000, -1000, etc). Unlikely to false flag.
+--]]
+
 pStub.Register("Autostrafe", {
 	Enabled = true,
 	Name = "Autostrafe",
 	Description = "Detects players with artificial movement patterns related to strafing.",
 	Category = "Movement",
 	
-	Method = PUNISHMENT_KICK,
+	Method = PUNISHMENT_BAN,
 		
 	Flags = true,
 	Maximum = 20,
@@ -423,16 +488,24 @@ pStub.Register("Autostrafe", {
 	}
 })
 
+--[[
+	This occurs when a player has a movement value that isn't clamped to one
+	that the engine will use. Can false flag when interacting with predicted
+	entities (prediction errors).
+--]]
+
 pStub.Register("Input", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Input",
 	Description = "Detects players who are using something to manipulate their movement vectors.",
 	Category = "Movement",
 	
-	Method = PUNISHMENT_LOG,
+	Message = "Movement Vector Error: {Contact}",
+	
+	Method = PUNISHMENT_KICK,
 	
 	Minimum = 1000,
-	LTT = 1.5,
+	LTT = 2.5,
 
 	Vectors = {
 		[2500] = true,
@@ -441,7 +514,7 @@ pStub.Register("Input", {
 		[10000] = true
 	},
 	
-	Flags = false,
+	Flags = true,
 	Maximum = 12,
 	Decay = 8,
 	
@@ -449,7 +522,7 @@ pStub.Register("Input", {
 		Flags = ALERT_NONE
 	},
 	
-	Ping = 200,
+	Ping = 250,
 	Loss = 90,
 	Vehicles = true,
 	Water = true
@@ -457,15 +530,19 @@ pStub.Register("Input", {
 
 --- Exploits ---
 
+--[[
+	This occurs when a player either breaks lerp completely (positive direction desynculator) or sets their interpolation off by
+	abusing hidden console commands (cl_interpolate). You cannot naturally set your interpolation off without a module, so the risk
+	of this false flagging is practically nonexistent.
+--]]
+
 pStub.Register("Interpolation Abuse", {
 	Enabled = true,
 	Name = "Interpolation Abuse",
 	Description = "Detects two methods of interpolation abuse to catch cheaters.",
 	Category = "Exploit",
 	
-	Message = "Strange Interpolation: {Contact}",
-	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 	
 	Overflow = true,
 	
@@ -473,19 +550,25 @@ pStub.Register("Interpolation Abuse", {
 	Maximum = 4,
 	Decay = 8,
 	
-	Ping = 350,
-	Loss = 80
+	Ping = 250,
+	Loss = 90
 })
+
+--[[
+	This is a check that occurs from either command number manipulation or speedhack. It will not false flag unless the player is 
+	cheating or your server uses an external module.
+
+	You should also consider forcing sv_maxusrcmdprocessticks to a value that isn't zero. When it is at zero it allows a player to
+	speedhack by sending extra commands.
+--]]
 
 pStub.Register("Speedhack", {
 	Enabled = true,
 	Name = "Speedhack",
 	Description = "Detects speedhack on servers with sv_maxusrcmdprocessticks set to zero. May also detect other exploits.",
 	Category = "Exploit",
-	
-	Message = "Strange Lag Patterns: {Contact}",
-	
-	Method = PUNISHMENT_LOG,
+
+	Method = PUNISHMENT_BAN,
 	
 	Flags = true,
 	Maximum = 45,
@@ -497,18 +580,22 @@ pStub.Register("Speedhack", {
 		Flags = ALERT_NONE
 	},
 	
-	Ping = 100,
-	Loss = 80
+	Ping = 250,
+	Loss = 90
 })
 
+--[[
+	This is a check that occurs when a player messes with their tickcount. This usually occurs with backtrack but can also occur
+	with some aimbot quality of life features like aligning simulation time with tickcount.
+
+	It has a decent chance of false flagging if a server is under heavy lag.
+--]]
 
 pStub.Register("Tickcount", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Tickcount",
 	Description = "Detects tickcount manipulation to do things like backtrack.",
 	Category = "Exploit",
-	
-	Message = "Strange Lag Patterns: {Contact}",
 	
 	Method = PUNISHMENT_LOG,
 	
@@ -518,41 +605,22 @@ pStub.Register("Tickcount", {
 	Range = -350,
 	
 	Flags = true,
-	Maximum = 10,
+	Maximum = 25,
 	Decay = 5,
 	
 	Alerts = {
 		Flags = ALERT_NONE
 	},
 	
-	Ping = 80,
-	Loss = 80
+	Ping = 250,
+	Loss = 90
 })
 
-pStub.Register("Fakelag", {
-	Enabled = true,
-	Name = "Fakelag",
-	Description = "Detects constant lag patterns to find players who fakelag.",
-	Category = "Exploit",
-	
-	Message = "Strange Lag Patterns: {Contact}",
-	
-	Method = PUNISHMENT_LOG,
-	
-	Window = 32,
-	TimeSinceSpawned = 1,
-	
-	Flags = true,
-	Maximum = 15,
-	Decay = 10,
-	
-	Alerts = {
-		Flags = ALERT_NONE
-	},
-	
-	Ping = 150,
-	Loss = 35
-})
+--[[
+	This is a check that occurs when a player uses a cheat called "Desynculator". It is an engine exploit where in which you are able to
+	lower your simulation time to negative values and when combined with other exploits even positive values. This can be very dangerous
+	since it will break engine timers and predicted timers (in hooks such as Move).
+--]]
 
 pStub.Register("Simulation Time", {
 	Enabled = true,
@@ -560,9 +628,9 @@ pStub.Register("Simulation Time", {
 	Description = "Detects players using the 'Desynculator' simulation time exploit.",
 	Category = "Exploit",
 	
-	Message = "Timed Out: {Contact}",
+	Message = "Simulation Time: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 	
 	TimeSinceCreated = 25,
 	Low = -150,
@@ -573,28 +641,51 @@ pStub.Register("Simulation Time", {
 	Decay = 5,
 	
 	Ping = 250,
-	Loss = 80
+	Loss = 90
 })
+
+--[[
+	This is a check that occurs when an exploit is used that allows a player to move while act taunting.
+
+	Set CheckGamemode to false if you want this to activate on any gamemode other than sandbox.
+--]]
 
 pStub.Register("Act", {
 	Enabled = true,
 	Name = "Act",
 	Description = "Detects players who are moving while taunting (act commands).",
 	Category = "Exploit",
-	
-	Method = PUNISHMENT_LOG
+
+	Message = "Act Movement: {Contact}",
+
+	Method = PUNISHMENT_KICK,
+
+	CheckGamemode = false
 })
 
 --- Extras ---
 
+--[[
+	This is a check that goes off when a player changes their username. It can be used to kick players who are using
+	name spoofers but will also kick players who just simply change their name on Steam.
+--]]
+
 pStub.Register("Name Changer", {
 	Enabled = true,
 	Name = "Name Changer",
-	Description = "Detects when players change steam username/name command, can be used to kick players if needed.",
+	Description = "Detects when players change Steam username/name command, can be used to kick players if needed.",
 	Category = "Extra",
 	
 	Method = PUNISHMENT_LOG
 })
+
+--[[
+	This is a check that goes off when a player presses a specific key; it can be used to log a player who might be
+	using a cheat menu (insert and delete are the most common ones).
+
+	Maximum logs controls the amount of times the key will have to be pressed back to back in order to 
+	flag (set to -1 to always flag).
+--]]
 
 pStub.Register("Suspicious Keypresses", {
 	Enabled = true,
@@ -612,6 +703,11 @@ pStub.Register("Suspicious Keypresses", {
 	}
 })
 
+--[[
+	This is a check that goes off when a player encounters an error. Can be used to manually catch cheaters who 
+	have faulty cheats.
+--]]
+
 pStub.Register("Errors", {
 	Enabled = true,
 	Name = "Errors",
@@ -621,18 +717,23 @@ pStub.Register("Errors", {
 	Method = PUNISHMENT_LOG
 })
 
+--[[
+	This is a check that goes off when a player is too accurate. You can use this to manually detect cheaters
+	by looking at the accuracy of their shots.
+--]]
+
 pStub.Register("Accuracy", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Accuracy",
 	Description = "Gives reports about suspicious aiming accuracy.",
 	Category = "Extra",
 	
 	Method = PUNISHMENT_LOG,
 
-	Distance = -1,
-	Window = 10,
+	Distance = 1000,
+	Window = 25,
 	ShotWait = 0.1,
-	MinimumAccuracy = 0.5
+	MinimumAccuracy = 0.75
 })
 
 --- Command Enforcer ---
@@ -642,20 +743,16 @@ pStub.Register("Accuracy", {
 	shared ConVars by making sure the values are
 	replicated on the server. 
 	
-	In simple terms, if your config uses a shared 
-	value (sv_cheats) and the config is desynced 
-	with the server (sv_cheats 1) then it'll get 
-	fixed automatically.
+	For each ConVar you wish you verify you have
+	a few options:
 
-	Note that "interval" is the time between calls to
-	the client and "await" is the time the server is
-	willing to wait before verfying the player sent
-	the message, if it fails then it calls command
-	enforcer with "Not Initialized".
+		- Value: This is the value that will be verified by the anti-cheat.
+		- Patch: This makes the value replicated, it'll dynamically grab it from the server instead of using a static number.
+		- Log: Logs instead of banning, useful for ConVars that can be changed by the client.
 
-	Log makes the command log only. Useful for
-	commands that are capable of being seperated
-	but suspicious.
+	Interval is the amount of time between each check of the commands.
+
+	Await is the amount of time until the server verifies that commands have been sent. Keep this lower than the interval.
 --]]
 
 pStub.Register("Command Enforcer", {
@@ -666,7 +763,7 @@ pStub.Register("Command Enforcer", {
 	
 	Message = "Bad Command: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Commands = {
 		["sv_cheats"] = {
@@ -693,6 +790,13 @@ pStub.Register("Command Enforcer", {
 --- Interpolated View Angles ---
 
 --[[
+	What this does is break aimbots and other cheats by desyncing
+	view angles between client and server. To see what it does to
+	aimbot cheats you can checkout the offical TAC `Aimbot Breaker`
+	showcase:
+
+	https://www.youtube.com/watch?v=xNqrlCG11Ws
+
 	This will cause prediction issues but considering how low
 	the TPS of most Garry's Mod servers are anyway it shouldn't
 	effect the player as much as it effects the cheats.
@@ -724,6 +828,13 @@ Config.WorldClicker = true
 --- Improved PVS (ESP Breaker) ---
 
 --[[
+	What this does is break ESP by not sending entity information down to
+	clients from the server when the player isn't visible to one of the 
+	nodes around the target player. Check out the showcase to see what these
+	nodes look like:
+
+	https://www.youtube.com/watch?v=Nwy0jQc8S4Y
+
 	This may come with a moderate to severe proformance impact depending on
 	the size of the server and the amount of players present in the players
 	default PVS.
@@ -733,7 +844,7 @@ Config.WorldClicker = true
 ]]--
 
 Config.PVS = {
-	Enabled = true,
+	Enabled = false,
 	
 	squareSize = 1,
 	squaredSize = 256,
@@ -741,16 +852,15 @@ Config.PVS = {
 	Step = 8
 }
 
---- Spread Desyncer (Nospread Breaker) ---
-
-Config.Spread = {
-	Enabled = true,
-	
-	Minimum = 0,
-	Maximum = 0.05
-}
-
 --- Menu Movement ---
+
+--[[
+	This check occurs when a player starts moving his mouse while the mouse is visible. This
+	usually signifies a C++ cheat menu.
+
+	It is unlikely to false flag, although updates and addons can affect the stability of this
+	check.
+--]]
 
 pStub.Register("Menu Movement", {
 	Enabled = true,
@@ -759,8 +869,10 @@ pStub.Register("Menu Movement", {
 	Category = "Aimbot",
 	
 	Client = true,
+
+	Message = "Invalid Movement: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 6,
@@ -769,15 +881,23 @@ pStub.Register("Menu Movement", {
 
 --- Engine Prediction ---
 
+--[[
+	This check occurs when a player attempts to predict his movement for the next tick to match the
+	server. This usually is done to improve aimbot accuracy although some exploits will also trigger
+	this.
+
+	Chances of false flagging are low, but not impossible depending on the addons on the server.
+--]]
+
 pStub.Register("Engine Prediction", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Engine Prediction",
 	Description = "Occurs when the player attempts to use an aimbot prediction.",
 	Category = "Aimbot",
 	
 	Client = true,
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_BAN,
 	
 	Flags = true,
 	Maximum = 4,
@@ -786,41 +906,66 @@ pStub.Register("Engine Prediction", {
 
 --- Input Guard ---
 
+--[[
+	This check occurs when a player adjusts his angles without actually moving his angles naturally. 
+	Due to the nature of a check like this, it is highly susceptible to addon compatibility issues.
+--]]
+
 pStub.Register("Input Guard Angles", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Input Guard Angles",
 	Description = "Occurs when the player is detected for manipulating angles. Likely to flag poorly coded addons.",
 	Category = "Aimbot",
 	
 	Client = true,
+
+	Message = "Angle Input Error: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 	
 	Flags = true,
 	Maximum = 10,
 	Decay = 3
 })
 
+--[[
+	This check occurs when a player registers button presses without actually pressing buttons naturally. 
+	Due to the nature of a check like this, it is highly susceptible to addon compatibility issues.
+--]]
+
 pStub.Register("Input Guard Buttons", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Input Guard Buttons",
 	Description = "Occurs when the player is detected for manipulating buttons. Unlikely to false flag.",
 	Category = "Aimbot",
 	
 	Client = true,
+
+	Message = "Button Input Error: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK,
+
+	Flags = true,
+	Maximum = 4,
+	Decay = 3
 })
 
+--[[
+	This check occurs when a player updates his movement values without actually moving naturally.
+	Due to the nature of a check like this, it is highly susceptible to addon compatibility issues.
+--]]
+
 pStub.Register("Input Guard Movement", {
-	Enabled = true,
+	Enabled = false,
 	Name = "Input Guard Movement",
 	Description = "Occurs when the player is detected for manipulating movement values. Likely to flag poorly coded addons.",
 	Category = "Aimbot",
 	
 	Client = true,
+
+	Message = "Movement Input Error: {Contact}",
 	
-	Method = PUNISHMENT_LOG,
+	Method = PUNISHMENT_KICK,
 
 	Flags = true,
 	Maximum = 15,
@@ -842,15 +987,17 @@ pStub.Register("Stack", {
 	Category = "Integrity",
 	
 	Client = true,
-	
-	Message = "Bad Stack Frame: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+		
+	Method = PUNISHMENT_BAN
 })
 
 --- Honeypot ---
 
 --[[
+	This check acts like popular anti-cheat addons and tries to see if they are
+	bypassed or accessed in any weird ways. Detects a lot of older cheats and
+	some security scripts.
+
 	Wait handles the delay between times the client can request a punishment.
 --]]
 
@@ -859,13 +1006,19 @@ pStub.Register("Honeypot", {
 	Name = "Honeypot",
 	Description = "Emulates popular anti-cheat plugins to detect players attempting bruteforce bypasses.",
 	Category = "Integrity",
-
-	Wait = 0.25,
 	
-	Method = PUNISHMENT_LOG
+	Message = "Compatibility Error: {Contact}",
+
+	Method = PUNISHMENT_KICK,
+
+	Wait = 0.25
 })
 
 --- Static Script ---
+
+--[[
+	This check detects the files of known cheats. See the `cl_static.lua` list.
+--]]
 
 pStub.Register("Static Script", {
 	Enabled = true,
@@ -875,12 +1028,16 @@ pStub.Register("Static Script", {
 	
 	Client = true,
 	
-	Message = "Likely Cheater: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 --- Anti-Screengrab ---
+
+--[[
+	This check will attempt to capture a screenshot of the players view. If it 
+	fails that means the screenshot (or screengrab) is being blocked. Can be used
+	in combination with a screengrab addon.
+--]]
 
 pStub.Register("Anti-Screengrab", {
 	Enabled = true,
@@ -890,12 +1047,17 @@ pStub.Register("Anti-Screengrab", {
 	
 	Client = true,
 	
-	Message = "Screengrab Bypass: {Contact}",
+	Message = "Screengrab Error: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Error Tracer ---
+
+--[[
+	This check verifies that errors that occur on the clientside are matched to what
+	they should be. It manually causes hidden errors to facilitate this.
+--]]
 
 pStub.Register("Error Tracer", {
 	Enabled = true,
@@ -905,13 +1067,18 @@ pStub.Register("Error Tracer", {
 	
 	Client = true,
 	
-	Message = "Error: {Contact}",
+	Message = "Error Issue: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 
 --- File IO ---
+
+--[[
+	This check attempts to write & delete files, if it cannot do that then the player is
+	blocking file I/O through a security script like Spectre or Majestic.
+--]]
 
 pStub.Register("File IO", {
 	Enabled = true,
@@ -921,12 +1088,17 @@ pStub.Register("File IO", {
 	
 	Client = true,
 	
-	Message = "File I/O: {Contact}",
+	Message = "File I/O Error: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Debug Self ---
+
+--[[
+	This check abuses a logical flaw in security scripts to detect when a player is detouring debug
+	functions and returning fake information.
+--]]
 
 pStub.Register("Debug Self", {
 	Enabled = true,
@@ -936,27 +1108,15 @@ pStub.Register("Debug Self", {
 	
 	Client = true,
 	
-	Message = "Debug Self: {Contact}",
-	
-	Method = PUNISHMENT_LOG
-})
-
---- Debug Hooks ---
-
-pStub.Register("Debug Hooks", {
-	Enabled = true,
-	Name = "Debug Hooks",
-	Description = "Occurs when a player detours a function or various internal just-in-time functions.",
-	Category = "Integrity",
-	
-	Client = true,
-	
-	Message = "JIT: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 --- Libraries ---
+
+--[[
+	This check verifies the size of libraries on the clientside when loading in. They shouldn't
+	change unless another addon is also running in pre-init like us.
+--]]
 
 pStub.Register("Libraries", {
 	Enabled = true,
@@ -966,12 +1126,17 @@ pStub.Register("Libraries", {
 	
 	Client = true,
 	
-	Message = "Library Failure: {Contact}",
+	Message = "Library Size Error: {Contact}",
 	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_KICK
 })
 
 --- Scans ---
+
+--[[
+	All of these scans are manual scans that use the lists located in `tac/lists/*`. Its recommended
+	you read the description of each check and configure them accordingly.
+--]]
 
 pStub.Register("Binaries", {
 	Enabled = true,
@@ -981,9 +1146,7 @@ pStub.Register("Binaries", {
 	
 	Client = true,
 	
-	Message = "Bad Module: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 pStub.Register("Files", {
@@ -994,9 +1157,7 @@ pStub.Register("Files", {
 	
 	Client = true,
 	
-	Message = "Bad File: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 pStub.Register("Globals", {
@@ -1007,9 +1168,7 @@ pStub.Register("Globals", {
 	
 	Client = true,
 	
-	Message = "Bad Global: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 pStub.Register("Hooks", {
@@ -1020,9 +1179,7 @@ pStub.Register("Hooks", {
 	
 	Client = true,
 	
-	Message = "Bad Hook: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 pStub.Register("Commands", {
@@ -1033,9 +1190,7 @@ pStub.Register("Commands", {
 	
 	Client = true,
 	
-	Message = "Bad Command: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 pStub.Register("Listener", {
@@ -1045,10 +1200,8 @@ pStub.Register("Listener", {
 	Category = "Scans",
 	
 	Client = true,
-	
-	Message = "Bad Listener: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+
+	Method = PUNISHMENT_BAN
 })
 
 --- Detours ---
@@ -1067,9 +1220,7 @@ pStub.Register("Detours", {
 	Description = "Occurs when detours are triggered clientside and called from invalid files, contains C function checks as well.",
 	Category = "Scans",
 	
-	Message = "Detour System: {Contact}",
-	
-	Method = PUNISHMENT_LOG
+	Method = PUNISHMENT_BAN
 })
 
 --- Heartbeat ---
@@ -1094,8 +1245,10 @@ pStub.Register("Heartbeat", {
 	Category = "Integrity",
 	
 	Message = "Failed to load! Rejoin!",
-	
-	Await = 30,
 
-	Method = PUNISHMENT_KICK
+	Method = PUNISHMENT_KICK,
+
+	Await = 30
+
 })
+

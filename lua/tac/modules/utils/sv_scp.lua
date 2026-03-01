@@ -29,6 +29,7 @@ AccessorFunc(Base, "TickCount", "TickCount")
 AccessorFunc(Base, "IsForced", "IsForced")
 
 AccessorFunc(Base, "Pos", "Pos")
+AccessorFunc(Base, "RoughAngles", "RoughAngles")
 AccessorFunc(Base, "EyeTrace", "EyeTrace")
 AccessorFunc(Base, "Weapon", "Weapon")
 AccessorFunc(Base, "OnGround", "OnGround")
@@ -59,10 +60,12 @@ function TAC.SCP.CopyMeta(Player, CUserCMD)
 	
 	Meta.EyeTrace = TAC.EyeTrace(Player, true)
 
+	Meta.RoughAngles = CUserCMD:GetViewAngles()
+
 	if TAC.Config.AccurateAngles then
 		Meta.ViewAngles = Player:GetAimVector():AngleEx(vector_origin)
 	else
-		Meta.ViewAngles = CUserCMD:GetViewAngles()
+		Meta.ViewAngles = Meta.RoughAngles
 	end
 
 	Meta.PhysgunTarget = Player:Get("Physgun Target")
@@ -86,8 +89,7 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 	local cNew = TAC.SCP.CopyMeta(Player, CUserCMD)
 		
 	if not cOld then
-		Player:Set("SCP", cNew)
-		return
+		return Player:Set("SCP", cNew)
 	end
 	
 	cNew.Delta = math_abs(math_AngleDifference(TAC.StandardAngle(cNew.ViewAngles.y), TAC.StandardAngle(cOld.ViewAngles.y)))
@@ -105,6 +107,7 @@ function TAC.SCP.StartCommand(Player, CUserCMD)
 	
 	if cOld.Delta and cOld.TraceData then
 		hook_Run("TAC.StartCommandPlus", Player, cNew, cOld, CUserCMD)
+		hook_Run("TAC.PostStartCommandPlus", Player, cNew, cOld, CUserCMD)
 	end
 end
 
