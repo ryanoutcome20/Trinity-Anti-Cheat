@@ -70,6 +70,7 @@ If you experience any issues you should consult the [troubleshooting documentati
 * [License (GNU v3.0 w/ “Commons Clause”)](https://github.com/ryanoutcome20/Trinity-Anti-Cheat/blob/main/LICENSE)
 * [API](./lua/tac/api.lua)
 * [Contribute](./CONTRIBUTING.md)
+* [Debug Stubs](https://github.com/ryanoutcome20/Trinity-Anti-Cheat-Debug-Stub)
 
 ## Credits
 
