@@ -609,12 +609,14 @@ pStub.Register("Speedhack", {
 --]]
 
 pStub.Register("Tickcount", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Tickcount",
 	Description = "Detects tickcount manipulation to do things like backtrack.",
 	Category = "Exploit",
 	
 	Method = PUNISHMENT_LOG,
+	
+	TimeSinceCreated = 25,
 	
 	Regular = true,
 	
