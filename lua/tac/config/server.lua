@@ -7,6 +7,21 @@ local Config = { }
 
 TAC.Config = Config
 
+--- Recommended ConVars ---
+
+--[[
+	These are recommended ConVars that you should probably have on your server,
+	feel free to disable them here.
+
+	Read more about them on the wiki:
+	https://github.com/ryanoutcome20/Trinity-Anti-Cheat/wiki/Recommended-ConVars
+--]]
+
+RunConsoleCommand("sv_maxusrcmdprocessticks", 16) -- Default: 23
+RunConsoleCommand("sv_usercmd_custom_random_seed", 1) -- Default: 0
+RunConsoleCommand("sv_clockcorrection_msecs", 30) -- Default: 60
+RunConsoleCommand("sv_client_max_interp_ratio", 3) -- Default: 5
+
 --- Interpolated Strings ---
 
 --[[
