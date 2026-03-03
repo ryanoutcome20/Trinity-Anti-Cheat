@@ -544,6 +544,8 @@ pStub.Register("Interpolation Abuse", {
 	
 	Method = PUNISHMENT_BAN,
 	
+	Limit = 0.5,
+
 	Overflow = true,
 	
 	Flags = true,
@@ -1249,6 +1251,4 @@ pStub.Register("Heartbeat", {
 	Method = PUNISHMENT_KICK,
 
 	Await = 30
-
 })
-
