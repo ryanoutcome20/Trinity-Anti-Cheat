@@ -127,7 +127,7 @@ Config.FSB = {
 	Enabled = false,
 
 	Code = "\n",
-	Identifier = ".DEL\nCON.",
+	Identifier = ".\n.",
 
 	Spammer = true,
 	Ticks = 1,
@@ -216,5 +216,6 @@ Config.Scans = {
 Config.Listeners = {
 	Enabled = true
 }
+
 
 return Config
