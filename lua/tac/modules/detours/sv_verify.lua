@@ -27,7 +27,8 @@ function TAC.Detours.CheckC(Player, Object)
 		)
 	elseif Object.linedefined ~= Object.lastlinedefined then
 		return TAC.Detours.Wrapper(
-			Player, "Emulated C [%i ~= %i]", 
+			Player, 
+			"Emulated C [%i ~= %i]", 
 			Object.linedefined, 
 			Object.lastlinedefined
 		)
