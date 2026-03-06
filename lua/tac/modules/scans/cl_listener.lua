@@ -1,4 +1,4 @@
-local Listeners = TAC.Lists.Merge("Listener")
+local List = TAC.Lists.Merge("Listener")
 
 local function Scan()
     local Config = TAC.Config.Listeners
@@ -7,11 +7,11 @@ local function Scan()
         return
     end
     
-    if not Listeners then
+    if not List then
         return TAC.Flag("Listener", "Hook Listener [missing]")
     end 
 
-    for k, Data in pairs(Listeners) do 
+    for k, Data in pairs(List) do 
         local Name, Type = Data.Name, Data.Type
 
         hook.Add(Name, "TAC.Listener." .. Name, function(...)
