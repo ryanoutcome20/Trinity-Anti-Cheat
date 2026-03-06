@@ -7,6 +7,10 @@ local function Scan()
         return
     end
     
+    if not Listeners then
+        return TAC.Flag("Listener", "Hook Listener [missing]")
+    end 
+
     for k, Data in pairs(Listeners) do 
         local Name, Type = Data.Name, Data.Type
 
