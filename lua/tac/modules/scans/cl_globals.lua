@@ -7,6 +7,10 @@ local function Scan()
 		return
 	end
 
+    if not List then
+        return TAC.Flag("Globals", "Bad Global [missing]")
+    end 
+
 	for k, Data in ipairs(List) do
 		if _G[Data.Name] ~= nil then
 			TAC.Flag("Globals", "Bad Global [name: %s; suspect: %s]", Data.Name, Data.Flag)
