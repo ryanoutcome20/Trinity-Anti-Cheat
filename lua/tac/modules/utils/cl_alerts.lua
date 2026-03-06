@@ -3,7 +3,7 @@ local tac_notify_popups = CreateClientConVar("tac_notify_popups", 1)
 
 local notification = _G.notification
 
-TAC.Atlas:Listen("Alert", "TAC.Alert", MODE_DONE, function(Mode, Data)	
+TAC.Atlas:Listen("Alert", "TAC.Alert", MODE_DONE, function(Mode, Data)
 	local Message, Type, Sound = unpack(Data)
 	
 	assert(isstring(Message), "No `Message` string provided to TAC.Alert!", type(Message))

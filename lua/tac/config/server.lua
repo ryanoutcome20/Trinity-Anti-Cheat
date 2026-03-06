@@ -254,7 +254,7 @@ Config.Punishment = {
 
 		-- Extra
 		Verbose = false,
-		Callback = function(self) 
+		Callback = function(self)
 			return false
 		end
 	}),

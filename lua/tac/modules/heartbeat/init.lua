@@ -19,7 +19,7 @@ function TAC.Heartbeat.Check(Player)
             "Heartbeat",
             Player,
             "Not Initialized"
-        )	
+        )
     end
 
     TAC.Heartbeat.Start(Player)

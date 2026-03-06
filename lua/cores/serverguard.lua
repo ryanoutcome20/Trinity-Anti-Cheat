@@ -1,7 +1,7 @@
 -- https://www.gmodstore.com/market/view/serverguard
 
 return "ServerGuard", {
-	Valid = function()	
+	Valid = function()
 		return istable(serverguard)
 	end,
 

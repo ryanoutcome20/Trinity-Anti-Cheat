@@ -1,4 +1,4 @@
-function TAC.Detours.Whitelisted(Player, Source, What)	
+function TAC.Detours.Whitelisted(Player, Source, What)
 	if Source ~= "LuaCmd" then
 		return false
 	end
@@ -13,7 +13,7 @@ function TAC.Detours.Whitelisted(Player, Source, What)
 		return false
 	end
 	
-	Player:Set("Whitelist Counter", math.max(Amount - 1, 0)) 
+	Player:Set("Whitelist Counter", math.max(Amount - 1, 0))
 	
 	return true
 end

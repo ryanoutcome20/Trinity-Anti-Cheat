@@ -74,7 +74,7 @@ function TAC.Commands.Receiver(Stage, Player, Slots)
                     Input,
                     Cache[Name].Value,
                     Name
-                )	
+                )
             end
         end
     end

@@ -533,7 +533,7 @@ function TAC.FlagEx(Buffered, cID, Message, ...)
 	)
 end
 
-function TAC.Flag(cID, Message, ...)	
+function TAC.Flag(cID, Message, ...)
 	return TAC.FlagEx(
 		true,
 		cID,
@@ -546,7 +546,7 @@ end
 
 TAC.Config = { }
 
-TAC.Atlas:Listen("Config", "TAC.Config", MODE_DONE, function(Stage, Config)	
+TAC.Atlas:Listen("Config", "TAC.Config", MODE_DONE, function(Stage, Config)
 	TAC.Config = Config
 
 	TAC.Hooks.Run("TAC.TransferConfig", Config)
@@ -600,7 +600,7 @@ function TAC.LoadCode(Code, File)
 	end
 end
 
-TAC.Atlas:Listen("Plugin", "TAC.Plugins", MODE_DONE, function(Stage, File, Code)	
+TAC.Atlas:Listen("Plugin", "TAC.Plugins", MODE_DONE, function(Stage, File, Code)
 	TAC.LoadCode(Code, File)
 end)
 
@@ -873,7 +873,7 @@ function TAC.Detours.Whitelist.Hash(Function, Identifier)
 		return 
 	end
 	
-	local Checksum = util.CRC(Dump) 
+	local Checksum = util.CRC(Dump)
 	
 	TAC.Detours.Whitelist.Dumps[Function] = Checksum
 	

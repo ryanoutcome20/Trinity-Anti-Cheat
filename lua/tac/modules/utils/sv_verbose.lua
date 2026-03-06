@@ -19,7 +19,7 @@ function TAC.Verbose.TableDumpFlat(Table)
             Frame.Keys = { }
 			
             for k,v in pairs(Table) do 
-				table.insert(Frame.Keys, k) 
+				table.insert(Frame.Keys, k)
 			end
         end
 

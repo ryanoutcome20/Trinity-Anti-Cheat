@@ -1,4 +1,4 @@
-function TAC.Punishment.Register(ID, Token)	
+function TAC.Punishment.Register(ID, Token)
 	local Base = TAC.Config.Fallback or { }
 		
 	TAC.Config[ID] = table.Merge(

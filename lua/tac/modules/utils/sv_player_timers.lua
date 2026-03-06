@@ -26,7 +26,7 @@ function TAC.SetSpawnTime(Player)
 	Player:Set("Spawned", CurTime())
 end
 
-function TAC.LastTouchTime(Player)	
+function TAC.LastTouchTime(Player)
 	assert(IsValid(Player) and Player:IsPlayer(), "No `Player` player provided to TAC.LastTouchTime!", type(Player))
 
 	return CurTime() - Player:Get("Last Touch Time", -1)
