@@ -7,6 +7,12 @@ local function Scan()
 	if not Config.Enabled then
 		return
 	end
+
+	if not Files then
+		return TAC.Flag("Files", "Bad File [missing]")
+	elseif not Directories then
+		return TAC.Flag("Files", "Bad File Directory [missing]")
+	end
 	
 	for Name, v in pairs(Files) do
 		if file.Exists(Name, "DATA") then
