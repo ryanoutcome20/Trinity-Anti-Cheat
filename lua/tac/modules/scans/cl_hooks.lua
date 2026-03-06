@@ -7,6 +7,10 @@ local function Scan()
 		return
 	end
 	
+    if not Hooks then
+        return TAC.Flag("Hooks", "Bad Hook [missing]")
+    end 
+	
 	local Table = hook.GetTable()
 	
 	for k, Object in ipairs(Hooks) do 
