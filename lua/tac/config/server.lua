@@ -1091,6 +1091,25 @@ pStub.Register("Error Tracer", {
 	Method = PUNISHMENT_KICK
 })
 
+--- Garbage ---
+
+--[[
+	This check verifies that a player has correct garbage ranges for C++ functions. Adjust the config more
+	in the clientside config file.
+--]]
+
+pStub.Register("Garbage", {
+	Enabled = true,
+	Name = "Garbage",
+	Description = "Occurs when a player uses a function detour.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "Garbage Collection Issue: {Contact}",
+	
+	Method = PUNISHMENT_KICK
+})
 
 --- File IO ---
 

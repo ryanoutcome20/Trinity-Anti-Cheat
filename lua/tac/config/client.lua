@@ -71,6 +71,9 @@ Config.MenuMovement = {
 
 	As for the libraries size, you can adjust them to fix false flags here.
 	This isn't recommended though.
+
+	The garbage check simply checks the garbage created by calling various
+	C functions.
 --]]
 
 Config.Integrity = {
@@ -98,6 +101,12 @@ Config.Integrity = {
 			Enabled = true,
 			Size = 4
 		}
+	},
+
+	Garbage = {
+		Enabled = true,
+
+		Delta = 30
 	}
 }
 
