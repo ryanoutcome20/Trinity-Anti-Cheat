@@ -33,8 +33,8 @@ MsgN("  Caching resources")
 
 --- Config ---
 
-TAC.Version = "0.3.1"
-TAC.Edition = "Developer"
+TAC.Version = "0.3.0"
+TAC.Edition = "Release"
 
 MsgN("  Loading config")
 include("tac/config/server.lua")
@@ -49,6 +49,8 @@ AddCSLuaFile("includes/modules/concommand.lua")
 AddCSLuaFile("includes/modules/draw.lua")
 AddCSLuaFile("includes/modules/team.lua")
 AddCSLuaFile("tac/client.lua")
+
+resource.AddFile("materials/tac/close.png")
 
 --- External Libraries ---
 
@@ -65,6 +67,19 @@ AddCSLuaFile("external/atlas/cl_atlas.lua")
 
 MsgN("  Creating pLib instance")
 include("external/sv_plib.lua")
+
+MsgN("  Creating Surface instance")
+AddCSLuaFile("external/cl_surface.lua")
+
+--- Interface ---
+
+for k, List in ipairs(file.Find("tac/interface/*.lua", "LUA")) do 
+	if List:StartWith("sv_") then
+		continue
+	end
+	
+	AddCSLuaFile("tac/interface/" .. List)
+end
 
 --- Lists ---
 
