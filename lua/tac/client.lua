@@ -437,6 +437,41 @@ TAC.Localizers.Table.hook.Add = TAC.Hooks.Add
 TAC.Localizers.Table.hook.Remove = TAC.Hooks.Remove
 TAC.Localizers.Table.hook.Run = TAC.Hooks.Run
 
+--- CVar Callback ---
+
+TAC.CVars = { 
+	Callbacks = { }
+}
+
+function TAC.CVars.AddChangeCallback(Name, Callback, Identifier)
+	TAC.CVars.Callbacks[Name] = TAC.CVars.Callbacks[Name] or { }
+
+	if not Identifier then
+		return table.insert(TAC.CVars.Callbacks[Name], Callback)
+	end
+
+	TAC.CVars.Callbacks[Name][Identifier] = Callback
+end
+
+function TAC.CVars.RemoveChangeCallback(Name, Identifier)
+	TAC.CVars.Callbacks[Name] = TAC.CVars.Callbacks[Name] or { }
+
+	TAC.CVars.Callbacks[Identifier] = nil
+end
+
+TAC.Detour.Register("cvars.OnConVarChanged", function(Original, Name, Old, New, ...)
+	TAC.CVars.Callbacks[Name] = TAC.CVars.Callbacks[Name] or { }
+	
+	for k, Callback in pairs(TAC.CVars.Callbacks[Name]) do 
+		Callback(Name, Old, New)
+	end
+
+	return Original(Name, Old, New, ...)
+end)
+
+TAC.Localizers.Table.cvars.AddChangeCallback = TAC.CVars.AddChangeCallback
+TAC.Localizers.Table.cvars.RemoveChangeCallback = TAC.CVars.RemoveChangeCallback
+
 --- Batch System ---
 
 TAC.Batch = {
