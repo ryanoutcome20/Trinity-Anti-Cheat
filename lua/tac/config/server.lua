@@ -871,6 +871,17 @@ Config.PVS = {
 	Step = 8
 }
 
+--- Far ESP Breaker ---
+
+--[[
+	What this does is break "far" ESP. In otherwords, prevents the footsteps of players
+	from being networked down when they are dormant.
+--]]
+
+Config.FarESP = {
+	Enabled = true
+}
+
 --- Menu Movement ---
 
 --[[
