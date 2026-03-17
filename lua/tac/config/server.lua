@@ -755,6 +755,26 @@ pStub.Register("Accuracy", {
 	MinimumAccuracy = 0.75
 })
 
+--- Anti-Connect Spam ---
+
+--[[
+	This is a feature designed to prevent crashers and chat spammers that abuse reconnecting to a server. It
+	prevents players from connecting to the server over and over again. It'll put them on cooldown based on
+	the seconds you put it at.
+
+	Range is an integer of how many times a player can reconnect before being put on cooldown. Cooldown is 
+	the time they will remain on cooldown (in seconds). Decay is the amount of time before the retry counter
+	counts back down.
+--]]
+
+Config.AntiConnectSpam = {
+	Enabled = true,
+
+	Range = 3,
+	Decay = 5,
+	Cooldown = 15
+}
+
 --- Command Enforcer ---
 
 --[[
