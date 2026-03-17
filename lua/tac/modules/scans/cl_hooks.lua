@@ -21,12 +21,14 @@ local function Scan()
 	end
 	
 	for Hook, Sub in pairs(Table) do
-		for Name, p in pairs(Sub) do
+		for Name, Func in pairs(Sub) do
 			local Match = TAC.Match(Name)
 			
 			if Match then
 				TAC.Flag("Hooks", "Bad Hook Match [hook: %s; name: %s; match: %s]", Hook, Name, Match)
 			end
+
+			TAC.Captures.Direct(Func, "hook.GetTable (sub)")
 		end
 	end
 	
