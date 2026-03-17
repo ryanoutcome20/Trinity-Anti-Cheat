@@ -28,7 +28,7 @@ local util_AddNetworkString = util.AddNetworkString
 local table_concat = table.concat
 local table_insert = table.insert
 
-Atlas = {
+Atlas = Atlas or {
     Ports = { },
 
     Cache = { }
