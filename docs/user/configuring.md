@@ -117,7 +117,8 @@ pStub.Register("Fallback", {
 
     -- Extra
     Verbose = false,
-    Callback = function(self)        return false
+    Callback = function(self)        
+        return false
     end
 })
 ```
