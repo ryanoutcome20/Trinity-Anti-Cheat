@@ -20,6 +20,15 @@ local Config = { }
 Config.Batch = 32000
 Config.ProcessTime = 0.25
 
+--- Directory Audit ---
+
+--[[
+	This just checks if there are lua files in the "garrysmod/lua" base directory, if so, 
+	this could indicate a cheater or developer. Useful to investigate potential cheaters.
+--]]
+
+Config.DirectoryAudit = true
+
 --- Aimbot Checks ---
 
 --[[
