@@ -257,7 +257,7 @@ Config.Punishment = {
 		Callback = function(self)
 			return false
 		end
-	}),
+	})
 }
 
 --- Networking ---
@@ -823,7 +823,7 @@ pStub.Register("Command Enforcer", {
 	
 	Flags = false,
 	Maximum = -1,
-	Decay = -1,
+	Decay = -1
 })
 
 --- Interpolated View Angles ---
