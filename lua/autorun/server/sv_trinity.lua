@@ -34,7 +34,7 @@ MsgN("  Caching resources")
 --- Config ---
 
 TAC.Version = "0.3.1"
-TAC.Edition = "Developer"
+TAC.Edition = "Release"
 
 MsgN("  Loading config")
 include("tac/config/server.lua")
