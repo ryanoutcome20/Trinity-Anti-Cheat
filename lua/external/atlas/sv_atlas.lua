@@ -255,6 +255,10 @@ function Atlas:Send(Port, Target, ...)
 
     for i = 1, Size do 
         timer.Simple(i, function()
+            if not IsValid(Target) then
+                return
+            end
+            
             net_Start("tac-networking")
                 self:Write(table_concat(Split[i]), Size, Checksum, i, Port)
             net_Send(Target)
