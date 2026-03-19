@@ -8,7 +8,7 @@ function TAC.Commands.GeneratePackage(Slots)
             continue
         end
         
-        Built[Name] = ConVar:GetString() 
+        Built[Name] = ConVar:GetString()
     end
 
     return Built

@@ -12,7 +12,7 @@ function TAC.Aimbot.Angles(Player, cNew, cOld, CUserCMD)
 	local Angles = cNew:GetRoughAngles()
 
 	if Config.CheckPitch and math.abs(Angles.x) > (Config.MaxPitch + 1) then
-		TAC.Punishment.Wrapper("Angles", Player, "Angles [x: %i y: %i; bad x]", Angles.x, Angles.y)	
+		TAC.Punishment.Wrapper("Angles", Player, "Angles [x: %i y: %i; bad x]", Angles.x, Angles.y)
 	elseif Config.CheckYaw and math.abs(Angles.y) > (Config.MaxYaw + 1) then
 		TAC.Punishment.Wrapper("Angles", Player, "Angles [x: %i y: %i; bad y]", Angles.x, Angles.y)
 	end

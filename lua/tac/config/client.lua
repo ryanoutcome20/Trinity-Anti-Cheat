@@ -20,6 +20,15 @@ local Config = { }
 Config.Batch = 32000
 Config.ProcessTime = 0.25
 
+--- Directory Audit ---
+
+--[[
+	This just checks if there are lua files in the "garrysmod/lua" base directory, if so, 
+	this could indicate a cheater or developer. Useful to investigate potential cheaters.
+--]]
+
+Config.DirectoryAudit = true
+
 --- Aimbot Checks ---
 
 --[[
@@ -71,6 +80,9 @@ Config.MenuMovement = {
 
 	As for the libraries size, you can adjust them to fix false flags here.
 	This isn't recommended though.
+
+	The garbage check simply checks the garbage created by calling various
+	C functions.
 --]]
 
 Config.Integrity = {
@@ -98,6 +110,12 @@ Config.Integrity = {
 			Enabled = true,
 			Size = 4
 		}
+	},
+
+	Garbage = {
+		Enabled = true,
+
+		Delta = 30
 	}
 }
 
@@ -127,7 +145,7 @@ Config.FSB = {
 	Enabled = false,
 
 	Code = "\n",
-	Identifier = ".DEL\nCON.",
+	Identifier = ".\n.",
 
 	Spammer = true,
 	Ticks = 1,
@@ -216,5 +234,6 @@ Config.Scans = {
 Config.Listeners = {
 	Enabled = true
 }
+
 
 return Config

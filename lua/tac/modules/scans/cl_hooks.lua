@@ -1,4 +1,4 @@
-local Hooks = TAC.Lists.Merge("Hooks")
+local List = TAC.Lists.Merge("Hooks")
 
 local Config = TAC.Config.Scans.Hooks
 
@@ -7,9 +7,13 @@ local function Scan()
 		return
 	end
 	
+    if not List then
+        return TAC.Flag("Hooks", "Bad Hook [missing]")
+    end 
+	
 	local Table = hook.GetTable()
 	
-	for k, Object in ipairs(Hooks) do 
+	for k, Object in ipairs(List) do 
 		if Table[Object.Hook] and Table[Object.Hook][Object.Name] then
 			TAC.Flag("Hooks", "Bad Hook [hook: %s; name: %s]", Object.Hook, Object.Name)
 			break
@@ -17,12 +21,14 @@ local function Scan()
 	end
 	
 	for Hook, Sub in pairs(Table) do
-		for Name, p in pairs(Sub) do
+		for Name, Func in pairs(Sub) do
 			local Match = TAC.Match(Name)
 			
 			if Match then
 				TAC.Flag("Hooks", "Bad Hook Match [hook: %s; name: %s; match: %s]", Hook, Name, Match)
 			end
+
+			TAC.Captures.Direct(Func, "hook.GetTable (sub)")
 		end
 	end
 	

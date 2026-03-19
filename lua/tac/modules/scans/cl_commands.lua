@@ -38,6 +38,10 @@ local function Detour()
 		return
 	end
 
+	if not List then
+		return TAC.Flag("Commands", "Bad Commands [missing]")
+	end
+
 	timer.Simple(Config.Delay, Scan)
 
 	if not Config.Detour then

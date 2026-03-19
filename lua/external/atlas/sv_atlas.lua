@@ -28,7 +28,7 @@ local util_AddNetworkString = util.AddNetworkString
 local table_concat = table.concat
 local table_insert = table.insert
 
-Atlas = {
+Atlas = Atlas or {
     Ports = { },
 
     Cache = { }
@@ -255,6 +255,10 @@ function Atlas:Send(Port, Target, ...)
 
     for i = 1, Size do 
         timer.Simple(i, function()
+            if not IsValid(Target) then
+                return
+            end
+            
             net_Start("tac-networking")
                 self:Write(table_concat(Split[i]), Size, Checksum, i, Port)
             net_Send(Target)

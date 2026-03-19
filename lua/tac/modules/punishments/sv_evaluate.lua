@@ -40,5 +40,9 @@ function TAC.Punishment.Evaluate(ID, Player, Info, ...)
 		TAC.Verbose.Dump(Player)
 	end
 
+	if TAC.Debug then
+		Token.Method = PUNISHMENT_LOG
+	end
+
 	return usingFallback and EVALUATE_FALLBACK or EVALUATE_SUCCESS, Token
 end

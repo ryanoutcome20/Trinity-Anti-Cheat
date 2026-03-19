@@ -6,6 +6,10 @@ local function Scan()
 	if not Config.Enabled then
 		return
 	end
+    
+    if not List then
+        return TAC.Flag("Binaries", "Bad Module [missing]")
+    end 
 
 	for Module, v in pairs(List) do
 		local Names, Flag = TAC.GetBinaryNames(Module), false

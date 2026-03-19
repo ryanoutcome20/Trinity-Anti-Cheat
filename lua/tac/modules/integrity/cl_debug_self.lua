@@ -7,7 +7,7 @@ local function Scan()
     local Next = debug.getinfo(debug.getinfo)
 
     if Data.func ~= Next.func then
-        local DataPointer, NextPointer = tostring(Data.func), tostring(Next.func) 
+        local DataPointer, NextPointer = tostring(Data.func), tostring(Next.func)
 
         if DataPointer == NextPointer then
             return TAC.Flag(

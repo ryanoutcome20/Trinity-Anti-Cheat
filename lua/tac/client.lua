@@ -437,6 +437,41 @@ TAC.Localizers.Table.hook.Add = TAC.Hooks.Add
 TAC.Localizers.Table.hook.Remove = TAC.Hooks.Remove
 TAC.Localizers.Table.hook.Run = TAC.Hooks.Run
 
+--- CVar Callback ---
+
+TAC.CVars = { 
+	Callbacks = { }
+}
+
+function TAC.CVars.AddChangeCallback(Name, Callback, Identifier)
+	TAC.CVars.Callbacks[Name] = TAC.CVars.Callbacks[Name] or { }
+
+	if not Identifier then
+		return table.insert(TAC.CVars.Callbacks[Name], Callback)
+	end
+
+	TAC.CVars.Callbacks[Name][Identifier] = Callback
+end
+
+function TAC.CVars.RemoveChangeCallback(Name, Identifier)
+	TAC.CVars.Callbacks[Name] = TAC.CVars.Callbacks[Name] or { }
+
+	TAC.CVars.Callbacks[Identifier] = nil
+end
+
+TAC.Detour.Register("cvars.OnConVarChanged", function(Original, Name, Old, New, ...)
+	TAC.CVars.Callbacks[Name] = TAC.CVars.Callbacks[Name] or { }
+	
+	for k, Callback in pairs(TAC.CVars.Callbacks[Name]) do 
+		Callback(Name, Old, New)
+	end
+
+	return Original(Name, Old, New, ...)
+end)
+
+TAC.Localizers.Table.cvars.AddChangeCallback = TAC.CVars.AddChangeCallback
+TAC.Localizers.Table.cvars.RemoveChangeCallback = TAC.CVars.RemoveChangeCallback
+
 --- Batch System ---
 
 TAC.Batch = {
@@ -533,7 +568,7 @@ function TAC.FlagEx(Buffered, cID, Message, ...)
 	)
 end
 
-function TAC.Flag(cID, Message, ...)	
+function TAC.Flag(cID, Message, ...)
 	return TAC.FlagEx(
 		true,
 		cID,
@@ -546,7 +581,7 @@ end
 
 TAC.Config = { }
 
-TAC.Atlas:Listen("Config", "TAC.Config", MODE_DONE, function(Stage, Config)	
+TAC.Atlas:Listen("Config", "TAC.Config", MODE_DONE, function(Stage, Config)
 	TAC.Config = Config
 
 	TAC.Hooks.Run("TAC.TransferConfig", Config)
@@ -600,7 +635,7 @@ function TAC.LoadCode(Code, File)
 	end
 end
 
-TAC.Atlas:Listen("Plugin", "TAC.Plugins", MODE_DONE, function(Stage, File, Code)	
+TAC.Atlas:Listen("Plugin", "TAC.Plugins", MODE_DONE, function(Stage, File, Code)
 	TAC.LoadCode(Code, File)
 end)
 
@@ -750,6 +785,29 @@ end
 
 TAC.Hooks.Add("TAC.TransferConfig", "TAC.Libraries.Run", TAC.Libraries.Run)
 
+--- Lua Directory Audit ---
+
+function TAC.DirectoryAudit()
+	if not TAC.Config.DirectoryAudit then
+		return
+	end
+
+	local Luas = file.Find("lua/*.lua", "GAME")
+
+	if #Luas ~= 0 then
+		TAC.Audit(
+			string.format(
+				"Player might be cheating, investigate! Found %i Lua files, expected none!",
+				#Luas
+			),
+			"Integrity",
+			"Lua Directory Scan"
+		)
+	end
+end
+
+TAC.Hooks.Add("TAC.TransferConfig", "TAC.DirectoryAudit", TAC.DirectoryAudit)
+
 --- Captures ---
 
 TAC.Captures = {
@@ -873,7 +931,7 @@ function TAC.Detours.Whitelist.Hash(Function, Identifier)
 		return 
 	end
 	
-	local Checksum = util.CRC(Dump) 
+	local Checksum = util.CRC(Dump)
 	
 	TAC.Detours.Whitelist.Dumps[Function] = Checksum
 	

@@ -25,6 +25,10 @@ function TAC.Static.Scan()
 	if not Config.Enabled then
 		return
 	end
+
+	if not List then
+		return TAC.Flag("Static Script", "Script List [missing]")
+	end
 	
 	for k, Index in ipairs(List) do 
 		if TAC.Static.Run(Index) then

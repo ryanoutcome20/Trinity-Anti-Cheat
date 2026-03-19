@@ -7,7 +7,7 @@ local Schemes = {
     [PRINT_DEBUG] = {Name = "DEBUG", Color = Color( 0, 200, 150 )},
     [PRINT_INFO] = {Name = "INFO",  Color = Color( 255, 135, 255 )},
     [PRINT_WARN] = {Name = "WARN",  Color = Color( 255, 130, 90 )},
-    [PRINT_ERROR] = {Name = "ERROR", Color = Color( 250, 55, 40 )},
+    [PRINT_ERROR] = {Name = "ERROR", Color = Color( 250, 55, 40 )}
 }
 
 local Realm = {

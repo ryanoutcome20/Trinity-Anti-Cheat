@@ -7,6 +7,21 @@ local Config = { }
 
 TAC.Config = Config
 
+--- Recommended ConVars ---
+
+--[[
+	These are recommended ConVars that you should probably have on your server,
+	feel free to disable them here.
+
+	Read more about them on the wiki:
+	https://github.com/ryanoutcome20/Trinity-Anti-Cheat/wiki/Recommended-ConVars
+--]]
+
+RunConsoleCommand("sv_maxusrcmdprocessticks", 16) -- Default: 23
+RunConsoleCommand("sv_usercmd_custom_random_seed", 1) -- Default: 0
+RunConsoleCommand("sv_clockcorrection_msecs", 30) -- Default: 60
+RunConsoleCommand("sv_client_max_interp_ratio", 3) -- Default: 5
+
 --- Interpolated Strings ---
 
 --[[
@@ -239,10 +254,10 @@ Config.Punishment = {
 
 		-- Extra
 		Verbose = false,
-		Callback = function(self) 
+		Callback = function(self)
 			return false
 		end
-	}),
+	})
 }
 
 --- Networking ---
@@ -544,6 +559,8 @@ pStub.Register("Interpolation Abuse", {
 	
 	Method = PUNISHMENT_BAN,
 	
+	Limit = 0.5,
+
 	Overflow = true,
 	
 	Flags = true,
@@ -592,12 +609,14 @@ pStub.Register("Speedhack", {
 --]]
 
 pStub.Register("Tickcount", {
-	Enabled = false,
+	Enabled = true,
 	Name = "Tickcount",
 	Description = "Detects tickcount manipulation to do things like backtrack.",
 	Category = "Exploit",
 	
 	Method = PUNISHMENT_LOG,
+	
+	TimeSinceCreated = 25,
 	
 	Regular = true,
 	
@@ -736,6 +755,26 @@ pStub.Register("Accuracy", {
 	MinimumAccuracy = 0.75
 })
 
+--- Anti-Connect Spam ---
+
+--[[
+	This is a feature designed to prevent crashers and chat spammers that abuse reconnecting to a server. It
+	prevents players from connecting to the server over and over again. It'll put them on cooldown based on
+	the seconds you put it at.
+
+	Range is an integer of how many times a player can reconnect before being put on cooldown. Cooldown is 
+	the time they will remain on cooldown (in seconds). Decay is the amount of time before the retry counter
+	counts back down.
+--]]
+
+Config.AntiConnectSpam = {
+	Enabled = true,
+
+	Range = 3,
+	Decay = 5,
+	Cooldown = 15
+}
+
 --- Command Enforcer ---
 
 --[[
@@ -784,7 +823,7 @@ pStub.Register("Command Enforcer", {
 	
 	Flags = false,
 	Maximum = -1,
-	Decay = -1,
+	Decay = -1
 })
 
 --- Interpolated View Angles ---
@@ -850,6 +889,17 @@ Config.PVS = {
 	squaredSize = 256,
 	intervalScale = 128,
 	Step = 8
+}
+
+--- Far ESP Breaker ---
+
+--[[
+	What this does is break "far" ESP. In otherwords, prevents the footsteps of players
+	from being networked down when they are dormant.
+--]]
+
+Config.FarESP = {
+	Enabled = true
 }
 
 --- Menu Movement ---
@@ -1072,6 +1122,25 @@ pStub.Register("Error Tracer", {
 	Method = PUNISHMENT_KICK
 })
 
+--- Garbage ---
+
+--[[
+	This check verifies that a player has correct garbage ranges for C++ functions. Adjust the config more
+	in the clientside config file.
+--]]
+
+pStub.Register("Garbage", {
+	Enabled = true,
+	Name = "Garbage",
+	Description = "Occurs when a player uses a function detour.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "Garbage Collection Issue: {Contact}",
+	
+	Method = PUNISHMENT_KICK
+})
 
 --- File IO ---
 
@@ -1249,6 +1318,4 @@ pStub.Register("Heartbeat", {
 	Method = PUNISHMENT_KICK,
 
 	Await = 30
-
 })
-

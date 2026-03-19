@@ -9,17 +9,17 @@ end
 
 function TAC.Networking.Flag(Stage, Player, Data)
 	if not Data then
-		return TAC.Networking.Integrity(Player, "Invalid Flags [no data]")	
+		return TAC.Networking.Integrity(Player, "Invalid Flags [no data]")
 	end
 
 	if not Data.cID or not Data.Message then
-		return TAC.Networking.Integrity(Player, "Invalid Flags [cid: %s; message: %s]", type(Data.cID), type(Data.Message))	
+		return TAC.Networking.Integrity(Player, "Invalid Flags [cid: %s; message: %s]", type(Data.cID), type(Data.Message))
 	end
 	
 	local Config = TAC.Config[Data.cID]
 	
 	if not Config or not Config.Client then
-		return TAC.Networking.Integrity(Player, "Invalid Flags [config: %s]", tostring(Data.cID))	
+		return TAC.Networking.Integrity(Player, "Invalid Flags [config: %s]", tostring(Data.cID))
 	end
 	
 	return TAC.Punishment.Wrapper(Data.cID, Player, TAC.Fix(Data.Message) .. " [CL]")
@@ -29,7 +29,7 @@ function TAC.Networking.FlagBatch(Stage, Player, Objects)
 	Objects = istable(Objects) and Objects or { }
 
 	if #Objects == 0 then
-		return TAC.Networking.Integrity(Player, "Networking Batch [empty]")	
+		return TAC.Networking.Integrity(Player, "Networking Batch [empty]")
 	end
 	
 	for k, Object in ipairs(Objects) do 
