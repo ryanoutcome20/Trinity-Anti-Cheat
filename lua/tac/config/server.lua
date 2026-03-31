@@ -1152,6 +1152,25 @@ pStub.Register("Error Tracer", {
 	Method = PUNISHMENT_KICK
 })
 
+--- Game Events ---
+
+--[[
+	This check simply verifies that game events are being listened to from the 
+	client state and not any private environments or C++. It shouldn't false flag
+	unless you have some addons in pre-init, if so, beware.
+]]--
+
+pStub.Register("Game Events", {
+	Enabled = true,
+	Name = "Game Events",
+	Description = "Occurs when a player listens to a game event with a private environment.",
+	Category = "Integrity",
+	
+	Client = true,
+		
+	Method = PUNISHMENT_BAN
+})
+
 --- Garbage ---
 
 --[[

@@ -785,6 +785,20 @@ end
 
 TAC.Hooks.Add("TAC.TransferConfig", "TAC.Libraries.Run", TAC.Libraries.Run)
 
+--- Game Events ---
+
+TAC.GameEvents = {
+	Cache = TAC.Lists.Merge("Events")
+}
+
+TAC.Detour.Register("gameevent.Listen", function(Original, Hook, ...)
+	TAC.GameEvents.Cache[Hook] = true
+
+	TAC.Captures.Stack("gameevent.Listen")
+
+	return Original(Hook, ...)
+end)
+
 --- Lua Directory Audit ---
 
 function TAC.DirectoryAudit()
