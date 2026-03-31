@@ -46,6 +46,9 @@ RunConsoleCommand("sv_client_max_interp_ratio", 3) -- Default: 5
 
 	{Info} - Punishment reason.
 	{ID} - Punishment config ID.
+	{Category} - Punishment category.
+	{Type} - Either "LOGGED" or "PUNISHED" depending on the token's method.
+	{Description} - Punishment description.
 --]]
 
 --[[
@@ -72,6 +75,7 @@ RunConsoleCommand("sv_client_max_interp_ratio", 3) -- Default: 5
 	{Contact} - Contact string (Config.Contact).
 	{Map} - Map.
 	{Gamemode} - Gamemode name.
+	{Time} - Time formatted as "%d/%m/%Y %H:%M:%S".
 --]]
 
 --- General ---
@@ -183,6 +187,32 @@ Config.Logging = {
 			Type
 		)
 	end
+}
+
+--- Webhook ---
+
+--[[
+	This configures the Discord webhook integration.
+
+	To generate a webhook for this to work in you can follow this guide:
+	https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+
+	To get this to function correctly you need to install "gmsv_reqwest" here:
+	https://github.com/WilliamVenner/gmsv_reqwest
+	
+	Place the gmsv_reqwest DLLs into the directory "garrysmod/lua/bin/", if it doesn't 
+	exist, create it. You'll know its functional when the startup banner of Trinity says 
+	that its found it.
+
+	You can modify the embed itself by editing the file located in "tac/embed/template.json", 
+	it follows the interpolated strings format and is provided with a full punishment 
+	token.
+--]]
+
+Config.Webhook = {
+	Enabled = false,
+	URL = "",
+	Timeout = 30
 }
 
 --- Punishment ---

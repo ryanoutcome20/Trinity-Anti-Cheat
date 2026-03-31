@@ -24,7 +24,7 @@ function TAC.Execute(Token, noDelay)
 	end
 
 	local onlyLog = Token.Method == PUNISHMENT_LOG
-	
+
 	-- Check for delays.
 	if not noDelay and TAC.Punishment.Delay(Token) then
 		return EXECUTE_SUCCESS, false
@@ -33,6 +33,8 @@ function TAC.Execute(Token, noDelay)
 	-- Log specific override stuff.
 	local Formatted = onlyLog and TAC.Format(Token, Token.FormatLog) or TAC.Format(Token, Token.FormatPunishment)
 	local Sound = onlyLog and TAC.Config.Alerts.Sounds.Notify or TAC.Config.Alerts.Sounds.Punishment
+	
+	Token.Reason = Formatted
 
 	-- Log.
 	TAC.API.Log(
@@ -55,6 +57,8 @@ function TAC.Execute(Token, noDelay)
 		Sound,
 		Player
 	)
+
+	TAC.Webhook(Token)
 
 	if onlyLog then
 		return EXECUTE_SUCCESS, true
