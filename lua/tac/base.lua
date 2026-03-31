@@ -137,7 +137,11 @@ function TAC.Format(Token, Text, ...)
 	end
 
 	local Player = Token.Player
-	
+
+	if not Player then
+		return "<player error>"
+	end
+
 	local Interpolated = string.Interpolate(Text, {
 		["Name"] = TAC.Fix(Player:Name()),
 		["SteamID64"] = Player:SteamID64(),
@@ -148,12 +152,13 @@ function TAC.Format(Token, Text, ...)
 		["Position"] = tostring(Player:GetPos()),
 		["Angle"] = tostring(Player:EyeAngles()),
 		
-		["Info"] = Token.Info,
-		["ID"] = Token.ID,
+		["Info"] = Token.Info or "<no value>",
+		["ID"] = Token.ID or "<no value>",
+		["Category"] = Token.Category or "<no value>",
 		
-		["Timer"] = Token.Timer and tostring(math.Round(Token.Timer, 2)) or "N/A",
+		["Timer"] = Token.Timer and tostring(math.Round(Token.Timer, 2)) or "<no value>",
 		
-		["Flags"] = tostring(Token.FlagsCount) or "N/A",
+		["Flags"] = tostring(Token.FlagsCount) or "<no value>",
 		
 		["Contact"] = TAC.Config.Contact,
 		["Map"] = game.GetMap(),
