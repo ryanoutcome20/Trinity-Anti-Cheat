@@ -186,6 +186,9 @@ return {
     {Name = "spamchat_v2", Flag = "Mingescripts"},
     {Name = "spamchatv2", Flag = "Mingescripts"},
 
+    -- Kirkware
+    {Name = "_KW_LOADED", Flag = "Kirkware"},
+
     -- pKustom
     {Name = "AddSlider", Flag = "pKustom"},
 
