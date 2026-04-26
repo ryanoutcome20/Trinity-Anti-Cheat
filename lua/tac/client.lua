@@ -103,6 +103,7 @@ local tostring = Get("tostring")
 local tobool = Get("tobool")
 local istable = Get("istable")
 local isstring = Get("isstring")
+local isfunction = Get("isfunction")
 local pcall = Get("pcall")
 local pairs = Get("pairs")
 local ipairs = Get("ipairs")
@@ -601,12 +602,25 @@ TAC.Environment = setmetatable({
 })
 
 function TAC.Run()
+	TAC.Loaded = TAC.Loaded + #TAC.Plugins
+
 	for k, Object in ipairs(TAC.Plugins) do
 		if not Object then
 			continue
 		end
 		
-		setfenv(Object, TAC.Environment)()
+		local Wrapped = setfenv(Object, TAC.Environment)
+	
+		xpcall(Wrapped, function(Message)
+			TAC.Audit(
+				string.format(
+					"Got runtime error `%s`!",
+					Message
+				),
+				"Integrity",
+				"Loading"
+			)
+		end)
 	end
 
 	TAC.Plugins = { }
@@ -628,10 +642,23 @@ function TAC.LoadCode(Code, File)
 		)
 	end
 
-	Code = CompileString(Code, File or "MISSING")
+	local Status = CompileString(Code, File or "MISSING", false)
 	
-	if Code then
-		table.insert(TAC.Plugins, Code)
+	Status = nil
+
+	if isfunction(Status) then
+		table.insert(TAC.Plugins, Status)
+	else
+		TAC.Audit(
+			string.format(
+				"Got compile error `%s`!",
+				Status
+			),
+			"Integrity",
+			"Loading"
+		)
+		
+		TAC.Loaded = TAC.Loaded - 1
 	end
 end
 

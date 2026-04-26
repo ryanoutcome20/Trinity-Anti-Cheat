@@ -1,4 +1,6 @@
 if SERVER then
+	include("sv_environment.lua")
+	
 	return {
 		"cl_error_tracer.lua",
 		"cl_stack.lua",

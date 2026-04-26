@@ -1052,6 +1052,29 @@ pStub.Register("Input Guard Movement", {
 	Decay = 3
 })
 
+--- Environment ---
+
+--[[
+	This check sends a ConVar to the client and verifies that it
+	exists. It does this to make sure that the client is actually
+	running the code its sent.
+]]--
+
+pStub.Register("Environment", {
+	Enabled = true,
+	Name = "Environment",
+	Description = "Occurs when a player blocks the execution of our clientside code.",
+	Category = "Integrity",
+	
+	Message = "Failed to load! Rejoin!",
+
+	Client = true,
+	
+	Method = PUNISHMENT_KICK,
+
+	Wait = 60
+})
+
 --- Stack ---
 
 --[[
