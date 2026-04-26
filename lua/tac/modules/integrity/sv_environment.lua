@@ -46,7 +46,7 @@ function TAC.Environment.Start(Player)
 		"Plugin", 
 		Player, 
 		"tac/modules/utils/cl_alerts.lua",
-		"CreateClientConVar([[" .. Key .. "]], TAC.Loaded, false, true)"
+		"CreateConVar([[" .. Key .. "]], TAC.Loaded, FCVAR_USERINFO)"
 	)
 end
 
