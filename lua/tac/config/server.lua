@@ -1075,6 +1075,28 @@ pStub.Register("Environment", {
 	Wait = 60
 })
 
+
+--- Send Lua ---
+
+--[[
+	This check verifies that SendLua functions properly. Blocking SendLua from
+	executing code is a common cheating tool and is implemented in various cheats
+	or security scripts.
+]]--
+
+pStub.Register("Send Lua", {
+	Enabled = true,
+	Name = "Send Lua",
+	Description = "Occurs when the client blocks the execution of SendLua.",
+	Category = "Integrity",
+	
+	Message = "SendLua Error!",
+	
+	Method = PUNISHMENT_KICK,
+
+	Wait = 120
+})
+
 --- Stack ---
 
 --[[
