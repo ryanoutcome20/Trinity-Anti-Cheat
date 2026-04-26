@@ -435,7 +435,6 @@ return {
     {Hook = "HUDPaint", Name = "Diamondply"},
     {Hook = "HUDPaint", Name = "Hitinfo"},
     {Hook = "PreDrawPlayerHands", Name = "nohands"},
-    {Hook = "PreDrawHalos", Name = "AddHalos"},
     {Hook = "PreDrawHalos", Name = "AddHalos2"},
     {Hook = "PreDrawHalos", Name = "AddHalos4"},
     {Hook = "PreDrawHalos", Name = "AddHalos5"},

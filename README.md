@@ -1,5 +1,4 @@
 <div align="center">
-  <img width="256" height="256" alt="GitHub Icon" src="https://github.com/user-attachments/assets/3a73664a-c4ba-4728-a113-b3d1c1267ce5" />
 
   Trinity Anti-Cheat
   <hr>
