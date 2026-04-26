@@ -59,6 +59,18 @@ function TAC.Fix(Text)
 	return Text
 end
 
+function TAC.Random(Length)
+	Length = Length or math.random(20, 40)
+	
+	local Text = ""
+	
+	for i = 1, Length do
+		Text = Text .. string.char(math.random(97, 122))
+	end
+	
+	return Text
+end
+
 function TAC.Enum(...)
 	for k, Name in pairs({...}) do 
 		_G[Name] = k - 1
