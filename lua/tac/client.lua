@@ -644,8 +644,6 @@ function TAC.LoadCode(Code, File)
 
 	local Status = CompileString(Code, File or "MISSING", false)
 	
-	Status = nil
-
 	if isfunction(Status) then
 		table.insert(TAC.Plugins, Status)
 	else
