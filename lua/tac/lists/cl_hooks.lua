@@ -2276,7 +2276,20 @@ return {
     {Hook = "Think", Name = "SuperCommands"},
     {Hook = "AddToolMenuTabs", Name = "ZBotTab"},
     {Hook = "PopulateToolMenu", Name = "ZMenus"},
-	
+    {Hook = "RenderScene", Name = "notaucpastesowecanevademedal"},
+    {Hook = "ShutDown", Name = "whatdoesthisevendoidkipastesooomuch"},
+    {Hook = "HUDPaint", Name = "antimedal"},
+    {Hook = "CreateMove", Name = "KirkFriendsScroll"},
+    {Hook = "CreateMove", Name = "tapeverythingevenssc"},
+    {Hook = "InputMouseApply", Name = "SilentAimSmooth"},
+    {Hook = "CalcView", Name = "kirkware_freecam"},
+    {Hook = "PostDrawTranslucentRenderables", Name = "fakeakasuperrealangleaa"},
+    {Hook = "player_hurt", Name = "DamageLogger"},
+    {Hook = "entity_killed", Name = "KillLogger"},
+    {Hook = "Think", Name = "KIRK_EntityCache_Updater"},
+    {Hook = "KeyPress", Name = "KirkwareInput"},
+    {Hook = "RenderScreenspaceEffects", Name = "SelfLandPrediction"},
+
 	-- ZoomRT (https://github.com/ryanoutcome20/Coffee/blob/main/coffee/safe/zoomrt.lua)
 	{Hook = "HUDPaint", Name = "ZoomRT"},
 	
