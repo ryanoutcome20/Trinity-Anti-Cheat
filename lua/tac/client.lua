@@ -789,6 +789,10 @@ for k, Data in ipairs(TAC.Libraries.Slots) do
 end
 
 function TAC.Libraries.Run()
+	if not TAC.Config then
+		return
+	end
+
 	local Config = TAC.Config.Integrity.Libraries
 
 	if not Config.Enabled then
