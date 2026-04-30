@@ -297,7 +297,7 @@ Config.Punishment = {
 
 Config.Networking = {
 	Delay = 2,
-	Step = 0.5
+	Step = 10
 }
 
 --[[
