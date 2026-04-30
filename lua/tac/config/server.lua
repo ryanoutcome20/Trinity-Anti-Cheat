@@ -17,11 +17,6 @@ TAC.Config = Config
 	https://github.com/ryanoutcome20/Trinity-Anti-Cheat/wiki/Recommended-ConVars
 --]]
 
-RunConsoleCommand("sv_maxusrcmdprocessticks", 16) -- Default: 23
-RunConsoleCommand("sv_usercmd_custom_random_seed", 1) -- Default: 0
-RunConsoleCommand("sv_clockcorrection_msecs", 30) -- Default: 60
-RunConsoleCommand("sv_client_max_interp_ratio", 3) -- Default: 5
-
 --- Interpolated Strings ---
 
 --[[
