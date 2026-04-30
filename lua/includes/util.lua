@@ -257,10 +257,6 @@ end
 	Returns true if object is valid (is not nil and IsValid)
 -----------------------------------------------------------]]
 function IsValid( object )
-    	
-    if ( _G.TAC_Capture_Stack ) then
-        TAC_Capture_Stack( "IsValid" )
-    end
 
 	if ( !object ) then return false end
 
