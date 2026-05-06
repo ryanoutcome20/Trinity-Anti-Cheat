@@ -20,6 +20,17 @@ local Config = { }
 Config.Batch = 32000
 Config.ProcessTime = 0.25
 
+--- Hot Traces ---
+
+--[[
+	Time between each clear of the "hot trace" cache clientside. What this
+	does is prevent repeated dumping of information to the server from a
+	function that resides in a super common stack chain. In other words,
+	it prevents a bunch of repeated work by breaking early.
+--]]
+
+Config.HT = 300
+
 --- Directory Audit ---
 
 --[[
