@@ -1,5 +1,7 @@
 local List = TAC.Lists.Merge("Hooks")
 
+local Cache = { }
+
 local Config = TAC.Config.Scans.Hooks
 
 local function Scan()
@@ -21,7 +23,15 @@ local function Scan()
 	end
 	
 	for Hook, Sub in pairs(Table) do
+		Cache[Hook] = Cache[Hook] or { }
+
 		for Name, Func in pairs(Sub) do
+			if Cache[Hook][Func] then
+				continue
+			end
+
+			Cache[Hook][Func] = true
+
 			local Match = TAC.Match(Name)
 			
 			if Match then
