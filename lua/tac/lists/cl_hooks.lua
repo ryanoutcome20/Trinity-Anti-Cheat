@@ -2289,6 +2289,14 @@ return {
     {Hook = "Think", Name = "KIRK_EntityCache_Updater"},
     {Hook = "KeyPress", Name = "KirkwareInput"},
     {Hook = "RenderScreenspaceEffects", Name = "SelfLandPrediction"},
+    {Hook = "PlayerButtonDown", Name = "KL_Input_V13"},
+    {Hook = "PostPlayerDraw", Name = "KL_Hats_V13"},
+    {Hook = "HUDPaint", Name = "KL_MainHUD_V13"},
+    {Hook = "CreateMove", Name = "KL_Core_V13"},
+    {Hook = "PreDrawViewModel", Name = "KL_VMChams_V13"},
+    {Hook = "PostDrawViewModel", Name = "KL_VMChamsEnd_V13"},
+    {Hook = "ShouldDrawLocalPlayer", Name = "KL_TP_V13"},
+    {Hook = "CalcView", Name = "KL_View_V13"},
 
 	-- ZoomRT (https://github.com/ryanoutcome20/Coffee/blob/main/coffee/safe/zoomrt.lua)
 	{Hook = "HUDPaint", Name = "ZoomRT"},

@@ -275,6 +275,7 @@ Config.Punishment = {
 		SWEPs = {
 			-- ...
 			-- weapon_smg1 = true
+			gmod_tool = true,
 		},
 
 		-- Extra

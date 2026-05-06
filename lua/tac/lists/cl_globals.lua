@@ -257,5 +257,12 @@ return {
     {Name = "CF_SetConvar", Flag = "ColdFire"},
 
     -- RoachHook
-    {Name = "RoachHook", Flag = "RoachHook"}
+    {Name = "RoachHook", Flag = "RoachHook"},
+
+    -- KL-Ware
+    {Name = "KL_C", Flag = "KL-Ware"},
+    {Name = "KL_HB", Flag = "KL-Ware"},
+    {Name = "KL_BA", Flag = "KL-Ware"},
+    {Name = "KL_M", Flag = "KL-Ware"},
+    {Name = "KL_BM", Flag = "KL-Ware"}
 }
