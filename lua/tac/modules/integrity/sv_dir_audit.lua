@@ -1,6 +1,6 @@
-TAC.DirAudit = { }
+TAC.DirectoryAudit = { }
 
-function TAC.DirAudit.Verify(Mode, Player, Objects)
+function TAC.DirectoryAudit.Verify(Mode, Player, Objects)
     local Config = TAC.Config["Directory Audit"]
 
     if not Config.Enabled then
@@ -30,4 +30,4 @@ function TAC.DirAudit.Verify(Mode, Player, Objects)
 	end
 end
 
-Atlas:Listen("Directory Audit", "TAC.DirAudit.Verify", MODE_DONE, TAC.DirAudit.Verify)
+Atlas:Listen("Directory Audit", "TAC.DirectoryAudit.Verify", MODE_DONE, TAC.DirectoryAudit.Verify)
