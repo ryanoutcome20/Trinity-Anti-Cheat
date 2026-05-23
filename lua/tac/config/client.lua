@@ -31,15 +31,6 @@ Config.ProcessTime = 0.25
 
 Config.HT = 300
 
---- Directory Audit ---
-
---[[
-	This just checks if there are lua files in the "garrysmod/lua" base directory, if so, 
-	this could indicate a cheater or developer. Useful to investigate potential cheaters.
---]]
-
-Config.DirectoryAudit = true
-
 --- Aimbot Checks ---
 
 --[[

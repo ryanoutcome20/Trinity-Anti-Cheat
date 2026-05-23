@@ -1,5 +1,6 @@
 if SERVER then
 	include("sv_environment.lua")
+	include("sv_dir_audit.lua")
 	include("sv_sendlua.lua")
 
 	return {

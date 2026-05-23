@@ -1093,6 +1093,30 @@ pStub.Register("Send Lua", {
 	Wait = 120
 })
 
+--- Directory Audit ---
+
+--[[
+	This is a simple alert that runs through and checks a players
+	"garrysmod/lua/*" directory for Lua files that shouldn't be
+	there.
+
+	This shouldn't ban, this is just for alerting staff that this
+	player may be a cheater.
+]]--
+
+pStub.Register("Directory Audit", {
+	Enabled = true,
+	Name = "Directory Audit",
+	Description = "Occurs when the player has suspicious files installed.",
+	Category = "Integrity",
+	
+	Method = PUNISHMENT_LOG,
+
+	Whitelisted = {
+		-- ["example.lua"] = true,
+	}
+})
+
 --- Stack ---
 
 --[[

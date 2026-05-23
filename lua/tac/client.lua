@@ -831,20 +831,12 @@ end)
 --- Lua Directory Audit ---
 
 function TAC.DirectoryAudit()
-	if not TAC.Config.DirectoryAudit then
-		return
-	end
-
 	local Luas = file.Find("lua/*.lua", "GAME")
 
 	if #Luas ~= 0 then
-		TAC.Audit(
-			string.format(
-				"Player might be cheating, investigate! Found %i Lua files, expected none!",
-				#Luas
-			),
-			"Integrity",
-			"Lua Directory Scan"
+		TAC.Atlas:Send(
+			"Directory Audit",
+			Luas
 		)
 	end
 end
