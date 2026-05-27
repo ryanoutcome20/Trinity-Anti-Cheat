@@ -42,7 +42,6 @@ include("tac/config/server.lua")
 --- Clientside ---
 
 MsgN("  Creating clientside")
-AddCSLuaFile("includes/extensions/client/panel/scriptedpanels.lua")
 AddCSLuaFile("includes/extensions/player_auth.lua")
 AddCSLuaFile("includes/extensions/coroutine.lua")
 AddCSLuaFile("includes/modules/concommand.lua")
