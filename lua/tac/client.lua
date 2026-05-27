@@ -222,8 +222,23 @@ function TAC.Lists.Merge(Name, Shared)
 		return TAC.Lists.Cache[Name]
 	end
 
-	TAC.Lists.Cache[Name] = include("tac/lists/" .. Prefix .. TAC.Lists.GetStringCase(Name) .. ".lua")
+	local File = "tac/lists/" .. Prefix .. TAC.Lists.GetStringCase(Name) .. ".lua"
+
+	if not file.Exists(File, "LUA") then
+		TAC.Audit(
+			string.format(
+				"List Merge Failure `%s`!",
+				File
+			),
+			"Integrity",
+			"Loading"
+		)
+		
+		return { }
+	end
 	
+	TAC.Lists.Cache[Name] = include(File)
+
 	return TAC.Lists.Cache[Name]
 end
 
