@@ -76,10 +76,14 @@ If you experience any issues you should consult the [troubleshooting documentati
 
 ## Credits
 
-* Srlion - The SFS serialization library.
-* Vectivus - The print library.
-* Wholecream - Providing some detection ideas.
-* Matthew B. (HeX) - Providing the biggest source of motivation to finish this project and awesome detection resources for when I'm out of ideas. 
+* [Srlion](https://github.com/srlion) - The SFS serialization library.
+* [Vectivus](https://github.com/vectivuss) - The print library.
+* [Wholecream](https://github.com/blueshank-gh) - Providing some detection ideas.
+
+* [Dotty](https://github.com/GomeyDoge) - Issue testing.
+* [Lag](https://github.com/lag225) - Issue testing.
+
+* Matthew B. (General HeX) - Providing the biggest source of motivation to finish this project and awesome detection resources for when I'm out of ideas. Sorry I couldn't get a chance to apologize.
 
 ## License
 
