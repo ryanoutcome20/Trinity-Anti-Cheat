@@ -33,7 +33,7 @@ MsgN("  Caching resources")
 
 --- Config ---
 
-TAC.Version = "0.3.1"
+TAC.Version = "0.3.2"
 TAC.Edition = "Release"
 
 MsgN("  Loading config")
