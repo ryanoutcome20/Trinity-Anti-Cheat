@@ -17,11 +17,6 @@ TAC.Config = Config
 	https://github.com/ryanoutcome20/Trinity-Anti-Cheat/wiki/Recommended-ConVars
 --]]
 
-RunConsoleCommand("sv_maxusrcmdprocessticks", 16) -- Default: 23
-RunConsoleCommand("sv_usercmd_custom_random_seed", 1) -- Default: 0
-RunConsoleCommand("sv_clockcorrection_msecs", 30) -- Default: 60
-RunConsoleCommand("sv_client_max_interp_ratio", 3) -- Default: 5
-
 --- Interpolated Strings ---
 
 --[[
@@ -46,6 +41,9 @@ RunConsoleCommand("sv_client_max_interp_ratio", 3) -- Default: 5
 
 	{Info} - Punishment reason.
 	{ID} - Punishment config ID.
+	{Category} - Punishment category.
+	{Type} - Either "LOGGED" or "PUNISHED" depending on the token's method.
+	{Description} - Punishment description.
 --]]
 
 --[[
@@ -72,6 +70,7 @@ RunConsoleCommand("sv_client_max_interp_ratio", 3) -- Default: 5
 	{Contact} - Contact string (Config.Contact).
 	{Map} - Map.
 	{Gamemode} - Gamemode name.
+	{Time} - Time formatted as "%d/%m/%Y %H:%M:%S".
 --]]
 
 --- General ---
@@ -185,6 +184,32 @@ Config.Logging = {
 	end
 }
 
+--- Webhook ---
+
+--[[
+	This configures the Discord webhook integration.
+
+	To generate a webhook for this to work in you can follow this guide:
+	https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+
+	To get this to function correctly you need to install "gmsv_reqwest" here:
+	https://github.com/WilliamVenner/gmsv_reqwest
+	
+	Place the gmsv_reqwest DLLs into the directory "garrysmod/lua/bin/", if it doesn't 
+	exist, create it. You'll know its functional when the startup banner of Trinity says 
+	that its found it.
+
+	You can modify the embed itself by editing the file located in "tac/embed/template.json", 
+	it follows the interpolated strings format and is provided with a full punishment 
+	token.
+--]]
+
+Config.Webhook = {
+	Enabled = false,
+	URL = "",
+	Timeout = 30
+}
+
 --- Punishment ---
 
 Config.Punishment = {
@@ -250,6 +275,7 @@ Config.Punishment = {
 		SWEPs = {
 			-- ...
 			-- weapon_smg1 = true
+			gmod_tool = true,
 		},
 
 		-- Extra
@@ -272,7 +298,7 @@ Config.Punishment = {
 
 Config.Networking = {
 	Delay = 2,
-	Step = 0.5
+	Step = 2.5
 }
 
 --[[
@@ -1022,6 +1048,75 @@ pStub.Register("Input Guard Movement", {
 	Decay = 3
 })
 
+--- Environment ---
+
+--[[
+	This check sends a ConVar to the client and verifies that it
+	exists. It does this to make sure that the client is actually
+	running the code its sent.
+]]--
+
+pStub.Register("Environment", {
+	Enabled = true,
+	Name = "Environment",
+	Description = "Occurs when a player blocks the execution of our clientside code.",
+	Category = "Integrity",
+	
+	Message = "Failed to load! Rejoin!",
+
+	Client = true,
+	
+	Method = PUNISHMENT_KICK,
+
+	Wait = 60
+})
+
+
+--- Send Lua ---
+
+--[[
+	This check verifies that SendLua functions properly. Blocking SendLua from
+	executing code is a common cheating tool and is implemented in various cheats
+	or security scripts.
+]]--
+
+pStub.Register("Send Lua", {
+	Enabled = true,
+	Name = "Send Lua",
+	Description = "Occurs when the client blocks the execution of SendLua.",
+	Category = "Integrity",
+	
+	Message = "SendLua Error!",
+	
+	Method = PUNISHMENT_KICK,
+
+	Wait = 120
+})
+
+--- Directory Audit ---
+
+--[[
+	This is a simple alert that runs through and checks a players
+	"garrysmod/lua/*" directory for Lua files that shouldn't be
+	there.
+
+	This shouldn't ban, this is just for alerting staff that this
+	player may be a cheater.
+]]--
+
+pStub.Register("Directory Audit", {
+	Enabled = true,
+	Name = "Directory Audit",
+	Description = "Occurs when the player has suspicious files installed.",
+	Category = "Integrity",
+	
+	Method = PUNISHMENT_LOG,
+
+	Whitelisted = {
+		-- ["example.lua"] = true,
+	}
+})
+
 --- Stack ---
 
 --[[
@@ -1120,6 +1215,25 @@ pStub.Register("Error Tracer", {
 	Message = "Error Issue: {Contact}",
 	
 	Method = PUNISHMENT_KICK
+})
+
+--- Game Events ---
+
+--[[
+	This check simply verifies that game events are being listened to from the 
+	client state and not any private environments or C++. It shouldn't false flag
+	unless you have some addons in pre-init, if so, beware.
+]]--
+
+pStub.Register("Game Events", {
+	Enabled = true,
+	Name = "Game Events",
+	Description = "Occurs when a player listens to a game event with a private environment.",
+	Category = "Integrity",
+	
+	Client = true,
+		
+	Method = PUNISHMENT_BAN
 })
 
 --- Garbage ---

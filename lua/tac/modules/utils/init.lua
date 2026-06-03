@@ -7,6 +7,7 @@ include("sv_audits.lua")
 include("sv_batch.lua")
 include("sv_lists.lua")
 include("sv_scp.lua")
+include("sv_pfp.lua")
 
 return {
 	"cl_alerts.lua"

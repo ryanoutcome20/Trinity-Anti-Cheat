@@ -24,6 +24,7 @@ Wrap("MsgC")
 Wrap("MsgAll")
 Wrap("RunConsoleCommand")
 Wrap("GetConVar_Internal")
+Wrap("Derma_DrawBackgroundBlur")
 
 --- Classes ---
 

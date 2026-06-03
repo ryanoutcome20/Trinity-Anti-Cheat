@@ -103,6 +103,7 @@ local tostring = Get("tostring")
 local tobool = Get("tobool")
 local istable = Get("istable")
 local isstring = Get("isstring")
+local isfunction = Get("isfunction")
 local pcall = Get("pcall")
 local pairs = Get("pairs")
 local ipairs = Get("ipairs")
@@ -178,7 +179,7 @@ function TAC.GetBinaryNames(Name)
 	-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/lua/includes/extensions/util.lua#L394-L418
 
 	local Names = { }
-	local Suffixes = { "osx64", "osx", "linux64", "linux", "linux32", "win64", "win32" }
+	local Suffixes = { /*"osx64", "osx", "linux64", "linux", "linux32",*/ "win64", "win32" }
 	
 	for k, Suffix in ipairs(Suffixes) do 
 		table.insert(Names, string.format(
@@ -221,8 +222,23 @@ function TAC.Lists.Merge(Name, Shared)
 		return TAC.Lists.Cache[Name]
 	end
 
-	TAC.Lists.Cache[Name] = include("tac/lists/" .. Prefix .. TAC.Lists.GetStringCase(Name) .. ".lua")
+	local File = "tac/lists/" .. Prefix .. TAC.Lists.GetStringCase(Name) .. ".lua"
+
+	if not file.Exists(File, "LUA") then
+		TAC.Audit(
+			string.format(
+				"List Merge Failure `%s`!",
+				File
+			),
+			"Integrity",
+			"Loading"
+		)
+		
+		return { }
+	end
 	
+	TAC.Lists.Cache[Name] = include(File)
+
 	return TAC.Lists.Cache[Name]
 end
 
@@ -601,12 +617,25 @@ TAC.Environment = setmetatable({
 })
 
 function TAC.Run()
+	TAC.Loaded = TAC.Loaded + #TAC.Plugins
+
 	for k, Object in ipairs(TAC.Plugins) do
 		if not Object then
 			continue
 		end
 		
-		setfenv(Object, TAC.Environment)()
+		local Wrapped = setfenv(Object, TAC.Environment)
+	
+		xpcall(Wrapped, function(Message)
+			TAC.Audit(
+				string.format(
+					"Got runtime error `%s`!",
+					Message
+				),
+				"Integrity",
+				"Loading"
+			)
+		end)
 	end
 
 	TAC.Plugins = { }
@@ -628,10 +657,21 @@ function TAC.LoadCode(Code, File)
 		)
 	end
 
-	Code = CompileString(Code, File or "MISSING")
+	local Status = CompileString(Code, File or "MISSING", false)
 	
-	if Code then
-		table.insert(TAC.Plugins, Code)
+	if isfunction(Status) then
+		table.insert(TAC.Plugins, Status)
+	else
+		TAC.Audit(
+			string.format(
+				"Got compile error `%s`!",
+				Status
+			),
+			"Integrity",
+			"Loading"
+		)
+		
+		TAC.Loaded = TAC.Loaded - 1
 	end
 end
 
@@ -764,6 +804,10 @@ for k, Data in ipairs(TAC.Libraries.Slots) do
 end
 
 function TAC.Libraries.Run()
+	if not TAC.Config then
+		return
+	end
+
 	local Config = TAC.Config.Integrity.Libraries
 
 	if not Config.Enabled then
@@ -785,23 +829,29 @@ end
 
 TAC.Hooks.Add("TAC.TransferConfig", "TAC.Libraries.Run", TAC.Libraries.Run)
 
+--- Game Events ---
+
+TAC.GameEvents = {
+	Cache = TAC.Lists.Merge("Events")
+}
+
+TAC.Detour.Register("gameevent.Listen", function(Original, Hook, ...)
+	TAC.GameEvents.Cache[Hook] = true
+
+	TAC.Captures.Stack("gameevent.Listen")
+
+	return Original(Hook, ...)
+end)
+
 --- Lua Directory Audit ---
 
 function TAC.DirectoryAudit()
-	if not TAC.Config.DirectoryAudit then
-		return
-	end
-
 	local Luas = file.Find("lua/*.lua", "GAME")
 
 	if #Luas ~= 0 then
-		TAC.Audit(
-			string.format(
-				"Player might be cheating, investigate! Found %i Lua files, expected none!",
-				#Luas
-			),
-			"Integrity",
-			"Lua Directory Scan"
+		TAC.Atlas:Send(
+			"Directory Audit",
+			Luas
 		)
 	end
 end
@@ -811,9 +861,14 @@ TAC.Hooks.Add("TAC.TransferConfig", "TAC.DirectoryAudit", TAC.DirectoryAudit)
 --- Captures ---
 
 TAC.Captures = {
-	Data = { },
-	Ran = { }
+	Ran = { },
+	Hot = { }
 }
+
+function TAC.Captures.ClearHotTraces()
+	TAC.Captures.Hot = { }
+	timer.Simple(TAC.Config and TAC.Config.HT or 300, TAC.Captures.ClearHotTraces)
+end
 
 function TAC.Captures.Direct(Function, Message)
 	local Data = TAC.GenerateBuffer(Function)
@@ -835,19 +890,25 @@ function TAC.Captures.Direct(Function, Message)
 end
 
 function TAC.Captures.Stack(Message)
-	for i = 2, 8 do 
+	for i = 3, 8 do 
 		local Info = debug.getinfo(i, "f")
-	
+		
 		if not Info then
 			break
 		end
 		
 		local Hash = tostring(Info.func)
 		
-		if TAC.Captures.Ran[Hash] then
+		local Hot = (TAC.Captures.Hot[Hash] or 0) + 1
+
+		TAC.Captures.Hot[Hash] = Hot
+
+		if Hot > 15 then
+			break
+		elseif TAC.Captures.Ran[Hash] then
 			continue
 		end
-		
+
 		TAC.Captures.Direct(Info.func, Message)
 		
 		TAC.Captures.Ran[Hash] = true
@@ -864,6 +925,8 @@ end
 
 TAC.Secure[TAC_Capture_Stack] = true
 TAC.Secure[TAC_Capture_Direct] = true
+
+TAC.Captures.ClearHotTraces()
 
 --- Detours ---
 

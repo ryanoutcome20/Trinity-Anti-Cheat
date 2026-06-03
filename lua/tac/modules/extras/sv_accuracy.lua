@@ -28,12 +28,6 @@ function TAC.Accuracy.Compute(Player, Data)
 		return
 	end
 	
-	local cOld = Player:Get("SCP")
-	
-	if not cOld then
-		return
-	end
-	
 	local Time = CurTime()
 	
 	local Info = Player:Get("Accuracy Info", {
@@ -43,6 +37,12 @@ function TAC.Accuracy.Compute(Player, Data)
 	})
 	
 	if Info.Last > Time then
+		return
+	end
+
+	local cOld = Player:Get("SCP")
+	
+	if not cOld then
 		return
 	end
 	

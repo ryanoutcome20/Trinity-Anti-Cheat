@@ -33,7 +33,7 @@ MsgN("  Caching resources")
 
 --- Config ---
 
-TAC.Version = "0.3.1"
+TAC.Version = "0.3.2"
 TAC.Edition = "Release"
 
 MsgN("  Loading config")
@@ -42,11 +42,9 @@ include("tac/config/server.lua")
 --- Clientside ---
 
 MsgN("  Creating clientside")
-AddCSLuaFile("includes/extensions/client/panel/scriptedpanels.lua")
 AddCSLuaFile("includes/extensions/player_auth.lua")
 AddCSLuaFile("includes/extensions/coroutine.lua")
 AddCSLuaFile("includes/modules/concommand.lua")
-AddCSLuaFile("includes/modules/draw.lua")
 AddCSLuaFile("includes/modules/team.lua")
 AddCSLuaFile("tac/client.lua")
 
@@ -65,6 +63,9 @@ AddCSLuaFile("external/atlas/cl_atlas.lua")
 
 MsgN("  Creating pLib instance")
 include("external/sv_plib.lua")
+
+MsgN("  Creating gXML instance")
+include("external/sv_gxml.lua")
 
 --- Lists ---
 

@@ -27,6 +27,7 @@ function TAC.Transfer.Step(Player, ID)
 	local File = TAC.Transfer.Get(Index)
 	
 	if not File then
+		hook.Run("TAC.PreTransferStopped", Player)
 		hook.Run("TAC.TransferStopped", Player)
 		return timer.Remove(ID)
 	end

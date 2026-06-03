@@ -59,6 +59,18 @@ function TAC.Fix(Text)
 	return Text
 end
 
+function TAC.Random(Length)
+	Length = Length or math.random(20, 40)
+	
+	local Text = ""
+	
+	for i = 1, Length do
+		Text = Text .. string.char(math.random(97, 122))
+	end
+	
+	return Text
+end
+
 function TAC.Enum(...)
 	for k, Name in pairs({...}) do 
 		_G[Name] = k - 1
@@ -123,7 +135,7 @@ function TAC.IsStaff(Player)
 	return false
 end
 
-function TAC.Format(Token, Text, ...)
+function TAC.Format(Token, Text, jsonSafe)
 	if not Token then
 		return
 	end
@@ -137,8 +149,12 @@ function TAC.Format(Token, Text, ...)
 	end
 
 	local Player = Token.Player
-	
-	local Interpolated = string.Interpolate(Text, {
+
+	if not Player then
+		return "<player error>"
+	end
+
+	local Interpolate = {
 		["Name"] = TAC.Fix(Player:Name()),
 		["SteamID64"] = Player:SteamID64(),
 		["SteamID"] = Player:SteamID(),
@@ -148,19 +164,32 @@ function TAC.Format(Token, Text, ...)
 		["Position"] = tostring(Player:GetPos()),
 		["Angle"] = tostring(Player:EyeAngles()),
 		
-		["Info"] = Token.Info,
-		["ID"] = Token.ID,
+		["Info"] = Token.Info or "<no value>",
+		["ID"] = Token.ID or "<no value>",
+		["Category"] = Token.Category or "<no value>",
+		["Type"] = Token.Method == PUNISHMENT_LOG and "Logged" or "Punished",
+		["Description"] = Token.Description or "<no value>",
+		["Reason"] = Token.Reason or "<no value>",
+
+		["Timer"] = Token.Timer and tostring(math.Round(Token.Timer, 2)) or "<no value>",
 		
-		["Timer"] = Token.Timer and tostring(math.Round(Token.Timer, 2)) or "N/A",
-		
-		["Flags"] = tostring(Token.FlagsCount) or "N/A",
+		["Flags"] = tostring(Token.FlagsCount) or "<no value>",
+
+		["Image"] = Player.Avatar or "<no value>",
 		
 		["Contact"] = TAC.Config.Contact,
 		["Map"] = game.GetMap(),
-		["Gamemode"] = engine.ActiveGamemode()
-	})
+		["Gamemode"] = engine.ActiveGamemode(),
+		["Time"] = os.date("%d/%m/%Y %H:%M:%S")
+	}
+
+	if jsonSafe then
+		for k,v in pairs(Interpolate) do 
+			Interpolate[k] = string.Replace(v, "\"", "'")
+		end
+	end
 	
-	return string.format(Interpolated, ...)
+	return string.Interpolate(Text, Interpolate)
 end
  
 function TAC.Tell(What, Who, Type, Sound, Ignore)

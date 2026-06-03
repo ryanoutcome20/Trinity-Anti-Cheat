@@ -1,0 +1,22 @@
+{
+  "content": null,
+  "embeds": [
+    {
+      "title": "Punishment ({Type})",
+      "description": "Name: {Name}\nCategory: {Category}\nModule: {ID}\nResult: {Type}\nReason: {Reason}",
+      "color": 3381759,
+      "author": {
+        "name": "{Name}",
+        "url": "https://steamcommunity.com/profiles/{SteamID64}",
+        "icon_url": "{Image}"
+      },
+      "footer": {
+        "text": "{Time}",
+        "icon_url": "https://i.imgur.com/uoo7PHv.png"
+      }
+    }
+  ],
+  "username": "Trinity Anti-Cheat",
+  "avatar_url": "https://cdn.discordapp.com/icons/1410210633302937622/73af224a00b9e34f0188a8a935dab585.webp?size=60&quality=lossless",
+  "attachments": []
+}

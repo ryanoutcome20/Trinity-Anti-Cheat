@@ -1,12 +1,12 @@
 <div align="center">
-  <img width="256" height="256" alt="GitHub Icon" src="https://github.com/user-attachments/assets/3a73664a-c4ba-4728-a113-b3d1c1267ce5" />
+  <img width="512" height="200" alt="GitHub Icon" src="https://github.com/user-attachments/assets/3a73664a-c4ba-4728-a113-b3d1c1267ce5" />
 
   Trinity Anti-Cheat
   <hr>
   
   <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/ryanoutcome20/Trinity-Anti-Cheat/dev?style=plastic&color=blue&logo=github">
   <a href="https://discord.gg/Brdm4tFG9K"><img alt="Discord" src="https://img.shields.io/discord/1410210633302937622?style=plastic&color=blue&labelColor=grey&label=Discord&logo=discord"></a>
-  <img alt="Version 0.3" src="https://img.shields.io/badge/Version-0.3.1-blue?style=plastic&logo=lua">
+  <img alt="Version 0.3.2" src="https://img.shields.io/badge/Version-0.3.2-blue?style=plastic&logo=lua">
   
   <hr>
 </div>
@@ -76,10 +76,14 @@ If you experience any issues you should consult the [troubleshooting documentati
 
 ## Credits
 
-* Srlion - The SFS serialization library.
-* Vectivus - The print library.
-* Wholecream - Providing some detection ideas.
-* Matthew B. (HeX) - Providing the biggest source of motivation to finish this project and awesome detection resources for when I'm out of ideas. 
+* [Srlion](https://github.com/srlion) - The SFS serialization library.
+* [Vectivus](https://github.com/vectivuss) - The print library.
+* [Wholecream](https://github.com/blueshank-gh) - Providing some detection ideas.
+
+* [Dotty](https://github.com/GomeyDoge) - Issue testing.
+* [Lag](https://github.com/lag225) - Issue testing.
+
+* Matthew B. (General HeX) - Providing the biggest source of motivation to finish this project and awesome detection resources for when I'm out of ideas. Sorry I couldn't get a chance to apologize.
 
 ## License
 
