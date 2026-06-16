@@ -296,7 +296,8 @@ function TAC.GenerateBuffer(Function)
 		
 		j_linedefined = FuncInfo.linedefined or "ld",
 		
-		isfunc = GetInfo.name and GetInfo.namewhat and GetInfo.linedefined > 0
+		name = GetInfo.name,
+		namewhat = GetInfo.namewhat,
 	}
 end
 
@@ -880,7 +881,6 @@ function TAC.Captures.Direct(Function, Message)
 	Data.Message = Message
 
 	Data.source = nil
-	Data.isfunc = nil
 
 	TAC.Batch.Add(
 		"Function", 
@@ -951,18 +951,6 @@ function TAC.Detours.Whitelist.Whitelisted(Function, Info)
 
 	if Whitelist.Counter == 0 or not Whitelist.Identifiers[Info.short_src] then
 		return false
-	end
-
-	if tobool(Info.isfunc) and Info.what ~= "main" then
-		if Info.namewhat == "global" and not _G[Info.name] then
-			TAC.Audit(
-				"Whitelist encountered secure sub environment, possible bypass attempt?", 
-				"Detours",
-				"Sub Environment"
-			)
-		end
-		
-		return true
 	end
 	
 	local Hash = Whitelist.Hash(Function, Info.short_src)
