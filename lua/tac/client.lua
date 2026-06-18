@@ -284,20 +284,22 @@ end
 
 --- Function Buffers ---
 
-function TAC.GenerateBuffer(Function)
-	local GetInfo, FuncInfo = debug.getinfo(Function, "fnS"), jit.util.funcinfo(Function)
+function TAC.GenerateBuffer(Function, GetInfo)
+	local GetInfo = GetInfo or debug.getinfo(Function, "fnS")
+	local FuncInfo = FuncInfo or jit.util.funcinfo(Function)
 
 	return {
 		source = tostring(GetInfo.source or "s"):gsub("\\", "/"), -- OS specific. (#13)
 		short_src = GetInfo.short_src or "sh",
 		what = GetInfo.what or "wh",
+		currentline = GetInfo.currentline or "cl",
 		linedefined = GetInfo.linedefined or "ld",
 		lastlinedefined = GetInfo.lastlinedefined or "lld",
 		
 		j_linedefined = FuncInfo.linedefined or "ld",
 		
-		name = GetInfo.name,
-		namewhat = GetInfo.namewhat,
+		name = GetInfo.name or "nn",
+		namewhat = GetInfo.namewhat or "nw",
 	}
 end
 
@@ -862,14 +864,8 @@ TAC.Hooks.Add("TAC.TransferConfig", "TAC.DirectoryAudit", TAC.DirectoryAudit)
 --- Captures ---
 
 TAC.Captures = {
-	Ran = { },
-	Hot = { }
+	Ran = { }
 }
-
-function TAC.Captures.ClearHotTraces()
-	TAC.Captures.Hot = { }
-	timer.Simple(TAC.Config and TAC.Config.HT or 300, TAC.Captures.ClearHotTraces)
-end
 
 function TAC.Captures.Direct(Function, Message)
 	local Data = TAC.GenerateBuffer(Function)
@@ -890,28 +886,64 @@ function TAC.Captures.Direct(Function, Message)
 end
 
 function TAC.Captures.Stack(Message)
-	for i = 3, 8 do 
-		local Info = debug.getinfo(i, "f")
-		
+	local Captures = { }
+
+	-- Index nth of captures.
+	local nth = 1
+
+	for i = 1, 8 do
+		-- Validate.
+		local Info = debug.getinfo(i)
+
 		if not Info then
 			break
 		end
-		
+
+		-- Check hash against hot traces.
 		local Hash = tostring(Info.func)
+
+		if TAC.Captures.Ran[Hash] then
+			continue
+		end
 		
-		local Hot = (TAC.Captures.Hot[Hash] or 0) + 1
+		TAC.Captures.Ran[Hash] = true
 
-		TAC.Captures.Hot[Hash] = Hot
+		-- Check whitelist.
+		local Whitelisted = TAC.Detours.Whitelist.Whitelisted(Info.func, Info)
 
-		if Hot > 15 then
-			break
-		elseif TAC.Captures.Ran[Hash] then
+		if Whitelisted then
 			continue
 		end
 
-		TAC.Captures.Direct(Info.func, Message)
-		
-		TAC.Captures.Ran[Hash] = true
+		-- Update info.
+		local Data = TAC.GenerateBuffer(Info.func, Info)
+
+		Data.Message = Message .. " (" .. i .. ")"
+
+		Data.source = nil
+
+		Captures[nth] = Data
+
+		nth = nth + 1
+	end
+
+	for Index, Data in pairs(Captures) do 
+		if Data.name ~= "nn" then
+			local Next = Captures[Index + 1]
+
+			Data.nextsrc = Next and Next.short_src
+			Data.nextline = Next and Next.currentline 
+		end
+
+		if Index == #Captures then
+			Data.last = true
+		end
+
+		TAC.Batch.Add(
+			"Function", 
+			Data, 
+			TAC.Size(Data)
+		)
 	end
 end
 
@@ -925,8 +957,6 @@ end
 
 TAC.Secure[TAC_Capture_Stack] = true
 TAC.Secure[TAC_Capture_Direct] = true
-
-TAC.Captures.ClearHotTraces()
 
 --- Detours ---
 
@@ -950,17 +980,17 @@ function TAC.Detours.Whitelist.Whitelisted(Function, Info)
 	local Whitelist = TAC.Detours.Whitelist
 
 	if Whitelist.Counter == 0 or not Whitelist.Identifiers[Info.short_src] then
-		return false
+		return false, tostring(Function)
 	end
 	
 	local Hash = Whitelist.Hash(Function, Info.short_src)
 
 	if Hash and Whitelist.Hashes[Hash] then
 		Whitelist.Counter = math.max(Whitelist.Counter - 1, 0)
-		return true
+		return true, Hash
 	end
 	
-	return false
+	return false, Hash
 end
 
 function TAC.Detours.Whitelist.Hash(Function, Identifier)
