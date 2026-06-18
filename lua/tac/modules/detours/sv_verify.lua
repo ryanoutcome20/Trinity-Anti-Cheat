@@ -78,6 +78,12 @@ function TAC.Detours.CheckLua(Player, Object)
 			type(Object.linedefined), 
 			type(Object.j_linedefined)
 		)
+	elseif Object.last and not isbool(Object.last) then
+		return TAC.Detours.Wrapper(
+			Player, 
+			"Emulated Lua [last; bool or nil expected got %s]", 
+			type(Object.last)
+		)
 	end
 
 	if Object.j_linedefined ~= Object.linedefined then
@@ -112,6 +118,38 @@ function TAC.Detours.CheckLua(Player, Object)
 			TAC.Fix(Object.Message), 
 			TAC.Fix(Object.short_src)
 		)
+	elseif Object.name ~= "nn" and not Object.last then
+		if not isnumber(Object.nextline) then
+			return TAC.Detours.Wrapper(
+				Player, 
+				"Emulated Lua [next; number expected got %s]", 
+				type(Object.nextline)
+			)
+		elseif not isstring(Object.nextsrc) then
+			return TAC.Detours.Wrapper(
+				Player, 
+				"Emulated Lua [next; string expected got %s]", 
+				type(Object.nextsrc)
+			)
+		end
+
+		local nextCache = TAC.Detours.Get(Object.nextsrc)
+
+		if nextCache.Split then
+			local Index = nextCache.Split[Object.nextline]
+		
+			if not Index then
+				return TAC.Detours.Wrapper(
+					Player, 
+					"Emulated Lua [next; invalid cache]"
+				)
+			elseif not string.find(Index, Object.name) then
+				return TAC.Detours.Wrapper(
+					Player, 
+					"Emulated Lua [next; invalid data]"
+				)
+			end
+		end
 	end
 	
 	return true
@@ -126,7 +164,7 @@ function TAC.Detours.Verify(Mode, Player, Objects)
 		)
 	end
 	
-	for k, Object in ipairs(Objects) do 		
+	for k, Object in ipairs(Objects) do
 		if TAC.Detours.Whitelisted(Player, Object.short_src, Object.what) then
 			continue
 		end
