@@ -39,7 +39,8 @@ function TAC.Detours.File(Directory)
 		return TAC.Detours.Cache[Directory]
 	end
 
-	TAC.Detours.Cache[Directory].Lines = #string.Split(Code, "\n")
+	TAC.Detours.Cache[Directory].Split = string.Split(Code, "\n")
+	TAC.Detours.Cache[Directory].Lines = #TAC.Detours.Cache[Directory].Split
 	
 	return TAC.Detours.Cache[Directory]
 end
