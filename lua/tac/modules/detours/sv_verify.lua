@@ -48,7 +48,43 @@ function TAC.Detours.CheckC(Player, Object)
 			"Lua Executor"
 		)
 	end
-	
+
+	if Object.name ~= "nn" and not Object.last then
+		if not isnumber(Object.nextline) then
+			return TAC.Detours.Wrapper(
+				Player, 
+				"Emulated C [next; number expected got %s]", 
+				type(Object.nextline)
+			)
+		elseif not isstring(Object.nextsrc) then
+			return TAC.Detours.Wrapper(
+				Player, 
+				"Emulated C [next; string expected got %s]", 
+				type(Object.nextsrc)
+			)
+		end
+
+		local nextCache = TAC.Detours.Get(Object.nextsrc)
+
+		if nextCache.Split then
+			local Index = nextCache.Split[Object.nextline]
+		
+			if not Index then
+				return TAC.Detours.Wrapper(
+					Player, 
+					"Emulated C [next; invalid cache]"
+				)
+			elseif not string.find(Index, Object.name) then
+				PrintTable(Object)
+				MsgN(Index)
+				return TAC.Detours.Wrapper(
+					Player, 
+					"Emulated C [next; invalid data]"
+				)
+			end
+		end
+	end
+
 	return true
 end
 
@@ -83,6 +119,21 @@ function TAC.Detours.CheckLua(Player, Object)
 			Player, 
 			"Emulated Lua [last; bool or nil expected got %s]", 
 			type(Object.last)
+		)
+	elseif not isstring(Object.name) then
+		return TAC.Detours.Wrapper(
+			Player, 
+			"Emulated Lua [name; string expected got %s]", 
+			type(Object.name)
+		)
+	end
+
+	if Object.last and (Object.nextsrc or Object.nextline) then
+		return TAC.Detours.Wrapper(
+			Player, 
+			"Emulated Lua [fake last; nextsrc: %s; nextline: %s]", 
+			type(Object.nextsrc),
+			type(Object.nextline)
 		)
 	end
 

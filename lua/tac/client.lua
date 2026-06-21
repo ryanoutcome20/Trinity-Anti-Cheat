@@ -298,8 +298,7 @@ function TAC.GenerateBuffer(Function, GetInfo)
 		
 		j_linedefined = FuncInfo.linedefined or "ld",
 		
-		name = GetInfo.name or "nn",
-		namewhat = GetInfo.namewhat or "nw",
+		name = GetInfo.name or "nn"
 	}
 end
 
@@ -876,6 +875,7 @@ function TAC.Captures.Direct(Function, Message)
 
 	Data.Message = Message
 
+	Data.name = nil
 	Data.source = nil
 
 	TAC.Batch.Add(
@@ -888,8 +888,8 @@ end
 function TAC.Captures.Stack(Message)
 	local Captures = { }
 
-	-- Index nth of captures.
-	local nth = 1
+	local Tmp = 1
+	local tmpData = { }
 
 	for i = 1, 8 do
 		-- Validate.
@@ -898,6 +898,8 @@ function TAC.Captures.Stack(Message)
 		if not Info then
 			break
 		end
+
+		tmpData[i] = Info
 
 		-- Check hash against hot traces.
 		local Hash = tostring(Info.func)
@@ -918,26 +920,26 @@ function TAC.Captures.Stack(Message)
 		-- Update info.
 		local Data = TAC.GenerateBuffer(Info.func, Info)
 
+		Data.Index = i
 		Data.Message = Message .. " (" .. i .. ")"
 
-		Data.source = nil
+		Captures[Tmp] = Data
 
-		Captures[nth] = Data
-
-		nth = nth + 1
+		Tmp = Tmp + 1
 	end
 
-	for Index, Data in pairs(Captures) do 
-		if Data.name ~= "nn" then
-			local Next = Captures[Index + 1]
+	for Index, Data in pairs(Captures) do
+		if Index == #Captures then
+			Data.last = true
+		elseif Data.name then
+			local Next = tmpData[Data.Index + 1]
 
 			Data.nextsrc = Next and Next.short_src
 			Data.nextline = Next and Next.currentline 
 		end
 
-		if Index == #Captures then
-			Data.last = true
-		end
+		Data.Index = nil
+		Data.source = nil
 
 		TAC.Batch.Add(
 			"Function", 
