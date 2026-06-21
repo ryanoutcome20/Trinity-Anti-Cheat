@@ -981,14 +981,13 @@ setmetatable(TAC.Detours.Whitelist.Dumps, {
 function TAC.Detours.Whitelist.Whitelisted(Function, Info)
 	local Whitelist = TAC.Detours.Whitelist
 
-	if Whitelist.Counter == 0 or not Whitelist.Identifiers[Info.short_src] then
-		return false, tostring(Function)
+	if Whitelist.Identifiers[Info.short_src] then
+		return true, tostring(Function)
 	end
 	
 	local Hash = Whitelist.Hash(Function, Info.short_src)
 
 	if Hash and Whitelist.Hashes[Hash] then
-		Whitelist.Counter = math.max(Whitelist.Counter - 1, 0)
 		return true, Hash
 	end
 	
@@ -1021,10 +1020,6 @@ function TAC.Detours.Whitelist.Hash(Function, Identifier)
 	return Checksum
 end
 
-function TAC.Detours.Whitelist.Increment()
-	TAC.Detours.Whitelist.Counter = TAC.Detours.Whitelist.Counter + 1
-end
-
 function TAC.Detours.Whitelist.Update(Code, Identifier)
 	local Hash = TAC.Detours.Whitelist.Hash(Code, Identifier)
 
@@ -1046,8 +1041,6 @@ TAC.Detour.Register("RunString", function(Original, Code, Identifier, ...)
 		TAC.Detours.Whitelist.Update(Code, Identifier)
 	end
 	
-	TAC.Detours.Whitelist.Increment()
-	
 	return Original(Code, Identifier, ...)
 end)
 
@@ -1061,8 +1054,6 @@ TAC.Detour.Register("RunStringEx", function(Original, Code, Identifier, ...)
 	if isstring(Code) then
 		TAC.Detours.Whitelist.Update(Code, Identifier)
 	end
-	
-	TAC.Detours.Whitelist.Increment()
 	
 	return Original(Code, Identifier, ...)
 end)
@@ -1079,8 +1070,6 @@ TAC.Detour.Register("CompileString", function(Original, Code, Identifier, ...)
 	if isfunction(Output) then		
 		TAC.Detours.Whitelist.Update(Output, Identifier)
 	end
-	
-	TAC.Detours.Whitelist.Increment()
 	
 	return Output
 end)
