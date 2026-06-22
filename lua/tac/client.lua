@@ -875,6 +875,7 @@ function TAC.Captures.Direct(Function, Message)
 
 	Data.Message = Message
 
+	Data.last = true
 	Data.name = nil
 	Data.source = nil
 
