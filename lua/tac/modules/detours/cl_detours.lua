@@ -63,9 +63,6 @@ Wrap("input.SetCursorPos")
 
 Wrap("net.SendToServer")
 
-Wrap("player.GetAll")
-Wrap("player.GetHumans")
-
 Wrap("gui.EnableScreenClicker")
 
 Wrap("render.IsTakingScreenshot")
