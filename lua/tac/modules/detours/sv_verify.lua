@@ -120,7 +120,7 @@ function TAC.Detours.CheckLua(Player, Object)
 			"Emulated Lua [last; bool or nil expected got %s]", 
 			type(Object.last)
 		)
-	elseif not isstring(Object.name) then
+	elseif Object.name and not isstring(Object.name) then
 		return TAC.Detours.Wrapper(
 			Player, 
 			"Emulated Lua [name; string expected got %s]", 
