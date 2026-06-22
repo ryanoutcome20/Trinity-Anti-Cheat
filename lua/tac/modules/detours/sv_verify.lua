@@ -75,8 +75,6 @@ function TAC.Detours.CheckC(Player, Object)
 					"Emulated C [next; invalid cache]"
 				)
 			elseif not string.find(Index, Object.name) then
-				PrintTable(Object)
-				MsgN(Index)
 				return TAC.Detours.Wrapper(
 					Player, 
 					"Emulated C [next; invalid data]"
