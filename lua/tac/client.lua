@@ -203,6 +203,36 @@ function TAC.GetBinaryNames(Name)
 	return Names
 end
 
+--- Timing Manager ---
+
+TAC.Timing = { }
+
+function TAC.Timing.New(Function, Config, Repeatable, ...)
+	if not Config.Enabled then
+		return
+	end
+
+	if not Repeatable then
+		return timer.Simple(Config.Delay, Function)
+	end
+
+	local Data = { ... }
+	
+	local Sub;
+
+	Sub = function()
+		if not Config.Enabled then
+			return
+		end
+
+		Function(unpack(Data))
+
+		timer.Simple(Config.Delay, Sub)
+	end
+
+	timer.Simple(Config.Delay, Sub)
+end
+
 --- List Manager ---
 
 TAC.Lists = { 
