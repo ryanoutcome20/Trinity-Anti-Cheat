@@ -1431,5 +1431,5 @@ pStub.Register("Heartbeat", {
 
 	Method = PUNISHMENT_KICK,
 
-	Await = 30
+	Await = 300
 })

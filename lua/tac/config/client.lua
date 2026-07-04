@@ -163,7 +163,7 @@ Config.ESP = {
 Config.Heartbeat = {
 	Enabled = true,
 
-	Await = 15
+	Await = 150
 }
 
 --- Scans ---
