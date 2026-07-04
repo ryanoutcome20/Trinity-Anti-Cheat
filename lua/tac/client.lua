@@ -212,12 +212,14 @@ function TAC.Timing.New(Function, Config, Repeatable, ...)
 		return
 	end
 
-	if not Repeatable then
+	if Config.Delay == 0 then
+		return Function(...)
+	elseif not Repeatable then
 		return timer.Simple(Config.Delay, Function)
 	end
 
 	local Data = { ... }
-	
+
 	local Sub;
 
 	Sub = function()
