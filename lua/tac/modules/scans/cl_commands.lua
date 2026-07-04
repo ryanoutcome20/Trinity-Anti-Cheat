@@ -2,10 +2,6 @@ local Config = TAC.Config.Scans.Commands
 local List = TAC.Lists.Merge("Commands")
 
 local function Scan()
-	if not Config.Enabled then
-		return
-	end
-
 	local Name, Value = debug.getupvalue(concommand.GetTable, 1)
 	
 	if not istable(Value) then
@@ -29,8 +25,6 @@ local function Scan()
 			continue
 		end
 	end
-	
-	timer.Simple(Config.Delay, Scan)
 end
 
 local function Detour()
@@ -42,7 +36,7 @@ local function Detour()
 		return TAC.Flag("Commands", "Bad Commands [missing]")
 	end
 
-	timer.Simple(Config.Delay, Scan)
+	TAC.Timing.New(Scan, Config, true)
 
 	if not Config.Detour then
 		return
