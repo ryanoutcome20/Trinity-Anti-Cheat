@@ -41,10 +41,8 @@ local function Scan()
 			TAC.Captures.Direct(Func, "hook.GetTable (sub)")
 		end
 	end
-	
-	timer.Simple(Config.Delay, Scan)
 end
 
 hook.Add("TAC.Initialize", "TAC.Hooks", function()
-	timer.Simple(Config.Delay, Scan)
+	TAC.Timing.New(Scan, Config, true)
 end)
