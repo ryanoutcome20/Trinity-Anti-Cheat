@@ -56,6 +56,6 @@ end
 
 if Config.Enabled then
 	TAC.Timing.New(TAC.Stack.Caller, Config, true)
-end
 
-TAC.Stack.Self()
+	TAC.Stack.Self()
+end
