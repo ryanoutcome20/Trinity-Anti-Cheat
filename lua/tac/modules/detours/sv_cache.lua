@@ -39,6 +39,9 @@ function TAC.Detours.File(Directory)
 		return TAC.Detours.Cache[Directory]
 	end
 
+	Code = string.gsub(Code, "\r\n", "\n")
+	Code = string.gsub(Code, "\r", "\n")
+
 	TAC.Detours.Cache[Directory].Split = string.Split(Code, "\n")
 	TAC.Detours.Cache[Directory].Lines = #TAC.Detours.Cache[Directory].Split
 	
