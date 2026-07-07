@@ -227,8 +227,8 @@ function TAC.Timing.New(Function, Config, Repeatable, ...)
 			return
 		end
 
-		Function(unpack(Data))
-
+		local Return = Function(unpack(Data))
+		
 		timer.Simple(Config.Delay, Sub)
 	end
 
@@ -609,13 +609,15 @@ function TAC.FlagEx(Buffered, cID, Message, ...)
 			#Data.cID + #Data.Message
 		)
 		
-		return
+		return true
 	end
 	
 	TAC.Atlas:Send(
 		"Flag", 
 		Data
 	)
+
+	return true
 end
 
 function TAC.Flag(cID, Message, ...)
