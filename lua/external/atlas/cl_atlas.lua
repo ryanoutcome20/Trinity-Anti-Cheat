@@ -327,4 +327,8 @@ net_Receive("tac-networking", function()
     Atlas:Receive()
 end)
 
+timer_Simple(0, function() 
+    TAC_Capture_Stack("Atlas")
+end)
+
 return Atlas
