@@ -5,6 +5,8 @@ local tostring = tostring
 local tonumber = tonumber
 local tobool = tobool
 local pairs = pairs
+local unpack = unpack
+local TypeID = TypeID
 
 local net_Start = net.Start
 local net_SendToServer = net.SendToServer
@@ -25,6 +27,7 @@ local util_Compress = util.Compress
 local util_Decompress = util.Decompress
 local table_concat = table.concat
 local table_insert = table.insert
+local timer_Simple = timer.Simple
 
 local SFS = include("external/sh_sfs.lua")
 
@@ -252,7 +255,7 @@ function Atlas:Send(Port, ...)
     local Size     = Count
 
     for i = 1, Size do 
-        timer.Simple(i, function()
+        timer_Simple(i, function()
             net_Start("tac-networking")
                 self:Write(table_concat(Split[i]), Size, Checksum, i, Port)
             net_SendToServer()
