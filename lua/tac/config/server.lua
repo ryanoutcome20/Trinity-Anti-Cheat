@@ -906,6 +906,10 @@ Config.WorldClicker = true
 	
 	This will never add onto the PVS, just remove. Also won't ever effect
 	entities, just players.
+
+	Because this is an intensive feature it comes with the ability to disable
+	it whenever you get too many players in your server (maximumPlayers). Set
+	this to -1 to disable it entirely.
 ]]--
 
 Config.PVS = {
@@ -914,7 +918,9 @@ Config.PVS = {
 	squareSize = 1,
 	squaredSize = 256,
 	intervalScale = 128,
-	Step = 8
+	Step = 8,
+
+	maximumPlayers = 16
 }
 
 --- Far ESP Breaker ---
