@@ -82,7 +82,9 @@ Config.Integrity = {
 	},
 
 	Stack = {
-		Enabled = true
+		Enabled = true,
+
+		Delay = 300
 	},
 
 	DebugSelf = {
