@@ -705,7 +705,11 @@ pStub.Register("Act", {
 
 	Method = PUNISHMENT_KICK,
 
-	CheckGamemode = false
+	CheckGamemode = false,
+
+	Flags = true,
+	Maximum = 5,
+	Decay = 1
 })
 
 --- Extras ---
