@@ -2,13 +2,17 @@
 local AddConsoleCommand = AddConsoleCommand
 local string = string
 local Msg = Msg
+local isfunction = isfunction
+local type = type
+local ErrorNoHaltWithStack = ErrorNoHaltWithStack
+local _G = _G
 
 --[[---------------------------------------------------------
    Name: concommand
    Desc: A module to take care of the registration and calling
          of Lua console commands.
 -----------------------------------------------------------]]
-module( "concommand", package.seeall )
+module( "concommand" )
 
 local CommandList = {}
 local CompleteList = {}
@@ -18,9 +22,9 @@ local CompleteList = {}
    Desc: Returns the table of console commands and auto complete
 -----------------------------------------------------------]]
 function GetTable()
-	
-    if ( _G.TAC_Capture_Stack ) then
-        TAC_Capture_Stack( "concommand.GetTable" )
+    	
+    if ( _G && _G.TAC_Capture_Stack ) then
+        _G.TAC_Capture_Stack( "concommand.Add" )
     end
 
 	return CommandList, CompleteList
@@ -32,10 +36,13 @@ end
 -----------------------------------------------------------]]
 function Add( name, func, completefunc, help, flags )
     	
-    if ( _G.TAC_Capture_Stack ) then
-        TAC_Capture_Stack( "concommand.Add" )
+    if ( _G && _G.TAC_Capture_Stack ) then
+        _G.TAC_Capture_Stack( "concommand.Add" )
     end
-    
+	
+	if ( !isfunction( func ) ) then ErrorNoHaltWithStack( "bad argument #2 to 'Add' (function expected, got " .. type( func ) .. ")", 2 ) end
+	if ( completefunc != nil && !isfunction( completefunc ) ) then ErrorNoHaltWithStack( "bad argument #3 to 'Add' (function expected, got " .. type( completefunc ) .. ")", 2 ) end
+
 	local LowerName = string.lower( name )
 	CommandList[ LowerName ] = func
 	CompleteList[ LowerName ] = completefunc
@@ -47,11 +54,6 @@ end
    Desc: Removes a console command
 -----------------------------------------------------------]]
 function Remove( name )
-    	
-    if ( _G.TAC_Capture_Stack ) then
-        TAC_Capture_Stack( "concommand.Remove" )
-    end
-
 	local LowerName = string.lower( name )
 	CommandList[ LowerName ] = nil
 	CompleteList[ LowerName ] = nil
