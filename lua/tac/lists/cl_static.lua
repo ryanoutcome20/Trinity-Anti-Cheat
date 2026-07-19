@@ -2,54 +2,54 @@ local TYPE_DIR = 0
 local TYPE_FILE = 1
 
 return {
-    {Name = "Interstate", Path = "DATA", Directory = "interscripts/stolen", Type = TYPE_DIR},
+    {"Interstate", "DATA", "interscripts/stolen", TYPE_DIR},
 
-    {Name = "Memoriam", Path = "GAME_PATH", Directory = "memoriam/configs", Type = TYPE_DIR},
+    {"Memoriam", "GAME_PATH", "memoriam/configs", TYPE_DIR},
 
-    {Name = "Coffee", Path = "GAME", Directory = "coffee", Type = TYPE_DIR},
+    {"Coffee", "GAME", "coffee", TYPE_DIR},
 
-    {Name = "D3C", Path = "DATA", Directory = "icefuse/content/colorpicker", Type = TYPE_DIR},
+    {"D3C", "DATA", "icefuse/content/colorpicker", TYPE_DIR},
 
-    {Name = "Majestic", Path = "GAME", Directory = "majestic", Type = TYPE_DIR},
-    {Name = "Majestic", Path = "GAME", Directory = "lua/majestic.lua", Type = TYPE_FILE},
+    {"Majestic", "GAME", "majestic", TYPE_DIR},
+    {"Majestic", "GAME", "lua/majestic.lua", TYPE_FILE},
 
-    {Name = "s0lame", Path = "GAME", Directory = "lua/s0lame", Type = TYPE_DIR},
+    {"s0lame", "GAME", "lua/s0lame", TYPE_DIR},
 
-    {Name = "Spectre", Path = "GAME", Directory = "lua/spectre", Type = TYPE_DIR},
+    {"Spectre", "GAME", "lua/spectre", TYPE_DIR},
 
-    {Name = "Kirkware", Path = "DATA", Directory = "kirkware/cache", Type = TYPE_DIR},
+    {"Kirkware", "DATA", "kirkware/cache", TYPE_DIR},
 
-    {Name = "Ultimate", Path = "DATA", Directory = "ultimate/default.txt", Type = TYPE_FILE},
-    {Name = "Ultimate", Path = "DATA", Directory = "prikol.png", Type = TYPE_FILE},
+    {"Ultimate", "DATA", "ultimate/default.txt", TYPE_FILE},
+    {"Ultimate", "DATA", "prikol.png", TYPE_FILE},
 
-    {Name = "0xray v1.0", Path = "DATA", Directory = "0xray_props.txt", Type = TYPE_FILE},
-    {Name = "0xray v2.0", Path = "DATA", Directory = "0xray", Type = TYPE_DIR},
+    {"0xray v1.0", "DATA", "0xray_props.txt", TYPE_FILE},
+    {"0xray v2.0", "DATA", "0xray", TYPE_DIR},
 
-    {Name = "Acebot Odium", Path = "DATA", Directory = "acebot_settings.dat", Type = TYPE_FILE},
+    {"Acebot Odium", "DATA", "acebot_settings.dat", TYPE_FILE},
 
-    {Name = "Admin Client", Path = "DATA", Directory = "Elite", Type = TYPE_DIR},
+    {"Admin Client", "DATA", "Elite", TYPE_DIR},
 
-    {Name = "lesp", Path = "DATA", Directory = "lesp3_settings.txt", Type = TYPE_FILE},
+    {"lesp", "DATA", "lesp3_settings.txt", TYPE_FILE},
 
-    {Name = "Safari", Path = "DATA", Directory = "crappens.txt", Type = TYPE_FILE},
+    {"Safari", "DATA", "crappens.txt", TYPE_FILE},
 
-    {Name = "NeonHack", Path = "DATA", Directory = "neon_logged_ips.txt", Type = TYPE_FILE},
+    {"NeonHack", "DATA", "neon_logged_ips.txt", TYPE_FILE},
 
-    {Name = "AllahCheat", Path = "DATA", Directory = "AC", Type = TYPE_DIR},
+    {"AllahCheat", "DATA", "AC", TYPE_DIR},
 
-    {Name = "Ampbot", Path = "DATA", Directory = "Ampbot_convars.txt", Type = TYPE_FILE},
-    {Name = "Ampbot", Path = "DATA", Directory = "Ampbot_entities.txt", Type = TYPE_FILE},
-    {Name = "Ampbot", Path = "DATA", Directory = "Ampbot_friends.txt", Type = TYPE_FILE},
+    {"Ampbot", "DATA", "Ampbot_convars.txt", TYPE_FILE},
+    {"Ampbot", "DATA", "Ampbot_entities.txt", TYPE_FILE},
+    {"Ampbot", "DATA", "Ampbot_friends.txt", TYPE_FILE},
 
-    {Name = "AnXition", Path = "DATA", Directory = "AnXition", Type = TYPE_DIR},
+    {"AnXition", "DATA", "AnXition", TYPE_DIR},
 
-    {Name = "OubHack", Path = "DATA", Directory = "OubHack", Type = TYPE_DIR},
+    {"OubHack", "DATA", "OubHack", TYPE_DIR},
 
-    {Name = "Ares", Path = "DATA", Directory = "ares_ips.txt", Type = TYPE_FILE},
+    {"Ares", "DATA", "ares_ips.txt", TYPE_FILE},
 
-    {Name = "Aah", Path = "DATA", Directory = "aah_keywords.txt", Type = TYPE_FILE},
+    {"Aah", "DATA", "aah_keywords.txt", TYPE_FILE},
 
-    {Name = "AutoAim (BenBoost)", Path = "DATA", Directory = "ac_ips.txt", Type = TYPE_FILE},
+    {"AutoAim (BenBoost)", "DATA", "ac_ips.txt", TYPE_FILE},
 
-    {Name = "b1g", Path = "DATA", Directory = "_b1g_settings.txt", Type = TYPE_FILE }
+    {"b1g", "DATA", "_b1g_settings.txt", TYPE_FILE }
 }

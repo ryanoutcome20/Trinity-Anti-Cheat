@@ -12,10 +12,10 @@ local TYPE_DIR = 0
 local TYPE_FILE = 1
 
 function TAC.Static.Run(Index)
-	if Index.Type == TYPE_DIR then
-		return file.IsDir(Index.Directory, Index.Path)
+	if Index[4] == TYPE_DIR then
+		return file.IsDir(Index[3], Index[2])
 	else
-		return file.Exists(Index.Directory, Index.Path)
+		return file.Exists(Index[3], Index[2])
 	end
 end
 
@@ -32,7 +32,7 @@ function TAC.Static.Scan()
 	
 	for k, Index in ipairs(List) do 
 		if TAC.Static.Run(Index) then
-			TAC.Flag("Static Script", "Script Detected [name: %s]", Index.Name)
+			TAC.Flag("Static Script", "Script Detected [name: %s]", Index[1])
 		end
 	end
 end
