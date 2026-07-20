@@ -147,5 +147,56 @@ return {
 
     {"NeatCheat", "DATA", "Neat_cheat", TYPE_DIR},
 
-    {"TimesHack", "DATA", "timeshack", TYPE_DIR}
+    {"TimesHack", "DATA", "timeshack", TYPE_DIR},
+
+    {"NillarhHack", "DATA", "NillarhHack", TYPE_DIR},
+
+    {"Nostalgia", "DATA", "nostalgia_normal.txt", TYPE_FILE},
+    {"Nostalgia", "DATA", "nostalgia_hvh.txt", TYPE_FILE},
+
+    {"OneHack", "DATA", "o_conf.dat", TYPE_FILE},
+
+    {"Lenn's Scripts", "DATA", "lua/miscellaneous-gmod-stuff-main", TYPE_DIR},
+
+    {"Pasteware", "DATA", "pa$teware.txt", TYPE_FILE},
+    {"Pasteware (Workshop)", "DATA", "pasteware_normal.txt", TYPE_FILE},
+    {"Pasteware (Workshop)", "DATA", "pasteware_hvh.txt", TYPE_FILE},
+
+    {"penisdeda", "DATA", "penisdeda", TYPE_DIR},
+
+    {"vKingMenu", "GAME", "materials/ironman.jpg", TYPE_FILE},
+    {"vKingMenu", "GAME", "materials/ironman.png", TYPE_FILE},
+
+    {"Loki", "DATA", "Lokidev_settings.dat", TYPE_FILE},
+    {"Loki", "DATA", "LokiDev_serveur_list.txt", TYPE_FILE},
+    {"Loki (PM)", "DATA", "Processdev_exploit.dat", TYPE_FILE},
+
+    {"CUniformRandomStream", "GAME", "lua/includes/modules/CUniformRandomStream.lua", TYPE_FILE},
+
+    {"Pwned", "DATA", "pwned_settings.dat", TYPE_FILE},
+
+    {"Razor HvH Base", "DATA", "newshack.txt", TYPE_FILE},
+
+    {"ReichBot", "DATA", "[Reich]IP_logs.txt", TYPE_FILE},
+
+    {"RetardScript (v1.0 full)", "DATA", "retard_theme.txt", TYPE_FILE},
+    {"RetardScript (v1.0 rewrite)", "DATA", "rh", TYPE_DIR},
+
+    {"shitcheat", "DATA", "autizam.txt", TYPE_FILE},
+
+    {"Stormbot", "DATA", "storm", TYPE_DIR},
+
+    {"TacoBot", "DATA", "tacobot_cfg.txt", TYPE_FILE},
+
+    {"TeeBot", "DATA", "TBAuth.txt", TYPE_FILE},
+
+    {"Snixzz3 (v1.0.3hrp)", "DATA", "hrp_settings.txt", TYPE_FILE},
+
+    {"WillzHax", "DATA", "p_settings.txt", TYPE_FILE},
+    {"WillzHax", "DATA", "p_entities.txt", TYPE_FILE},
+    {"WillzHax", "DATA", "p_whitelist.txt", TYPE_FILE},
+    {"WillzHax", "DATA", "p_aimkey.txt", TYPE_FILE},
+    {"WillzHax", "DATA", "p_trigkey.txt", TYPE_FILE},
+
+    {"ZBot", "DATA", "zbot", TYPE_DIR},
 }
