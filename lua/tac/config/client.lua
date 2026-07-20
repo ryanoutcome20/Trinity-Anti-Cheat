@@ -182,9 +182,7 @@ Config.Heartbeat = {
 
 Config.Scans = {
 	Binaries = {
-		Enabled = true,
-
-		Detour = true
+		Enabled = true
 	},
 
 	Commands = {

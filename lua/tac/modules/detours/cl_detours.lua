@@ -12,6 +12,7 @@ end
 
 --- Globals ---
 
+Wrap("require")
 Wrap("gcinfo")
 Wrap("collectgarbage")
 Wrap("getfenv")
