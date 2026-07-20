@@ -2,7 +2,7 @@ local Config = TAC.Config.Scans.Commands
 local List = TAC.Lists.Merge("Commands")
 
 local function Scan()
-	local Name, Value = debug.getupvalue(concommand.GetTable, 1)
+	local Name, Value = debug.getupvalue(concommand.GetTable, 2)
 	
 	if not istable(Value) then
 		Value = concommand.GetTable()
