@@ -19,7 +19,7 @@ return {
 
     {"Kirkware", "DATA", "kirkware/cache", TYPE_DIR},
 
-    {"Ultimate", "DATA", "ultimate/default.txt", TYPE_FILE},
+    {"Ultimate", "DATA", "ultimate", TYPE_DIR},
     {"Ultimate", "DATA", "prikol.png", TYPE_FILE},
 
     {"0xray v1.0", "DATA", "0xray_props.txt", TYPE_FILE},
@@ -84,6 +84,7 @@ return {
 
     {"Exie", "DATA", "EXIE_logged_ips.txt", TYPE_FILE},
 
+    {"Snowy", "DATA", "sg", TYPE_DIR},
     {"Snowy", "DATA", "sg_cache.txt", TYPE_FILE},
 
     {"FartClient", "DATA", "FartClient", TYPE_DIR},
@@ -170,6 +171,7 @@ return {
     {"Loki", "DATA", "Lokidev_settings.dat", TYPE_FILE},
     {"Loki", "DATA", "LokiDev_serveur_list.txt", TYPE_FILE},
     {"Loki (PM)", "DATA", "Processdev_exploit.dat", TYPE_FILE},
+    {"Loki (v2.0)", "DATA", "lokiv2.dat", TYPE_FILE},
 
     {"CUniformRandomStream", "GAME", "lua/includes/modules/CUniformRandomStream.lua", TYPE_FILE},
 
@@ -199,4 +201,40 @@ return {
     {"WillzHax", "DATA", "p_trigkey.txt", TYPE_FILE},
 
     {"ZBot", "DATA", "zbot", TYPE_DIR},
+
+    {"911", "DATA", "nine_eleven", TYPE_DIR},
+
+    {"asdRazor", "DATA", "naisho", TYPE_DIR},
+
+    {"BananaBot", "DATA", "fruit", TYPE_DIR},
+
+    {"BXS", "DATA", "BXS", TYPE_DIR},
+
+    {"Cunikware", "DATA", "CUNIKWARE_config", TYPE_DIR},
+
+    {"Venom", "DATA", "rmenu", TYPE_DIR},
+
+    {"DenzHak", "DATA", "denzware", TYPE_DIR},
+    {"DenzHak (replica)", "DATA", "alloyavera", TYPE_DIR},
+
+    {"dHack", "DATA", "deaglerh", TYPE_DIR},
+
+    {"DreamBot", "DATA", "dreambot_config", TYPE_DIR},
+
+    {"FartClient", "DATA", "FartClient", TYPE_DIR},
+
+    {"gBot", "DATA", "gbot", TYPE_DIR},
+
+    {"gRust", "DATA", "serj", TYPE_DIR},
+
+    {"Ilysha", "DATA", "Ilysha", TYPE_DIR},
+    {"Ilysha", "DATA", "IlyaWare", TYPE_DIR},
+
+    {"kennedyhack", "DATA", "kennedyhack", TYPE_DIR},
+
+    {"Samoware", "DATA", "swbase_cfg", TYPE_DIR},
+
+    {"Scorch", "DATA", "scorch", TYPE_DIR},
+
+    {"Roachhook", "DATA", "roachhook", TYPE_DIR}
 }
