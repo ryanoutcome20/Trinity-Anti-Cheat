@@ -30,7 +30,6 @@ Wrap("Derma_DrawBackgroundBlur")
 --- Classes ---
 
 Wrap("TickCount", "CUserCmd")
-Wrap("SetViewAngles", "CUserCmd")
 Wrap("SetMouseX", "CUserCmd")
 Wrap("SetMouseY", "CUserCmd")
 Wrap("SetSideMove", "CUserCmd")
