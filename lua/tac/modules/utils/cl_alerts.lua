@@ -20,7 +20,7 @@ TAC.Atlas:Listen("Alert", "TAC.Alert", MODE_DONE, function(Mode, Data)
 			TAC.SIGNITURE_GREEN,
 			"Trinity",
 			TAC.GRAY,
-			" : ALERT ] ",
+			" ] ",
 			TAC.WHITE,
 			Message
 		)
