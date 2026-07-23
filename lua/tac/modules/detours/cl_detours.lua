@@ -4,7 +4,7 @@ local Detour = TAC.Detour.Register
 
 local Wrap = function(ID, Meta)
 	Detour(ID, function(Original, ...)
-		TAC.Captures.Stack(ID)
+		TAC.Captures.Stack(Meta and Meta..":"..ID or ID)
 
 		return Original(...)
 	end, Meta)
