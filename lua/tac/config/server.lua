@@ -1304,26 +1304,6 @@ pStub.Register("Debug Self", {
 	Method = PUNISHMENT_BAN
 })
 
---- Libraries ---
-
---[[
-	This check verifies the size of libraries on the clientside when loading in. They shouldn't
-	change unless another addon is also running in pre-init like us.
---]]
-
-pStub.Register("Libraries", {
-	Enabled = true,
-	Name = "Libraries",
-	Description = "Occurs when the integrity of libraries during the player joining cannot be verified, may false flag addons.",
-	Category = "Integrity",
-	
-	Client = true,
-	
-	Message = "Library Size Error: {Contact}",
-	
-	Method = PUNISHMENT_KICK
-})
-
 --- Scans ---
 
 --[[

@@ -69,9 +69,6 @@ Config.MenuMovement = {
 	These do not have a huge impact on clientside performance so it is
 	not necessary to disable them here.
 
-	As for the libraries size, you can adjust them to fix false flags here.
-	This isn't recommended though.
-
 	The garbage check simply checks the garbage created by calling various
 	C functions.
 --]]
@@ -89,20 +86,6 @@ Config.Integrity = {
 
 	DebugSelf = {
 		Enabled = true
-	},
-
-	Libraries = {
-		Enabled = true,
-		
-		concommand = {
-			Enabled = true,
-			Size = 1
-		},
-		
-		net = {
-			Enabled = true,
-			Size = 4
-		}
 	},
 
 	Garbage = {
