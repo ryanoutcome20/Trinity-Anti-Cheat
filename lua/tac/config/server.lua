@@ -427,7 +427,7 @@ pStub.Register("Micromovement", {
 	
 	Method = PUNISHMENT_BAN,
 		
-	Delta = 0.01,
+	Delta = 0.001,
 	LowOffset = 0.000001,
 	HighOffset = 0.75,
 	HighIncrement = 3,
