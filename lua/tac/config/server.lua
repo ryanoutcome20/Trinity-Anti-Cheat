@@ -14,7 +14,7 @@ TAC.Config = Config
 	feel free to disable them here.
 
 	Read more about them on the wiki:
-	https://github.com/ryanoutcome20/Trinity-Anti-Cheat/wiki/Recommended-ConVars
+	https://github.com/Trinity-Anti-Cheat/Trinity-Anti-Cheat/wiki/Recommended-ConVars
 --]]
 
 --- Interpolated Strings ---
@@ -76,7 +76,7 @@ TAC.Config = Config
 --- General ---
 
 -- Contact text used when {Contact} interpolated string is used.
-Config.Contact = "github.com/ryanoutcome20/Trinity-Anti-Cheat/"
+Config.Contact = "github.com/Trinity-Anti-Cheat/Trinity-Anti-Cheat/"
 
 --[[
 	When patching text sent from the clientside this will be the maximum
