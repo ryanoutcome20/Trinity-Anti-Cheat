@@ -1,2 +1,2 @@
-# Trinity-Anti-Cheat
-Trinity is a specialized anti-cheat system for Garry's Mod.
+# Moved to organization
+https://github.com/Trinity-Anti-Cheat/Trinity-Anti-Cheat
