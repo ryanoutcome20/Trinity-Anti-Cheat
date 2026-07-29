@@ -807,6 +807,8 @@ function TAC.Packages()
 			TAC.Flag("Packages", "Package [size; %s; got: %i; wanted: %i]", Name, Size, idealSize)
 		end
 	end
+
+	TAC_Packages = nil
 end
 
 TAC.Hooks.Add("TAC.TransferConfig", "TAC.Packages", TAC.Packages)
