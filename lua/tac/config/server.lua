@@ -1304,6 +1304,26 @@ pStub.Register("Debug Self", {
 	Method = PUNISHMENT_BAN
 })
 
+--- Packages ---
+
+--[[
+	This check verifies the packages loaded before init to make sure nothing executed before 
+	the anti-cheat.
+--]]
+
+pStub.Register("Packages", {
+	Enabled = true,
+	Name = "Packages",
+	Description = "Occurs when a player loads packages before the game is supposed to; usually indicates a pre-init script.",
+	Category = "Integrity",
+	
+	Client = true,
+	
+	Message = "Packages Loaded: {Contact}",
+
+	Method = PUNISHMENT_KICK
+})
+
 --- Scans ---
 
 --[[

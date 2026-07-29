@@ -192,6 +192,37 @@ Config.Scans = {
 	}
 }
 
+--- Packages ---
+
+--[[
+	This is a clientside version of the config for 'Packages' serverside.
+
+	Modify the number in the packages section if your getting false flags.
+
+	'checkModified' controls whether or not to consider missing libraries
+	or new libraries a flag of the check.
+--]]
+
+Config.Packages = {
+	Enabled = true,
+
+	checkModified = true,
+
+	Packages = {
+        ["coroutine"] = 7,
+        ["jit"] = 11,
+        ["jit.opt"] = 1,
+        ["jit.util"] = 11,
+        ["math"] = 31,
+        ["package"] = 5,
+        ["os"] = 4,
+        ["bit"] = 12,
+        ["string"] = 15,
+        ["debug"] = 12,
+        ["table"] = 9
+	}
+}
+
 --- Listeners ---
 
 --[[

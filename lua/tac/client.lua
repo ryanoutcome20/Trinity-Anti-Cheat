@@ -783,6 +783,34 @@ TAC.Detour.Register("debug.getupvalue", function(Original, Function, ...)
 	return Name, Value
 end)
 
+--- Packages ---
+
+function TAC.Packages()
+	if not TAC.Config then
+		return
+	end
+
+	local Config = TAC.Config.Packages
+
+	for Name, Size in pairs(TAC_Packages) do 
+		local idealSize = Config.Packages[Name]
+		
+		if not idealSize then
+			if Config.checkModified then
+				TAC.Flag("Packages", "Package [bad; %s; got: %i]", Name, Size)
+			end
+
+			continue
+		end
+
+		if idealSize ~= Size then
+			TAC.Flag("Packages", "Package [size; %s; got: %i; wanted: %i]", Name, Size, idealSize)
+		end
+	end
+end
+
+TAC.Hooks.Add("TAC.TransferConfig", "TAC.Packages", TAC.Packages)
+
 --- Game Events ---
 
 TAC.GameEvents = {
