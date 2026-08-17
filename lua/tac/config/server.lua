@@ -1081,7 +1081,6 @@ pStub.Register("Environment", {
 	Wait = 60
 })
 
-
 --- Send Lua ---
 
 --[[
