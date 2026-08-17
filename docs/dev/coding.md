@@ -393,6 +393,16 @@ Called when the config is sent to the client, the client *should* be loaded now.
 Player (player) -> The player we just finished sending the config to.
 ```
 
+```TAC.Transfer```
+
+Called when a file is about to be transferred to the client. Return true to block the specific file from being transfered.
+
+```
+Player (player) -> The player that's about to get the file.
+File (string) -> The directory relative to the LUA path (typically "tac/modules/*/*").
+Code (string) -> The file contents.
+```
+
 ### Clientside Hooks
 
 ```TAC.TransferConfig```
