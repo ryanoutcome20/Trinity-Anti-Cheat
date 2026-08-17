@@ -12,7 +12,7 @@ function TAC.Environment.Post(Player)
     end
 
     TAC.Timer(Player, Config.Wait, function(Player)
-        local Info, Step = Player:GetInfo(Player:Get("Key")), Player:Get("Transfer Step")
+        local Info, Step = Player:GetInfo(Player:Get("Key")), Player:Get("Transfer Sent")
 
         if not Info or Info == "" then
             TAC.Punishment.Wrapper(
@@ -27,7 +27,7 @@ function TAC.Environment.Post(Player)
                 Player, 
                 "Environment [got: %s; expected: %s]", 
                 TAC.Fix(Info),
-                Player:Get("Transfer Step")
+                Player:Get("Transfer Sent")
             )
         end
     end)
