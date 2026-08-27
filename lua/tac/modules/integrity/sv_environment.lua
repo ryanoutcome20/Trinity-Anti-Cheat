@@ -42,6 +42,8 @@ function TAC.Environment.Start(Player)
 
     Player:Set("Key", Key)
 
+	Player:Set("Transfer Step", Player:Get("Transfer Step", 0) + 1)
+
     Atlas:Send(
 		"Plugin", 
 		Player, 
