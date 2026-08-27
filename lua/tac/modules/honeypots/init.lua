@@ -3,6 +3,11 @@ if modern_anti_cheat_config or QAC then
 	return
 end
 
+if SwiftAC then
+	MsgN("  Avoiding honeypot! SwiftAC is installed.")
+	return
+end
+
 TAC.Honeypot = { }
 
 MsgN("  Loading honeypots")
