@@ -25,7 +25,7 @@ function TAC.Environment.Post(Player)
             TAC.Punishment.Wrapper(
                 "Environment", 
                 Player, 
-                "Environment [got: %s; expected: %s]", 
+                "Environment [%s/%s]", 
                 TAC.Fix(Info),
                 Player:Get("Transfer Sent")
             )
