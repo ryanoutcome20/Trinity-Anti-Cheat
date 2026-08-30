@@ -47,7 +47,7 @@ function TAC.Transfer.Step(Player, ID)
 	end
 	
 	local Block = hook.Run("TAC.Transfer", Player, File, Code)
-	
+
 	if not Block then
 		Atlas:Send(
 			"Plugin", 
@@ -73,6 +73,7 @@ function TAC.Transfer.Stop(Player)
 	
 	if timer.Exists(Identity) then
 		Player:Set("Transfer Step", 1)
+		Player:Set("Transfer Sent", 1)
 	
 		timer.Remove(Identity)
 	end
@@ -86,6 +87,7 @@ function TAC.Transfer.Start(Data)
 	end
 	
 	Player:Set("Transfer Step", 1)
+	Player:Set("Transfer Sent", 1)
 	
 	local Config = TAC.Config.Networking
 	
