@@ -142,7 +142,7 @@ MsgN(string.format(
 	TAC.Edition
 ))
 
-MsgN("\n  Open Source Software\n  github.com/Trinity-Anti-Cheat/Trinity-Anti-Cheat")
+MsgN("\n  Open Source Software\n  github.com/ryanoutcome20/Trinity-Anti-Cheat")
 
 Header()
 

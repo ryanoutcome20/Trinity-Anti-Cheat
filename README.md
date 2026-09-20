@@ -4,9 +4,9 @@
   Trinity Anti-Cheat
   <hr>
   
-  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/Trinity-Anti-Cheat/Trinity-Anti-Cheat/dev?style=plastic&color=blue&logo=github">
+  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/ryanoutcome20/Trinity-Anti-Cheat/dev?style=plastic&color=blue&logo=github">
   <a href="https://discord.gg/Brdm4tFG9K"><img alt="Discord" src="https://img.shields.io/discord/1410210633302937622?style=plastic&color=blue&labelColor=grey&label=Discord&logo=discord"></a>
-  <img alt="Version 0.3.2" src="https://img.shields.io/badge/Version-0.3.2-blue?style=plastic&logo=lua">
+  <img alt="Version 0.3.3" src="https://img.shields.io/badge/Version-0.3.3-blue?style=plastic&logo=lua">
   
   <hr>
 </div>
@@ -72,7 +72,7 @@ If you experience any issues you should consult the [troubleshooting documentati
 * [License (GNU v3.0 w/ “Commons Clause”)](https://github.com/ryanoutcome20/Trinity-Anti-Cheat/blob/main/LICENSE)
 * [API](./lua/tac/api.lua)
 * [Contribute](./CONTRIBUTING.md)
-* [Debug Stubs](https://github.com/ryanoutcome20/Trinity-Anti-Cheat-Debug-Stub)
+* [Debug Stubs](https://github.com/ryanoutcome20/Debug-Stubs)
 
 ## Credits
 

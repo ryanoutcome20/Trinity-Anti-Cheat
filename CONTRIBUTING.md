@@ -38,7 +38,7 @@ There are a couple of design principles that are considered a priority when deve
 
 * **Simplicity**: Generally you want to keep every single function you write under twenty lines with a maximum of eighty lines for extremely complicated code.
 * **Server Authority**: We keep as much as we can on the server as possible - this includes small things like processing data. It allows us to expand the config and prevent bypasses.
-* **Backwards Compatibility**: Due to the modular nature of Trinity, you'll need to ensure other custom modules will function correctly ([see the debug module stubs we wrote for this](https://github.com/ryanoutcome20/Trinity-Anti-Cheat-Debug-Stub)).
+* **Backwards Compatibility**: Due to the modular nature of Trinity, you'll need to ensure other custom modules will function correctly ([see the debug module stubs we wrote for this](https://github.com/ryanoutcome20/Debug-Stubs)).
 * **Performance**: We take performance very seriously, do not attempt to push any changes that significantly slow down the server or especially the client.
 
 There are also a couple of pitfalls that a lot of new developers will fall into:
