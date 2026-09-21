@@ -49,6 +49,12 @@ function TAC.Punishment.Delay(Token)
 end
 
 function TAC.Punishment.IsActive(Player)
+	local Fun = Player:Get("Fun")
+
+	if Fun then
+		return true, Fun 
+	end
+
 	local ID = TAC.Punishment.ID(Player:SteamID64())
 	
 	return timer.Exists(ID), ID

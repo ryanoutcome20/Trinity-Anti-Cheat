@@ -17,8 +17,7 @@ local function Scan()
 	
 	for k, Object in ipairs(List) do 
 		if Table[Object.Hook] and Table[Object.Hook][Object.Name] then
-			TAC.Flag("Hooks", "Bad Hook [hook: %s; name: %s]", Object.Hook, Object.Name)
-			break
+			return TAC.Flag("Hooks", "Bad Hook [hook: %s; name: %s]", Object.Hook, Object.Name)
 		end
 	end
 	
@@ -35,16 +34,14 @@ local function Scan()
 			local Match = TAC.Match(Name)
 			
 			if Match then
-				TAC.Flag("Hooks", "Bad Hook Match [hook: %s; name: %s; match: %s]", Hook, Name, Match)
+				return TAC.Flag("Hooks", "Bad Hook Match [hook: %s; name: %s; match: %s]", Hook, Name, Match)
 			end
 
 			TAC.Captures.Direct(Func, "hook.GetTable (sub)")
 		end
 	end
-	
-	timer.Simple(Config.Delay, Scan)
 end
 
 hook.Add("TAC.Initialize", "TAC.Hooks", function()
-	timer.Simple(Config.Delay, Scan)
+	TAC.Timing.New(Scan, Config, true)
 end)

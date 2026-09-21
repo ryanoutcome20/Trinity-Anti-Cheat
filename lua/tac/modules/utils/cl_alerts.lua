@@ -8,19 +8,19 @@ TAC.Atlas:Listen("Alert", "TAC.Alert", MODE_DONE, function(Mode, Data)
 	
 	assert(isstring(Message), "No `Message` string provided to TAC.Alert!", type(Message))
 
-	if tac_notify_popups:GetBool() then
+	if tac_notify_popups and tac_notify_popups:GetBool() then
 		notification.AddLegacy("[TAC]: " .. Message, Type, 8)
 		surface.PlaySound(Sound)
 	end
 	
-	if tac_notify_chat:GetBool() then
+	if tac_notify_chat and tac_notify_chat:GetBool() then
 		chat.AddText(
 			TAC.GRAY,
 			"[ ",
 			TAC.SIGNITURE_GREEN,
 			"Trinity",
 			TAC.GRAY,
-			" : ALERT ] ",
+			" ] ",
 			TAC.WHITE,
 			Message
 		)

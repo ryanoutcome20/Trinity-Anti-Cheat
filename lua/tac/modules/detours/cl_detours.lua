@@ -4,7 +4,7 @@ local Detour = TAC.Detour.Register
 
 local Wrap = function(ID, Meta)
 	Detour(ID, function(Original, ...)
-		TAC.Captures.Stack(ID)
+		TAC.Captures.Stack(Meta and Meta..":"..ID or ID)
 
 		return Original(...)
 	end, Meta)
@@ -12,6 +12,7 @@ end
 
 --- Globals ---
 
+Wrap("require")
 Wrap("gcinfo")
 Wrap("collectgarbage")
 Wrap("getfenv")
@@ -29,7 +30,6 @@ Wrap("Derma_DrawBackgroundBlur")
 --- Classes ---
 
 Wrap("TickCount", "CUserCmd")
-Wrap("SetViewAngles", "CUserCmd")
 Wrap("SetMouseX", "CUserCmd")
 Wrap("SetMouseY", "CUserCmd")
 Wrap("SetSideMove", "CUserCmd")
@@ -62,9 +62,6 @@ Wrap("hook.Remove")
 Wrap("input.SetCursorPos")
 
 Wrap("net.SendToServer")
-
-Wrap("player.GetAll")
-Wrap("player.GetHumans")
 
 Wrap("gui.EnableScreenClicker")
 

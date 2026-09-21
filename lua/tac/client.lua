@@ -175,32 +175,36 @@ function TAC.StandardAngle(Yaw)
 	return Yaw - 360
 end
 
-function TAC.GetBinaryNames(Name)
-	-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/lua/includes/extensions/util.lua#L394-L418
+--- Timing Manager ---
 
-	local Names = { }
-	local Suffixes = { /*"osx64", "osx", "linux64", "linux", "linux32",*/ "win64", "win32" }
-	
-	for k, Suffix in ipairs(Suffixes) do 
-		table.insert(Names, string.format(
-			"lua/bin/gmcl_%s_%s.dll", 
-			Name, 
-			Suffix
-		))
-		
-		table.insert(Names, string.format(
-			"lua/bin/gmsv_%s_%s.dll", 
-			Name, 
-			Suffix
-		))
+TAC.Timing = { }
 
-		table.insert(Names, string.format(
-			"lua/bin/gm_%s.dll", 
-			Name
-		))
+function TAC.Timing.New(Function, Config, Repeatable, ...)
+	if not Config.Enabled then
+		return
 	end
-	
-	return Names
+
+	if Config.Delay == 0 then
+		return Function(...)
+	elseif not Repeatable then
+		return timer.Simple(Config.Delay, Function)
+	end
+
+	local Data = { ... }
+
+	local Sub;
+
+	Sub = function()
+		if not Config.Enabled then
+			return
+		end
+
+		local Return = Function(unpack(Data))
+		
+		timer.Simple(Config.Delay, Sub)
+	end
+
+	timer.Simple(Config.Delay, Sub)
 end
 
 --- List Manager ---
@@ -284,19 +288,21 @@ end
 
 --- Function Buffers ---
 
-function TAC.GenerateBuffer(Function)
-	local GetInfo, FuncInfo = debug.getinfo(Function, "fnS"), jit.util.funcinfo(Function)
+function TAC.GenerateBuffer(Function, GetInfo)
+	local GetInfo = GetInfo or debug.getinfo(Function, "fnS")
+	local FuncInfo = FuncInfo or jit.util.funcinfo(Function)
 
 	return {
 		source = tostring(GetInfo.source or "s"):gsub("\\", "/"), -- OS specific. (#13)
 		short_src = GetInfo.short_src or "sh",
 		what = GetInfo.what or "wh",
+		currentline = GetInfo.currentline or "cl",
 		linedefined = GetInfo.linedefined or "ld",
 		lastlinedefined = GetInfo.lastlinedefined or "lld",
 		
 		j_linedefined = FuncInfo.linedefined or "ld",
 		
-		isfunc = GetInfo.name and GetInfo.namewhat and GetInfo.linedefined > 0
+		name = GetInfo.name or "nn"
 	}
 end
 
@@ -575,13 +581,15 @@ function TAC.FlagEx(Buffered, cID, Message, ...)
 			#Data.cID + #Data.Message
 		)
 		
-		return
+		return true
 	end
 	
 	TAC.Atlas:Send(
 		"Flag", 
 		Data
 	)
+
+	return true
 end
 
 function TAC.Flag(cID, Message, ...)
@@ -775,59 +783,35 @@ TAC.Detour.Register("debug.getupvalue", function(Original, Function, ...)
 	return Name, Value
 end)
 
---- Libraries Check ---
+--- Packages ---
 
-TAC.Libraries = {
-	Slots = {
-		{
-			Key = concommand.GetTable,
-			Config = "concommand", 
-			Index = "CommandList"
-		},
-		{
-			Key = net.Receivers,
-			Config = "net"
-		}
-	}
-}
-
-for k, Data in ipairs(TAC.Libraries.Slots) do 
-	local Size = -1
-
-	if Data.Index then
-		Size = table.Count(TAC.GenerateUpvalueTree(Data.Key)[Data.Index])
-	else
-		Size = table.Count(Data.Key)
-	end
-
-	Data.Size = Size
-end
-
-function TAC.Libraries.Run()
+function TAC.Packages()
 	if not TAC.Config then
 		return
 	end
 
-	local Config = TAC.Config.Integrity.Libraries
+	local Config = TAC.Config.Packages
 
-	if not Config.Enabled then
-		return
-	end
+	for Name, Size in pairs(TAC_Packages) do 
+		local idealSize = Config.Packages[Name]
+		
+		if not idealSize then
+			if Config.checkModified then
+				TAC.Flag("Packages", "Package [bad; %s; got: %i]", Name, Size)
+			end
 
-	for k, Data in ipairs(TAC.Libraries.Slots) do 
-		local Sub = Config[Data.Config]
-
-		if not Sub.Enabled then
 			continue
 		end
 
-		if not Data.Size or Data.Size ~= Sub.Size then
-			return TAC.Flag("Libraries", "Bad Libraries [%s; expected: %i; got: %s]", Data.Config, Sub.Size, Data.Size)
+		if idealSize ~= Size then
+			TAC.Flag("Packages", "Package [size; %s; got: %i; wanted: %i]", Name, Size, idealSize)
 		end
 	end
+
+	TAC_Packages = nil
 end
 
-TAC.Hooks.Add("TAC.TransferConfig", "TAC.Libraries.Run", TAC.Libraries.Run)
+TAC.Hooks.Add("TAC.TransferConfig", "TAC.Packages", TAC.Packages)
 
 --- Game Events ---
 
@@ -861,14 +845,8 @@ TAC.Hooks.Add("TAC.TransferConfig", "TAC.DirectoryAudit", TAC.DirectoryAudit)
 --- Captures ---
 
 TAC.Captures = {
-	Ran = { },
-	Hot = { }
+	Ran = { }
 }
-
-function TAC.Captures.ClearHotTraces()
-	TAC.Captures.Hot = { }
-	timer.Simple(TAC.Config and TAC.Config.HT or 300, TAC.Captures.ClearHotTraces)
-end
 
 function TAC.Captures.Direct(Function, Message)
 	local Data = TAC.GenerateBuffer(Function)
@@ -879,8 +857,9 @@ function TAC.Captures.Direct(Function, Message)
 
 	Data.Message = Message
 
+	Data.last = true
+	Data.name = nil
 	Data.source = nil
-	Data.isfunc = nil
 
 	TAC.Batch.Add(
 		"Function", 
@@ -890,28 +869,66 @@ function TAC.Captures.Direct(Function, Message)
 end
 
 function TAC.Captures.Stack(Message)
-	for i = 3, 8 do 
-		local Info = debug.getinfo(i, "f")
-		
+	local Captures = { }
+
+	local Tmp = 1
+	local tmpData = { }
+
+	for i = 1, 8 do
+		-- Validate.
+		local Info = debug.getinfo(i)
+
 		if not Info then
 			break
 		end
-		
+
+		tmpData[i] = Info
+
+		-- Check hash against hot traces.
 		local Hash = tostring(Info.func)
+
+		if TAC.Captures.Ran[Hash] then
+			continue
+		end
 		
-		local Hot = (TAC.Captures.Hot[Hash] or 0) + 1
+		TAC.Captures.Ran[Hash] = true
 
-		TAC.Captures.Hot[Hash] = Hot
+		-- Check whitelist.
+		local Whitelisted = TAC.Detours.Whitelist.Whitelisted(Info.func, Info)
 
-		if Hot > 15 then
-			break
-		elseif TAC.Captures.Ran[Hash] then
+		if Whitelisted then
 			continue
 		end
 
-		TAC.Captures.Direct(Info.func, Message)
-		
-		TAC.Captures.Ran[Hash] = true
+		-- Update info.
+		local Data = TAC.GenerateBuffer(Info.func, Info)
+
+		Data.Index = i
+		Data.Message = Message .. " (" .. i .. ")"
+
+		Captures[Tmp] = Data
+
+		Tmp = Tmp + 1
+	end
+
+	for Index, Data in pairs(Captures) do
+		if Index == #Captures then
+			Data.last = true
+		elseif Data.name then
+			local Next = tmpData[Data.Index + 1]
+
+			Data.nextsrc = Next and Next.short_src
+			Data.nextline = Next and Next.currentline 
+		end
+
+		Data.Index = nil
+		Data.source = nil
+
+		TAC.Batch.Add(
+			"Function", 
+			Data, 
+			TAC.Size(Data)
+		)
 	end
 end
 
@@ -925,8 +942,6 @@ end
 
 TAC.Secure[TAC_Capture_Stack] = true
 TAC.Secure[TAC_Capture_Direct] = true
-
-TAC.Captures.ClearHotTraces()
 
 --- Detours ---
 
@@ -949,30 +964,17 @@ setmetatable(TAC.Detours.Whitelist.Dumps, {
 function TAC.Detours.Whitelist.Whitelisted(Function, Info)
 	local Whitelist = TAC.Detours.Whitelist
 
-	if Whitelist.Counter == 0 or not Whitelist.Identifiers[Info.short_src] then
-		return false
-	end
-
-	if tobool(Info.isfunc) and Info.what ~= "main" then
-		if Info.namewhat == "global" and not _G[Info.name] then
-			TAC.Audit(
-				"Whitelist encountered secure sub environment, possible bypass attempt?", 
-				"Detours",
-				"Sub Environment"
-			)
-		end
-		
-		return true
+	if Whitelist.Identifiers[Info.short_src] then
+		return true, tostring(Function)
 	end
 	
 	local Hash = Whitelist.Hash(Function, Info.short_src)
 
 	if Hash and Whitelist.Hashes[Hash] then
-		Whitelist.Counter = math.max(Whitelist.Counter - 1, 0)
-		return true
+		return true, Hash
 	end
 	
-	return false
+	return false, Hash
 end
 
 function TAC.Detours.Whitelist.Hash(Function, Identifier)
@@ -1001,10 +1003,6 @@ function TAC.Detours.Whitelist.Hash(Function, Identifier)
 	return Checksum
 end
 
-function TAC.Detours.Whitelist.Increment()
-	TAC.Detours.Whitelist.Counter = TAC.Detours.Whitelist.Counter + 1
-end
-
 function TAC.Detours.Whitelist.Update(Code, Identifier)
 	local Hash = TAC.Detours.Whitelist.Hash(Code, Identifier)
 
@@ -1026,8 +1024,6 @@ TAC.Detour.Register("RunString", function(Original, Code, Identifier, ...)
 		TAC.Detours.Whitelist.Update(Code, Identifier)
 	end
 	
-	TAC.Detours.Whitelist.Increment()
-	
 	return Original(Code, Identifier, ...)
 end)
 
@@ -1041,8 +1037,6 @@ TAC.Detour.Register("RunStringEx", function(Original, Code, Identifier, ...)
 	if isstring(Code) then
 		TAC.Detours.Whitelist.Update(Code, Identifier)
 	end
-	
-	TAC.Detours.Whitelist.Increment()
 	
 	return Original(Code, Identifier, ...)
 end)
@@ -1059,8 +1053,6 @@ TAC.Detour.Register("CompileString", function(Original, Code, Identifier, ...)
 	if isfunction(Output) then		
 		TAC.Detours.Whitelist.Update(Output, Identifier)
 	end
-	
-	TAC.Detours.Whitelist.Increment()
 	
 	return Output
 end)

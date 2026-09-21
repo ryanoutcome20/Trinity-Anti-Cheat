@@ -1,5 +1,7 @@
 TAC.Stack = { }
 
+local Config = TAC.Config.Integrity.Stack
+
 function TAC.Stack.Scan()
 	local Index = 0
 	
@@ -11,7 +13,7 @@ function TAC.Stack.Scan()
 		end
 		
 		if not Info.name or not Info.namewhat then
-			if Index ~= 2 then
+			if Index ~= 3 then
 				return false, "name"
 			end
 		end
@@ -50,12 +52,10 @@ function TAC.Stack.Caller()
 	if not Valid then
 		return TAC.Flag("Stack", "Stack [%s]", Reason)
 	end
-	
-	timer.Simple(5, TAC.Stack.Caller)
 end
 
-if TAC.Config.Integrity.Stack.Enabled then
-	timer.Simple(5, TAC.Stack.Caller)
-end
+if Config.Enabled then
+	TAC.Timing.New(TAC.Stack.Caller, Config, true)
 
-TAC.Stack.Self()
+	TAC.Stack.Self()
+end

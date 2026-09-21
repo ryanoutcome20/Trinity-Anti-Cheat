@@ -3,7 +3,17 @@ local function Scan()
         return
     end 
 
-    local Data = debug.getinfo(debug.getinfo).func(debug.getinfo)
+    local Data = debug.getinfo(debug.getinfo)
+    
+    if not Data or not Data.func then
+        return TAC.Flag(
+            "Debug Self", 
+            "Incorrect function addresses [blocked]"
+        )
+    end
+
+    Data = Data.func(debug.getinfo)
+
     local Next = debug.getinfo(debug.getinfo)
 
     if Data.func ~= Next.func then

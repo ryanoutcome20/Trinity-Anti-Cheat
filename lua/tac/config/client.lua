@@ -20,17 +20,6 @@ local Config = { }
 Config.Batch = 32000
 Config.ProcessTime = 0.25
 
---- Hot Traces ---
-
---[[
-	Time between each clear of the "hot trace" cache clientside. What this
-	does is prevent repeated dumping of information to the server from a
-	function that resides in a super common stack chain. In other words,
-	it prevents a bunch of repeated work by breaking early.
---]]
-
-Config.HT = 300
-
 --- Aimbot Checks ---
 
 --[[
@@ -80,9 +69,6 @@ Config.MenuMovement = {
 	These do not have a huge impact on clientside performance so it is
 	not necessary to disable them here.
 
-	As for the libraries size, you can adjust them to fix false flags here.
-	This isn't recommended though.
-
 	The garbage check simply checks the garbage created by calling various
 	C functions.
 --]]
@@ -93,25 +79,13 @@ Config.Integrity = {
 	},
 
 	Stack = {
-		Enabled = true
+		Enabled = true,
+
+		Delay = 300
 	},
 
 	DebugSelf = {
 		Enabled = true
-	},
-
-	Libraries = {
-		Enabled = true,
-		
-		concommand = {
-			Enabled = true,
-			Size = 1
-		},
-		
-		net = {
-			Enabled = true,
-			Size = 4
-		}
 	},
 
 	Garbage = {
@@ -174,7 +148,7 @@ Config.ESP = {
 Config.Heartbeat = {
 	Enabled = true,
 
-	Await = 15
+	Await = 150
 }
 
 --- Scans ---
@@ -191,9 +165,7 @@ Config.Heartbeat = {
 
 Config.Scans = {
 	Binaries = {
-		Enabled = true,
-
-		Detour = true
+		Enabled = true
 	},
 
 	Commands = {
@@ -220,6 +192,37 @@ Config.Scans = {
 	}
 }
 
+--- Packages ---
+
+--[[
+	This is a clientside version of the config for 'Packages' serverside.
+
+	Modify the number in the packages section if your getting false flags.
+
+	'checkModified' controls whether or not to consider missing libraries
+	or new libraries a flag of the check.
+--]]
+
+Config.Packages = {
+	Enabled = true,
+
+	checkModified = true,
+
+	Packages = {
+        ["coroutine"] = 7,
+        ["jit"] = 11,
+        ["jit.opt"] = 1,
+        ["jit.util"] = 11,
+        ["math"] = 31,
+        ["package"] = 5,
+        ["os"] = 4,
+        ["bit"] = 12,
+        ["string"] = 15,
+        ["debug"] = 12,
+        ["table"] = 9
+	}
+}
+
 --- Listeners ---
 
 --[[
@@ -236,6 +239,5 @@ Config.Scans = {
 Config.Listeners = {
 	Enabled = true
 }
-
 
 return Config

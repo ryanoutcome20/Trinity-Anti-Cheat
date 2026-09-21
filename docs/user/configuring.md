@@ -52,7 +52,7 @@ These strings are format strings used by various systems to allow you to add uni
 nullptr* [76561199623856937] was logged for "Bad Module [exists; name: proxi] [CL]" (Binaries)! P:-1311.389282 -224.098999 114.052940 A:4.784 -153.864 0.000 [dbg]
 ```
 
-The debug message is applied with TAC.Debug being enabled, see this [GitHub](https://github.com/ryanoutcome20/Trinity-Anti-Cheat-Debug-Stub).
+The debug message is applied with TAC.Debug being enabled, see this [GitHub](https://github.com/ryanoutcome20/Debug-Stubs).
 
 ### Flags / Punishment Stubs
 

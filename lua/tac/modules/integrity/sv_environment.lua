@@ -12,7 +12,7 @@ function TAC.Environment.Post(Player)
     end
 
     TAC.Timer(Player, Config.Wait, function(Player)
-        local Info, Step = Player:GetInfo(Player:Get("Key")), Player:Get("Transfer Step")
+        local Info, Step = Player:GetInfo(Player:Get("Key")), Player:Get("Transfer Sent")
 
         if not Info or Info == "" then
             TAC.Punishment.Wrapper(
@@ -25,9 +25,9 @@ function TAC.Environment.Post(Player)
             TAC.Punishment.Wrapper(
                 "Environment", 
                 Player, 
-                "Environment [got: %s; expected: %s]", 
+                "Environment [%s/%s]", 
                 TAC.Fix(Info),
-                Player:Get("Transfer Step")
+                Player:Get("Transfer Sent")
             )
         end
     end)
@@ -41,6 +41,8 @@ function TAC.Environment.Start(Player)
     local Key = TAC.Random(math.random(5,10))
 
     Player:Set("Key", Key)
+
+	Player:Set("Transfer Sent", Player:Get("Transfer Sent", 0) + 1)
 
     Atlas:Send(
 		"Plugin", 

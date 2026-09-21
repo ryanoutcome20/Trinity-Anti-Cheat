@@ -29,6 +29,17 @@ function TAC.Execute(Token, noDelay)
 	if not noDelay and TAC.Punishment.Delay(Token) then
 		return EXECUTE_SUCCESS, false
 	end
+
+	-- Check for fun.
+	if not noDelay and Token.FunID and TAC.Fun and TAC.Fun[Token.FunID] then
+		local Fun = table.Copy(TAC.Fun[Token.FunID]) 
+		
+		if Fun and Fun.Execute then
+			Fun:Execute(Player, Token)
+
+			return EXECUTE_SUCCESS, false
+		end
+	end
 	
 	-- Log specific override stuff.
 	local Formatted = onlyLog and TAC.Format(Token, Token.FormatLog) or TAC.Format(Token, Token.FormatPunishment)

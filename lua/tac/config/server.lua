@@ -427,7 +427,7 @@ pStub.Register("Micromovement", {
 	
 	Method = PUNISHMENT_BAN,
 		
-	Delta = 0.01,
+	Delta = 0.001,
 	LowOffset = 0.000001,
 	HighOffset = 0.75,
 	HighIncrement = 3,
@@ -705,7 +705,11 @@ pStub.Register("Act", {
 
 	Method = PUNISHMENT_KICK,
 
-	CheckGamemode = false
+	CheckGamemode = false,
+
+	Flags = true,
+	Maximum = 5,
+	Decay = 1
 })
 
 --- Extras ---
@@ -906,6 +910,10 @@ Config.WorldClicker = true
 	
 	This will never add onto the PVS, just remove. Also won't ever effect
 	entities, just players.
+
+	Because this is an intensive feature it comes with the ability to disable
+	it whenever you get too many players in your server (maximumPlayers). Set
+	this to -1 to disable it entirely.
 ]]--
 
 Config.PVS = {
@@ -914,7 +922,9 @@ Config.PVS = {
 	squareSize = 1,
 	squaredSize = 256,
 	intervalScale = 128,
-	Step = 8
+	Step = 8,
+
+	maximumPlayers = 16
 }
 
 --- Far ESP Breaker ---
@@ -1070,7 +1080,6 @@ pStub.Register("Environment", {
 
 	Wait = 60
 })
-
 
 --- Send Lua ---
 
@@ -1294,23 +1303,23 @@ pStub.Register("Debug Self", {
 	Method = PUNISHMENT_BAN
 })
 
---- Libraries ---
+--- Packages ---
 
 --[[
-	This check verifies the size of libraries on the clientside when loading in. They shouldn't
-	change unless another addon is also running in pre-init like us.
+	This check verifies the packages loaded before init to make sure nothing executed before 
+	the anti-cheat.
 --]]
 
-pStub.Register("Libraries", {
+pStub.Register("Packages", {
 	Enabled = true,
-	Name = "Libraries",
-	Description = "Occurs when the integrity of libraries during the player joining cannot be verified, may false flag addons.",
+	Name = "Packages",
+	Description = "Occurs when a player loads packages before the game is supposed to; usually indicates a pre-init script.",
 	Category = "Integrity",
 	
 	Client = true,
 	
-	Message = "Library Size Error: {Contact}",
-	
+	Message = "Packages Loaded: {Contact}",
+
 	Method = PUNISHMENT_KICK
 })
 
@@ -1431,5 +1440,5 @@ pStub.Register("Heartbeat", {
 
 	Method = PUNISHMENT_KICK,
 
-	Await = 30
+	Await = 300
 })

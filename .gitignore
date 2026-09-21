@@ -419,3 +419,7 @@ FodyWeavers.xsd
 
 # Trinity Anti-Cheat debugging files
 lua/tac/modules/debug/
+
+# Trinity Anti-Cheat fun addon
+lua/tac/modules/fun
+lua/tac/fun

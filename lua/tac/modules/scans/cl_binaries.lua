@@ -12,36 +12,22 @@ local function Scan()
     end 
 
 	for Module, v in pairs(List) do
-		local Names, Flag = TAC.GetBinaryNames(Module), false
+		local Name, Flag = "lua/bin/" .. Module .. ".dll", false
 
-		for k, Name in ipairs(Names) do
-			if file.Exists(Name, "GAME") then
-				TAC.Flag("Binaries", "Bad Module [exists; name: %s]", Module)
-				Flag = true
-				break
-			elseif file.Read(Name, "GAME") ~= nil then
-				TAC.Flag("Binaries", "Bad Module [valid; name: %s]", Module)
-				Flag = true
-				break
-			end
+		if file.Exists(Name, "GAME") then
+			TAC.Flag("Binaries", "Bad Module [exists; name: %s]", Module)
+			Flag = true
+			break
+		elseif file.Read(Name, "GAME") ~= nil then
+			TAC.Flag("Binaries", "Bad Module [valid; name: %s]", Module)
+			Flag = true
+			break
 		end
 		
 		if Flag then
 			break
 		end
 	end
-
-	if not Config.Detour then
-		return
-	end
-
-	TAC.Detour.Register("require", function(Original, Name, ...)
-		if List[string.lower(Name)] then
-			TAC.Flag("Binaries", "Bad Module [req; name: %s]", Name)
-		end
-		
-		return Original(Name, ...)
-	end)
 end
 
 hook.Add("TAC.Initialize", "TAC.Binaries", Scan)

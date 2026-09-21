@@ -89,6 +89,10 @@ function TAC.Breakers.PVS.Run()
 	if not Config.Enabled then
 		return
 	end
+	
+	if Config.maximumPlayers ~= -1 and Config.maximumPlayers <= player.GetCount() then
+		return
+	end
 
 	TAC.Breakers.PVS.Counter = (TAC.Breakers.PVS.Counter or 0) + 1 
 

@@ -33,7 +33,7 @@ MsgN("  Caching resources")
 
 --- Config ---
 
-TAC.Version = "0.3.2"
+TAC.Version = "0.3.3"
 TAC.Edition = "Release"
 
 MsgN("  Loading config")
@@ -46,6 +46,8 @@ AddCSLuaFile("includes/extensions/player_auth.lua")
 AddCSLuaFile("includes/extensions/coroutine.lua")
 AddCSLuaFile("includes/modules/concommand.lua")
 AddCSLuaFile("includes/modules/team.lua")
+AddCSLuaFile("includes/util/sql.lua")
+AddCSLuaFile("tac/pre-client.lua")
 AddCSLuaFile("tac/client.lua")
 
 --- External Libraries ---
