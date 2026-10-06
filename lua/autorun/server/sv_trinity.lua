@@ -28,9 +28,6 @@ include("tac/api.lua")
 MsgN("  Loading base")
 include("tac/base.lua")
 
-MsgN("  Caching resources")
--- ...
-
 --- Config ---
 
 TAC.Version = "0.3.4"
