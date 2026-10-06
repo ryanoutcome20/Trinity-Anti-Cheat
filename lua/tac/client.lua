@@ -2,6 +2,7 @@
 --[[ Trinity Anti-Cheat ]]--
 --[[ ~~~~~~~~~~~~~~~~~~ ]]--
 
+
 --- Anti-Hooking ---
 
 local Blank = function() end
@@ -450,7 +451,7 @@ if not TAC.Hooks.ULX then
 else
 	TAC.Print(
 		PRINT_WARN,
-		"HOOKS",
+		"Hooks",
 		"ULX system is overriding hooks, using insecure hooks"
 	)
 end

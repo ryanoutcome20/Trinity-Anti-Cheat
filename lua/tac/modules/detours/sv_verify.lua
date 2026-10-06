@@ -68,7 +68,7 @@ function TAC.Detours.CheckC(Player, Object)
 
 		if nextCache.Split then
 			local Index = nextCache.Split[Object.nextline]
-		
+
 			if not Index then
 				return TAC.Detours.Wrapper(
 					Player, 
